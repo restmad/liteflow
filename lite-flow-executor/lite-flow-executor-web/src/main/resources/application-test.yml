@@ -1,0 +1,40 @@
+server:
+  port: 8081
+## 数据源配置
+db:
+  host: db.liteflow.cn
+  port: 3306
+  name: lite_flow
+  user: root
+  pwd: root
+
+###redis配置
+redis:
+  hostName: 127.0.0.1
+  port: 6379
+  password:
+  timeout: 100000
+  pool:
+    maxIdle: 20
+    maxActive: 20
+    maxWaitMillis: 1000
+    testOnBorrow: true
+
+
+logging:
+    config: classpath:log4j2-test.xml
+
+dubbo:
+  registry:
+    address: zookeeper://127.0.0.1:2181
+    file: /tmp/dubbo.console.cache
+
+
+zk:
+  servers: 127.0.0.1:2181
+
+#运行空间
+lite:
+  flow:
+    executor:
+      workspace: /tmp/lite/executor

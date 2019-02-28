@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.TaskMapper">
+    <sql id="fields">
+        id AS id,
+        name AS name,
+        status AS status,
+        cron_expression AS cronExpression,
+        period AS period,
+        version AS version,
+        plugin_id AS pluginId,
+		plugin_conf AS pluginConf,
+        user_id AS userId,
+        is_retry AS isRetry,
+        retry_conf AS retryConf,
+        description AS description,
+        create_time as createTime,
+        update_time AS updateTime
+    </sql>
+	<sql id="where_sql">
+		<where>
+			<if test="pluginId != null">
+				plugin_id=#{pluginId}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND name like CONCAT('%', #{nameLike}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="period != null">
+				AND period = #{period}
+			</if>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="ids != null">
+				AND id IN
+				<foreach collection="ids" item="item" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+		</where>
+	</sql>
+    <sql id="table">
+      lf_console_task
+    </sql>
+	<select id="getById" resultType="Task">
+		select
+            <include refid="fields"/>
+		from <include refid="table"/>
+		where id=#{1}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		name,
+		cron_expression,
+		period,
+		version,
+		plugin_id,
+		plugin_conf,
+		user_id,
+		is_retry,
+		retry_conf,
+		description,
+		create_time)
+		value(
+		#{name},
+		#{cronExpression},
+		#{period},
+		#{version},
+		#{pluginId},
+		#{pluginConf},
+		#{userId},
+		#{isRetry},
+		#{retryConf},
+		#{description},
+		#{createTime})
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if> 
+			<if test="cronExpression != null and cronExpression != ''">
+				cron_expression=#{cronExpression},
+			</if>
+			<if test="period != null">
+				period=#{period},
+			</if>
+			<if test="version != null">
+				version=#{version},
+			</if>
+			<if test="pluginId != null">
+				plugin_id=#{pluginId},
+			</if>
+			<if test="pluginConf != null and pluginConf != ''">
+				plugin_conf = #{pluginConf},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="isRetry != null">
+				is_retry = #{isRetry},
+			</if>
+			<if test="description != null and description != ''">
+				description = #{description},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="count" resultType="int">
+        select count(*) from  <include refid="table"/>
+        <include refid="where_sql"/>
+	</select>
+	<select id="findList" resultType="Task">
+        select
+        	<include refid="fields"/>
+		FROM
+			<include refid="table"/>
+        <include refid="where_sql"/>
+   		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+        <if test="page != null">
+            limit #{page.offset},#{page.limit}
+        </if>
+	</select>
+	<select id="statisByStatus" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM
+			<include refid="table"/>
+		<where>
+			<if test="status != null">
+				status = #{status}
+			</if>
+		</where>
+	</select>
+</mapper>

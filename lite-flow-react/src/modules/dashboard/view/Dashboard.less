@@ -1,0 +1,35 @@
+@import "../../../themes/theme.less";
+
+.welcome {
+  color: #fff;
+  height: 100%;
+  width: 100%;
+  justify-content: space-between;
+  font-size: 14px;
+
+  .undoList{
+    width: 386px;
+    margin: 66px auto 300px;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    width: 386px;
+    margin: 5% auto 5px;
+
+    .temperature {
+      color: #1890ff;
+      font-size: 36px;
+      text-align: center;
+      height: 64px;
+    }
+
+    .description {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: right;
+    }
+  }
+}

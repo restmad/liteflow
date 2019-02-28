@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       ">
+
+
+    <!--
+        每天初始化数据
+    -->
+    <bean id="taskVersionDailyInitJob" class="cn.lite.flow.console.kernel.job.TaskVersionDailyInitJob" />
+    <bean id="taskVersionDailyInitJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="taskVersionDailyInitJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="taskVersionDailyInitJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="taskVersionDailyInitJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 30 23,22 * * ?</value>
+        </property>
+        <!-- 为了保证主切换后，阻塞的任务不会触发 -->
+        <property name="misfireInstruction" value="2"></property>
+    </bean>
+
+
+    <!--
+        Versiondailyinit数据生成taskVersion
+    -->
+    <bean id="versionDailyInitTriggerJob" class="cn.lite.flow.console.kernel.job.VersionDailyInit2FireJob" />
+    <bean id="versionDailyInitTriggerJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="versionDailyInitTriggerJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="versionDailyInitTriggerJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="versionDailyInitTriggerJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0/10 22,23 * * ?</value>
+        </property>
+        <!-- 为了保证主切换后，阻塞的任务不会触发 -->
+        <property name="misfireInstruction" value="2"></property>
+    </bean>
+
+    <!--
+        到达时间允许的任务
+    -->
+    <bean id="instanceReady2FireJob" class="cn.lite.flow.console.kernel.job.InstanceReady2FireJob" />
+    <bean id="instanceReady2FireJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="instanceReady2FireJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="instanceReady2FireJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="instanceReady2FireJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0/1 * * * ?</value>
+        </property>
+        <!-- 为了保证主切换后，阻塞的任务不会触发 -->
+        <property name="misfireInstruction" value="2"></property>
+    </bean>
+
+    <!--
+        可以提交到executor的任务
+    -->
+    <bean id="instanceSubmit2FireJob" class="cn.lite.flow.console.kernel.job.InstanceSubmit2FireJob" />
+    <bean id="instanceSubmit2FireJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="instanceSubmit2FireJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+
+    </bean>
+    <bean id="instanceSubmit2FireJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="instanceSubmit2FireJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0/1 * * * ?</value>
+        </property>
+        <!-- 为了保证主切换后，阻塞的任务不会触发 -->
+        <property name="misfireInstruction" value="2"></property>
+    </bean>
+
+    <!--
+        处理事件的任务
+    -->
+    <bean id="consumerEventQueueJob" class="cn.lite.flow.console.kernel.job.ConsumerEventQueueJob" />
+    <bean id="consumerEventQueueJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="consumerEventQueueJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="consumerEventQueueJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="consumerEventQueueJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>*/1 * * * * ?</value>
+        </property>
+        <!-- 为了保证主切换后，阻塞的任务不会触发 -->
+        <property name="misfireInstruction" value="2"></property>
+    </bean>
+
+    <!-- Scheduler -->
+    <bean name="startQuertz" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="taskVersionDailyInitJobTrigger"/>
+                <ref bean="instanceReady2FireJobTrigger"/>
+                <ref bean="instanceSubmit2FireJobTrigger"/>
+                <ref bean="consumerEventQueueJobTrigger"/>
+            </list>
+        </property>
+        <property name="autoStartup" value="false"></property>
+    </bean>
+
+    
+</beans>

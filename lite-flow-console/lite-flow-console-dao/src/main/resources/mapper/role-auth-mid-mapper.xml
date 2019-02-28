@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.RoleAuthMidMapper">
+
+	<sql id="fields">
+		id AS id,
+		role_id AS roleId,
+		menu_item_id AS menuItemId,
+		create_time AS createTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="menuItemId != null">
+				menu_item_id = #{menuItemId}
+			</if>
+			<if test="roleId != null">
+				AND role_id = #{roleId}
+			</if>
+			<if test="roleIds != null and !roleIds.isEmpty()">
+				AND role_id IN
+				<foreach collection="roleIds" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_role_auth_mid
+	</sql>
+	  
+	<select id="getById" resultType="RoleAuthMid">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		role_id,
+		menu_item_id,
+		create_time)
+		value(
+		#{roleId},
+		#{menu_item_id},
+		#{createTime})
+	</insert>
+	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		<include refid="table"/>(
+		role_id,
+		menu_item_id,
+		create_time)
+		VALUES
+		<foreach collection="list" item="item"  separator=",">
+			(#{item.roleId}, #{item.menuItemId}, #{item.createTime})
+		</foreach>
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="menuItemId != null">
+				menu_item_id=#{menuItemId},
+			</if>
+			<if test="roleId != null">
+				role_id=#{roleId}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="RoleAuthMid">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+
+	<delete id="deleteByRoleId">
+		DELETE
+		FROM <include refid="table"/>
+		WHERE role_id = #{roleId}
+	</delete>
+	<delete id="deleteByAuthUrlId">
+		DELETE
+		FROM <include refid="table"/>
+		WHERE auth_url_id = #{authUrlId}
+	</delete>
+</mapper>

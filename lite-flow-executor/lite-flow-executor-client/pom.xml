@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.lite.flow</groupId>
+    <artifactId>lite-flow-executor-client</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>lite-flow-executor-client</name>
+
+    <parent>
+        <groupId>cn.lite.flow</groupId>
+        <artifactId>lite-flow-executor</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <lombok.version>1.16.18</lombok.version>
+        <lite-flow.version>1.0.0-SNAPSHOT</lite-flow.version>
+    </properties>
+    <packaging>jar</packaging>
+    <dependencies>
+        <!-- module 相关加载 -->
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-executor-model-basic</artifactId>
+            <version>${lite-flow.version}</version>
+        </dependency>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.TaskVersionDailyInitMapper">
+
+
+	<sql id="table">
+		lf_console_task_version_daily_init
+	</sql>
+	<sql id="fields">
+		id AS id,
+		task_id AS taskId,
+		day AS day,
+		status AS status,
+		msg AS msg,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+
+	<sql id="where_sql">
+		<where>
+			<if test="taskId != null">
+				task_id = #{taskId}
+			</if>
+			<if test="day != null">
+				AND day = #{day}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+		</where>
+	</sql>
+
+	  
+	<select id="getById" resultType="TaskVersionDailyInit">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		task_id,
+		day,
+		status,
+		msg,
+		create_time,
+		update_time)
+		value(
+		#{taskId},
+		#{day},
+		#{status},
+		#{msg},
+		#{createTime},
+		#{updateTime}
+		)
+	</insert>
+	<insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		<include refid="table"/>(
+		task_id,
+		day,
+		status,
+		msg,
+		create_time,
+		update_time)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{item.taskId},
+			#{item.day},
+			#{item.status},
+			#{item.msg},
+			#{item.createTime},
+			#{item.updateTime})
+		</foreach>
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="taskId != null">
+				task_id=#{taskId},
+			</if>
+			<if test="day != null">
+				day=#{day},
+			</if>
+			<if test="status != null">
+				status=#{status},
+			</if>
+			<if test="msg != null">
+				msg=#{msg},
+			</if>
+			<if test="updateTime != null">
+				update_time=#{updateTime}
+			</if>
+			
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="TaskVersionDailyInit">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+</mapper>

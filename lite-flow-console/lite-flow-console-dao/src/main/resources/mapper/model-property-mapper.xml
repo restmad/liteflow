@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.ModelPropertyMapper">
+
+	<sql id="fields">
+		id AS id,
+		type AS type,
+		model_id AS modelId,
+		name AS name,
+		value AS value,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
+			<if test="model_id != null">
+				AND model_id = #{modelId}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_model_property
+	</sql>
+	  
+	<select id="getById" resultType="ModelProperty">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			<include refid="table"/> (type,model_id,name,value,create_time,update_time)
+		value(#{type},#{modelId},#{name},#{value},#{createTime},#{updateTime})
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if>
+			<if test="value != null and value != ''">
+				value = #{value},
+			</if>
+			<if test="modelId != null">
+				model_id=#{modelId},
+			</if>
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="updateTime != null">
+				update_time=#{updateTime}
+			</if>
+			
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="ModelProperty">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+</mapper>

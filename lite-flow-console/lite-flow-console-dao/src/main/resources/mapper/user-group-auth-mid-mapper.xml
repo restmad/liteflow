@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.UserGroupAuthMidMapper">
+
+	<sql id="fields">
+		id AS id,
+		source_id AS sourceId,
+		source_type AS sourceType,
+		target_id AS targetId,
+		target_type AS targetType,
+		has_edit_auth AS hasEditAuth,
+		has_execute_auth AS hasExecuteAuth,
+		user_id AS userId,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="sourceType != null">
+				source_type = #{sourceType}
+			</if>
+			<if test="targetType != null">
+				AND target_type = #{targetType}
+			</if>
+			<if test="sourceId != null">
+				AND source_id = #{sourceId}
+			</if>
+			<if test="sourceIds != null and !sourceIds.empty()">
+				AND source_id IN
+				<foreach collection="sourceIds" item="item" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="targetId != null">
+				AND target_id = #{targetId}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_user_group_auth_mid
+	</sql>
+	  
+	<select id="getById" resultType="UserGroupAuthMid">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		source_id,
+		source_type,
+		target_id,
+		target_type,
+		has_edit_auth,
+		has_execute_auth,
+		user_id,
+		create_time,
+		update_time)
+		value(
+		#{sourceId},
+		#{sourceType},
+		#{targetId},
+		#{targetType},
+		#{hasEditAuth},
+		#{hasExecuteAuth},
+		#{userId},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+		INSERT ignore INTO
+		<include refid="table"/>(
+		source_id,
+		source_type,
+		target_id,
+		target_type,
+		has_edit_auth,
+		has_execute_auth,
+		user_id,
+		create_time,
+		update_time)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.sourceId},
+			#{item.sourceType},
+			#{item.targetId},
+			#{item.targetType},
+			#{item.hasEditAuth},
+			#{item.hasExecuteAuth},
+			#{item.userId},
+			#{item.createTime},
+			#{item.updateTime}
+			)
+		</foreach>
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="sourceId != null">
+				source_id = #{sourceId},
+			</if>
+			<if test="sourceType != null">
+				source_type = #{sourceType},
+			</if>
+			<if test="targetId != null">
+				target_id = #{targetId},
+			</if>
+			<if test="targetType != null">
+				target_type = #{targetType},
+			</if>
+			<if test="hasEditAuth != null">
+				has_edit_auth = #{hasEditAuth},
+			</if>
+			<if test="hasExecuteAuth != null">
+				has_execute_auth = #{hasExecuteAuth},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="UserGroupAuthMid">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+
+	<select id="getTargetId" resultType="java.lang.Long">
+		<if test="userId != null">
+			SELECT target_id
+			FROM <include refid="table"/>
+			WHERE source_id = #{userId}
+			AND source_type = 1
+			AND target_type = #{targetType}
+		</if>
+		<if test="userId != null and groupIds != null and groupIds.size() > 0">
+			UNION
+		</if>
+		<if test="groupIds != null and groupIds.size() > 0">
+			SELECT target_id
+			FROM <include refid="table"/>
+			WHERE source_id IN
+			<foreach collection="groupIds" item="item" separator="," open="(" close=")">
+				#{item}
+			</foreach>
+			AND source_type = 2
+			AND target_type = #{targetType}
+		</if>
+	</select>
+	<delete id="deleteById">
+		DELETE
+		FROM <include refid="table"/>
+		WHERE id = #{id}
+	</delete>
+</mapper>

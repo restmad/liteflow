@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:consumer id="consoleConsumer" check="false"/>
+
+    <dubbo:reference id="executorServerRpcService" interface="cn.lite.flow.executor.client.ExecutorServerRpcService" version="1.0.0" check="false" loadbalance="direct"/>
+
+    <dubbo:reference id="executorContainerRpcService" interface="cn.lite.flow.executor.client.ExecutorContainerRpcService" version="1.0.0" check="false" loadbalance="direct"/>
+
+    <dubbo:reference id="executorJobRpcService" interface="cn.lite.flow.executor.client.ExecutorJobRpcService" version="1.0.0" check="false" loadbalance="direct"/>
+
+    <dubbo:reference id="executorPluginRpcService" interface="cn.lite.flow.executor.client.ExecutorPluginRpcService" version="1.0.0" check="false" loadbalance="direct"/>
+
+</beans>

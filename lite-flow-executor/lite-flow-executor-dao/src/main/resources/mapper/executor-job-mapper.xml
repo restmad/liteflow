@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.executor.dao.ExecutorJobMapper">
+
+	<sql id="fields">
+		id AS id,
+		application_id AS applicationId,
+		status AS status,
+		source_id AS sourceId,
+		plugin_id AS pluginId,
+		container_id AS containerId,
+		executor_server_id AS executorServerId,
+		config AS config,
+		start_time AS startTime,
+		end_time AS endTime,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="containerId != null">
+               and container_id = #{containerId}
+			</if>
+			<if test="pluginId != null">
+               and plugin_id = #{pluginId}
+			</if>
+			<if test="applicationId != null">
+               and application_id = #{applicationId}
+			</if>
+			<if test="sourceId != null">
+               and source_id = #{sourceId}
+			</if>
+			<if test="executorServerId != null">
+				and executor_server_id = #{executorServerId}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_executor_job
+	</sql>
+	  
+	<select id="getById" resultType="ExecutorJob">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		application_id,
+		status,
+		source_id,
+		plugin_id,
+		container_id,
+        executor_server_id,
+		config,
+		start_time)
+		value(
+		#{applicationId},
+		#{status},
+		#{sourceId},
+		#{pluginId},
+		#{containerId},
+		#{executorServerId},
+		#{config},
+		#{startTime})
+	</insert>
+	<select id="findList" resultType="ExecutorJob">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+
+	<update id="update">
+		update
+			<include refid="table"/>
+		<set>
+			<if test="executorServerId != null">
+                executor_server_id=#{executorServerId},
+			</if>
+			<if test="status != null">
+				status=#{status},
+			</if>
+			<if test="startTime != null">
+				start_time=#{startTime},
+			</if>
+			<if test="endTime != null">
+				end_time=#{endTime},
+			</if>
+			<if test="msg != null">
+				msg=#{msg}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<update id="bindApplicationId">
+		update
+			<include refid="table"/>
+		set application_id=#{applicationId} where id=#{jobId}
+	</update>
+
+	<select id="getBySourceId" resultType="ExecutorJob">
+		select
+		<include refid="fields"/>
+		from
+		<include refid="table"/>
+		where source_id=#{sourceId}
+	</select>
+</mapper>

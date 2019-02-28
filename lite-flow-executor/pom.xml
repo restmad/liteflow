@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.lite.flow</groupId>
+        <artifactId>lite-flow</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>cn.lite.flow</groupId>
+    <artifactId>lite-flow-executor</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>lite-flow-executor</name>
+
+    <modules>
+        <module>lite-flow-executor-client</module>
+        <module>lite-flow-executor-common</module>
+        <module>lite-flow-executor-model</module>
+        <module>lite-flow-executor-model-basic</module>
+        <module>lite-flow-executor-dao</module>
+        <module>lite-flow-executor-service</module>
+        <module>lite-flow-executor-kernel</module>
+        <module>lite-flow-executor-web</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- module 相关加载 -->
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-executor-client</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-executor-common</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-executor-model</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-executor-model-basic</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-executor-dao</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-executor-service</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-executor-kernel</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-console-client</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-common</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

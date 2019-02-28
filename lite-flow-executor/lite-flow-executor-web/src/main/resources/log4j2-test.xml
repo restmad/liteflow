@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="cn.lite" level="DEBUG" additivity="false">
+            <appenderRef ref="console" />
+        </Logger>
+        <Logger name="com.alibaba.dubbo" level="ERROR" additivity="false">
+            <appenderRef ref="console" />
+        </Logger>
+        <Logger name="cn.lite.flow.executor.kernel.schedule" level="ERROR" additivity="false">
+            <appenderRef ref="console" />
+        </Logger>
+        <Root level="INFO">
+            <appenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.TaskDependencyMapper">
+
+	<sql id="fields">
+		id AS id,
+		task_id AS taskId,
+		upstream_task_id AS upstreamTaskId,
+		type AS type,
+		config AS config,
+		status AS status,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="taskId != null">
+				AND task_id = #{taskId}
+			</if>
+			<if test="upstreamTaskId != null">
+				AND upstream_task_id = #{upstreamTaskId}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_task_dependency
+	</sql>
+	  
+	<select id="getById" resultType="TaskDependency">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{1}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		task_id,
+		upstream_task_id,
+		type,
+		config,
+		status,
+		create_time,
+		update_time)
+		value(
+		#{taskId},
+		#{upstreamTaskId},
+		#{type},
+		#{config},
+		#{status},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="taskId != null">
+				task_id=#{taskId},
+			</if>
+			<if test="upstreamTaskId != null">
+				upstream_task_id=#{upstreamTaskId},
+			</if>
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="config != null and config != ''">
+				config=#{config},
+			</if>
+			<if test="status != null">
+				status=#{status},
+			</if>
+			<if test="updateTime != null">
+				update_time=#{updateTime}
+			</if>
+
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="TaskDependency">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+	<delete id="delete">
+		DELETE
+		FROM <include refid="table"/>
+		WHERE id = #{0}
+	</delete>
+</mapper>

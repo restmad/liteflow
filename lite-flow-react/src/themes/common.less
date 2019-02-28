@@ -1,0 +1,277 @@
+/* 内容container */
+@containerBgColor: #f9f9f9;
+
+/*弹窗和表格相关*/
+@tableHeaderColor: #edf8fd;
+@modalHeaderColor: #edf8fd;
+
+/*样式一 from相关*/
+@s1BorderColor: #EAEAEA;
+@s1FormLableColor: #FBFBFB;
+
+/* 颜色 */
+@statusSuccess: #449d44;
+@statusInfo: #31b0d5;
+@statusError: #c9302c;
+@statusWarning: #ec971f;
+
+
+body {
+  height: 100%;
+  overflow-y: hidden;
+  background-color: #f8f8f8;
+}
+
+
+:global .sider-menu{
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    width: 2px;
+    background-color: rgba(0,0,0,.2);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+  }
+
+  ::-webkit-scrollbar-track {
+    width: 5px;
+  }
+  .app-logo {
+    img {
+      width: 28px;
+      margin: 6px 7px;
+    }
+  }
+
+  .ant-menu-inline-collapsed{
+    width: 50px;
+
+    .ant-menu-submenu-title,.ant-menu-item{
+      padding: 0 18px !important;
+    }
+  }
+}
+
+
+:global .ant-breadcrumb {
+  line-height: 34px;
+  & > span {
+    &:last-child {
+      color: #999;
+      font-weight: normal;
+    }
+  }
+}
+
+:global .ant-breadcrumb-link {
+  font-family: Microsoft Yahei;
+  .anticon + span {
+    margin-left: 4px;
+  }
+}
+
+:global .ant-popover-inner {
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 0 20px rgba(100, 100, 100, 0.2);
+}
+
+
+:global .ant-form-item-control {
+  vertical-align: middle;
+}
+
+/*通用css*/
+:global .margin-right5 {
+  margin-right: 5px;
+}
+
+:global .margin-bottom5{
+  margin-bottom: 5px;
+}
+
+:global .margin-bottom10{
+  margin-bottom: 10px;
+}
+
+:global .float-right{
+  float: right;
+}
+
+.alignCenter {
+  text-align: center;
+}
+/* 内容container */
+:global .container-row-block{
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border:1px solid @s1BorderColor;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+:global .op-btns-container{
+  margin-bottom: 10px;
+}
+/*弹窗和表格相关*/
+:global  .ant-modal-wrap .ant-modal-header{
+  background-color: @modalHeaderColor;
+}
+
+/*样式一 from相关*/
+:global .s1-form {
+
+  .s1-from-row {
+    border: 1px solid @s1BorderColor;
+    border-radius: 3px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
+  //col有下边框
+  .s1-from-col-b {
+    border-bottom: 1px solid @s1BorderColor;
+    box-sizing: border-box;
+  }
+  .s1-from-col-r {
+    border-right: 1px solid @s1BorderColor;
+    box-sizing: border-box;
+  }
+  .s1-from-col-l {
+    border-left: 1px solid @s1BorderColor;
+    box-sizing: border-box;
+  }
+  .ant-form-item-label {
+    background-color: @s1FormLableColor;
+  }
+  .ant-form-item-label{
+    border-right: 1px solid @s1BorderColor;
+    box-sizing:border-box;
+  }
+  .ant-input {
+    border: 0px solid #e5e5e5;
+  }
+  .has-error {
+    .ant-input {
+      border: 1px solid #f04134;
+      box-sizing: border-box;
+    }
+    .ant-form-explain {
+      display: none;
+    }
+  }
+  .ant-form-explain {
+    display: inline;
+  }
+  .ant-form-item-with-help {
+    margin-bottom: 0px;
+  }
+
+  .ant-form-item {
+    display: inline-block;
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .s1-from-btn-row {
+    text-align: center;
+  }
+  .s1-from-sub-btn {
+    margin-right: 10px;
+  }
+}
+
+
+/*table*/
+:global .ant-table {
+  .ant-table-thead > tr > th {
+    text-align: center;
+    background: @tableHeaderColor;
+  }
+  .ant-table-tbody > tr > td {
+    text-align: center;
+  }
+  .ant-table-body > table {
+    padding: 0;
+  }
+}
+:global .ant-table-pagination {
+  float: none !important;
+  display: table;
+  margin: 16px auto !important;
+}
+
+
+/**
+  list
+ */
+:global .list-content-row{
+
+  .list-content-col-title{
+    text-align: right;
+    font-weight: bold;
+  }
+  .list-content-col-content{
+    text-align: left;
+    padding-left: 5px;
+  }
+}
+
+
+/*task*/
+:global .task-status-1{
+  color: @statusSuccess;
+}
+:global .task-status{
+  font-weight: bold;
+}
+:global .task-status-0{
+  color: @statusInfo;
+}
+:global .task-status--1{
+  color: @statusError;
+}
+:global .status-warning{
+  color: @statusWarning;
+}
+/*flow*/
+:global .flow-status-1{
+  color: @statusSuccess;
+}
+:global .flow-status{
+  font-weight: bold;
+}
+:global .flow-status-0{
+  color: @statusInfo;
+}
+:global .flow-status--1{
+  color: @statusError;
+}
+:global .status-warning{
+  color: @statusWarning;
+}
+
+
+/*dag-node*/
+:global .dag-node-1{
+  fill: @statusSuccess;
+}
+:global .dag-node-0{
+  fill: @statusInfo;
+}
+:global .dag-node--1{
+  fill: @statusError;
+}
+

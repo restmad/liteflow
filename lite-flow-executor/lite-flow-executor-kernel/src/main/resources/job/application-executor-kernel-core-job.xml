@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       ">
+
+    <!--
+        处理容器中需要提交的任务
+    -->
+    <bean id="containerFireJob" class="cn.lite.flow.executor.kernel.schedule.ContainerFireJob" />
+    <bean id="containerFireJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="containerFireJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="containerFireJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="containerFireJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>*/1 * * * * ?</value>
+        </property>
+    </bean>
+
+    <!--
+        校验异步任务是否成功
+    -->
+    <bean id="asyncContainerCheckJob" class="cn.lite.flow.executor.kernel.schedule.AsyncContainerCheckJob" />
+    <bean id="asyncContainerCheckJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="asyncContainerCheckJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="asyncContainerCheckJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="asyncContainerCheckJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>*/5 * * * * ?</value>
+        </property>
+    </bean>
+    <!--
+        回调任务，补偿
+    -->
+    <bean id="callbackFireJob" class="cn.lite.flow.executor.kernel.schedule.CallbackFireJob" />
+    <bean id="callbackFireJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="callbackFireJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="callbackFireJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="callbackFireJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 */1 * * * ?</value>
+        </property>
+    </bean>
+    <!--
+        容器补偿，类似服务重启后，任务需要重新放到container中
+    -->
+    <bean id="containerCompensateJob" class="cn.lite.flow.executor.kernel.schedule.ContainerCompensateJob" />
+    <bean id="containerCompensateJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="containerCompensateJob" />
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="containerCompensateJobTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="containerCompensateJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 */5 * * * ?</value>
+        </property>
+    </bean>
+
+
+    <!-- ExecutorScheduler -->
+    <bean name="executorScheduler" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="containerFireJobTrigger"/>
+                <ref bean="asyncContainerCheckJobTrigger"/>
+                <ref bean="callbackFireJobTrigger"/>
+                <ref bean="containerCompensateJobTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    
+</beans>

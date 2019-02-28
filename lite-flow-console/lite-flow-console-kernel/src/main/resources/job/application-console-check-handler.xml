@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       ">
+    <!-- 是否可以运行校验 -->
+    <bean id="taskConcurrencyChecker" class="cn.lite.flow.console.kernel.event.handler.check.TaskConcurrencyChecker"/>
+    <bean id="instanceDependencyChecker" class="cn.lite.flow.console.kernel.event.handler.check.InstanceDependencyChecker"/>
+
+    <!-- 每天初始化handler -->
+    <bean id="dailyInitEventHandler" class="cn.lite.flow.console.kernel.event.handler.DailyInitEventHandler"/>
+    <!-- 任务提交前校验 -->
+    <bean id="readyEventHandler" class="cn.lite.flow.console.kernel.event.handler.ReadyEventHandler">
+        <constructor-arg name="checkers">
+            <list>
+                <ref bean="instanceDependencyChecker"/>
+                <ref bean="taskConcurrencyChecker"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    <!-- 任务提交handler -->
+    <bean id="submitEventHandler" class="cn.lite.flow.console.kernel.event.handler.SubmitEventHandler"/>
+
+</beans>

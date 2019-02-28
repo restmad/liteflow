@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.TaskInstanceDependencyMapper">
+
+	<sql id="fields">
+		id AS id,
+		instance_id AS instanceId,
+		upstream_task_id AS upstreamTaskId,
+		upstream_task_version_no AS upstreamTaskVersionNo,
+		status AS status,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="taskId != null">
+				AND task_id = #{taskId}
+			</if>
+			<if test="instanceId != null">
+				AND instance_id = #{instanceId}
+			</if>
+			<if test="upstreamTaskId != null">
+				AND upstream_task_id = #{upstreamTaskId}
+			</if>
+			<if test="upstreamTaskVersionNo != null and upstreamTaskVersionNo != ''">
+				AND upstream_task_version_no = #{upstreamTaskVersionNo}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_task_instance_dependency
+	</sql>
+	  
+	<select id="getById" resultType="TaskInstanceDependency">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		instance_id,
+		upstream_task_id,
+		upstream_task_version_no,
+		status,
+		create_time)
+		value(
+		#{instanceId},
+		#{upstreamTaskId},
+		#{upstreamTaskVersionNo},
+		#{status},
+		#{createTime})
+	</insert>
+	<insert id="insertBatch" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		instance_id,
+		upstream_task_id,
+		upstream_task_version_no,
+		status,
+		create_time)
+		values
+		<foreach collection="dependencies" item="dependency" separator=",">
+			(
+			#{dependency.instanceId},
+			#{dependency.upstreamTaskId},
+			#{dependency.upstreamTaskVersionNo},
+			#{dependency.status},
+			#{dependency.createTime})
+		</foreach>
+
+	</insert>
+
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="status != null">
+				status = #{status},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="TaskInstanceDependency">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+	<delete id="delete">
+		delete from
+			<include refid="table"/>
+		where id = #{0}
+	</delete>
+</mapper>

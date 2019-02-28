@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+        <groupId>cn.lite.flow</groupId>
+        <artifactId>lite-flow</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>cn.lite.flow</groupId>
+    <artifactId>lite-flow-console</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>lite-flow-console</name>
+    <modules>
+        <module>lite-flow-console-client</module>
+        <module>lite-flow-console-common</module>
+        <module>lite-flow-console-kernel</module>
+        <module>lite-flow-console-dao</module>
+        <module>lite-flow-console-model</module>
+        <module>lite-flow-console-service</module>
+        <module>lite-flow-console-web</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- module 相关加载 -->
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-console-client</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-console-kernel</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-console-common</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-console-dao</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-console-model</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.lite.flow</groupId>
+                <artifactId>lite-flow-console-service</artifactId>
+                <version>${lite-flow.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-common</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

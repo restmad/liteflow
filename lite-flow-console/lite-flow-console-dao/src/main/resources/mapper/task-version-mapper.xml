@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.TaskVersionMapper">
+
+
+	<sql id="table">
+		lf_console_task_version
+	</sql>
+	<sql id="fields">
+		id AS id,
+		version_no AS versionNo,
+		task_id AS taskId,
+		status AS status,
+		final_status AS finalStatus,
+		retry_num AS retryNum,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="ids != null">
+				AND id IN
+				<foreach collection="ids" open="(" close=")" separator="," item="item">
+					#{item}
+				</foreach>
+			</if>
+			<if test="taskId != null">
+				AND task_id = #{taskId}
+			</if>
+			<if test="taskVersionNo != null">
+				AND task_version_no = #{taskVersionNo}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="finalStatus != null">
+				AND final_status = #{finalStatus}
+			</if>
+		</where>
+	</sql>
+
+	  
+	<select id="getById" resultType="TaskVersion">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+
+	<select id="getTaskVersion" resultType="TaskVersion">
+		select
+			<include refid="fields"/>
+			from
+			<include refid="table"/>
+		where task_id=#{taskId} and version_no = #{taskVersionNo}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		version_no,
+		task_id,
+		status,
+		final_status,
+		create_time)
+		value(
+		#{versionNo},
+		#{taskId},
+		#{status},
+		#{finalStatus},
+		#{createTime}
+		)
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="status != null">
+				status=#{status},
+			</if>
+			<if test="finalStatus != null">
+				final_status=#{finalStatus},
+			</if>
+			<if test="retryNum != null">
+				retry_num=#{retryNum},
+			</if>
+			<if test="updateTime != null">
+				update_time=#{updateTime}
+			</if>
+			
+		</set>
+		where id=#{id}
+	</update>
+	<update id="updateWithStatus">
+		update <include refid="table"/>
+		<set>
+			<if test="taskVersion.status != null">
+				status=#{taskVersion.status},
+			</if>
+			<if test="taskVersion.finalStatus != null">
+				final_status=#{taskVersion.finalStatus},
+			</if>
+			<if test="taskVersion.retryNum != null">
+				retry_num=#{taskVersion.retryNum},
+			</if>
+			<if test="taskVersion.updateTime != null">
+				update_time=#{taskVersion.updateTime}
+			</if>
+		</set>
+		where id=#{taskVersion.id} and status=#{originStatus}
+	</update>
+	<select id="findList" resultType="TaskVersion">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+</mapper>

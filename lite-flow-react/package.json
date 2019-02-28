@@ -1,0 +1,58 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "roadhog build",
+    "start": "roadhog server"
+  },
+  "engines": {
+    "install-node": "6.x"
+  },
+  "dependencies": {
+    "@types/react": "^16.4.10",
+    "@types/react-dom": "^16.0.8",
+    "antd": "^3.9.3",
+    "babel-loader": "^7.1.5",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.9.2",
+    "@babel/runtime": "7.0.0-beta.55",
+    "braft-editor": "^1.1.12",
+    "classnames": "^2.2.5",
+    "dagre-d3": "^0.4.17",
+    "echarts": "^3.8.5",
+    "echarts-for-react": "^2.0.0",
+    "inversify": "^2.0.0-rc.10",
+    "inversify-binding-decorators": "^1.0.0-rc.2",
+    "inversify-inject-decorators": "^1.0.0-beta.1",
+    "isomorphic-fetch": "^2.2.1",
+    "less-vars-to-js": "^1.2.1",
+    "mobx": "^3.2.2",
+    "mobx-react": "^4.2.2",
+    "mobx-utils": "^3.0.0",
+    "qs": "^6.5.0",
+    "react": "16.4.0",
+    "react-dnd": "^2.5.4",
+    "react-dnd-html5-backend": "^2.5.4",
+    "react-dom": "16.5.0",
+    "react-router": "^3.2.0",
+    "reflect-metadata": "^0.1.10",
+    "react-json-view": "^1.16.1",
+    "react-particles-js": "^2.4.2",
+    "typescript": "2.9.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.0",
+    "babel-plugin-dva-hmr": "^0.3.2",
+    "babel-plugin-import": "^1.4.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.3.0",
+    "expect": "^21.0.2",
+    "husky": "^0.12.0",
+    "mockjs": "^1.0.1-beta3",
+    "redbox-react": "^1.5.0",
+    "roadhog": "^1.2.2"
+  }
+}

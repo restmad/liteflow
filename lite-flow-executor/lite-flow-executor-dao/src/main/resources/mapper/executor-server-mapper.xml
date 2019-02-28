@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.executor.dao.ExecutorServerMapper">
+
+	<sql id="fields">
+		id AS id,
+		name AS name,
+		ip AS ip,
+		status AS status,
+		description AS description,
+		user_id AS userId,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND name like CONCAT('%', #{nameLike}, '%')
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_executor_server
+	</sql>
+	  
+	<select id="getById" resultType="ExecutorServer">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		name,
+		ip,
+		status,
+		description,
+		user_id,
+		create_time,
+		update_time)
+		value(
+		#{name},
+		#{ip},
+		#{status},
+		#{description},
+		#{userId},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	<update id="update">
+		UPDATE
+			<include refid="table"/>
+		<set>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="description != null and description != ''">
+				description = #{description},
+			</if>
+			update_time = #{updateTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+	<select id="findList" resultType="ExecutorServer">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+	<select id="getByIp" resultType="ExecutorServer">
+		SELECT
+			<include refid="fields"/>
+		FROM
+			<include refid="table"/>
+		where ip = #{0}
+	</select>
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.FlowDependencySnapshotMapper">
+
+	<sql id="fields">
+		id AS id,
+		flow_id AS flowId,
+		task_id AS taskId,
+		upstream_task_id AS upstreamTaskId,
+		type AS type,
+		conf AS conf,
+		create_time AS createTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="flowId != null">
+				AND flow_id = #{flowId}
+			</if>
+			<if test="taskId != null">
+				AND task_id = #{taskId}
+			</if>
+			<if test="upstreamTaskId != null">
+				AND upstream_task_id = #{upstreamTaskId}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_flow_dependency_snapshot
+	</sql>
+	  
+	<select id="getById" resultType="FlowDependencySnapshot">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{1}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		flow_id,
+        task_id,
+		upstream_task_id,
+		type,
+		conf,
+		create_time)
+		value(
+		#{flowId},
+		#{taskId},
+		#{upstreamTaskId},
+		#{type},
+		#{conf},
+		#{createTime})
+	</insert>
+	<insert id="insertBatch">
+		insert into
+		<include refid="table"/>(
+		flow_id,
+		task_id,
+		upstream_task_id,
+		type,
+		conf,
+		create_time)
+		values
+		<foreach collection="dependencies" item="dependency" separator=",">
+			(#{dependency.flowId},
+			#{dependency.taskId},
+			#{dependency.upstreamTaskId},
+			#{dependency.type},
+			#{dependency.conf},
+			#{dependency.createTime})
+		</foreach>
+
+	</insert>
+
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="flowId != null">
+				flow_id=#{flowId},
+			</if>
+			<if test="taskId != null">
+				task_id=#{taskId},
+			</if>
+			<if test="upstreamTaskId != null">
+				upstream_task_id=#{upstreamTaskId},
+			</if>
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="conf != null">
+				conf=#{conf},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="findList" resultType="FlowDependencySnapshot">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+    
+	<delete id="deleteByFlowId">
+		delete from <include refid="table"/> where flow_id=#{0}
+	</delete>
+</mapper>

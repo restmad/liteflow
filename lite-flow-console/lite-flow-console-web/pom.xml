@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <parent>
+        <groupId>cn.lite.flow</groupId>
+        <artifactId>lite-flow-console</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>cn.lite.flow</groupId>
+    <artifactId>lite-flow-console-web</artifactId>
+    <version>${lite-flow.version}</version>
+    <name>lite-flow-console-web</name>
+
+    <packaging>jar</packaging>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <mvn.profile.active>test</mvn.profile.active>
+            </properties>
+            <activation>
+                <!-- 默认环境 -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <mvn.profile.active>prod</mvn.profile.active>
+            </properties>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <!-- module 相关加载 -->
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-console-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-console-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-console-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-console-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-console-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.lite.flow</groupId>
+            <artifactId>lite-flow-console-kernel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+</project>

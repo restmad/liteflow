@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.UserMapper">
+
+	<sql id="fields">
+		id AS id,
+		user_name AS userName,
+		email AS email,
+		phone AS phone,
+		password AS password,
+		status AS status,
+		is_super AS isSuper,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="ids != null and !ids.isEmpty()">
+				id IN
+				<foreach collection="ids" item="id" separator="," open="(" close=")">
+					#{id}
+				</foreach>
+			</if>
+			<if test="userName != null and userName != ''">
+				AND user_name = #{userName}
+			</if>
+			<if test="password != null and password != ''">
+				AND password = #{password}
+			</if>
+			<if test="userNameLike != null and userNameLike != ''">
+				AND user_name LIKE CONCAT('%', #{userNameLike}, '%')
+			</if>
+			<if test="emailLike != null and emailLike != ''">
+				AND email LIKE CONCAT('%', #{emailLike}, '%')
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_user
+	</sql>
+	  
+	<select id="getById" resultType="User">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		user_name,
+		email,
+		phone,
+		password,
+		status,
+		is_super,
+		create_time,
+		update_time)
+		value(
+		#{userName},
+		#{email},
+		#{phone},
+		#{password},
+		#{status},
+		#{isSuper},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="userName != null and userName != ''">
+				user_name=#{userName},
+			</if>
+			<if test="email != null and email != ''">
+				email = #{email},
+			</if>
+			<if test="phone != null and phone != ''">
+				phone = #{phone},
+			</if>
+			<if test="password != null and password != ''">
+				password=#{password},
+			</if>
+			<if test="status != null">
+				status=#{status},
+			</if>
+			<if test="isSuper != null">
+				is_super = #{isSuper},
+			</if>
+			<if test="updateTime != null">
+				update_time=#{updateTime}
+			</if>
+			
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="User">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+	<delete id="deleteByUserId">
+		DELETE
+		FROM <include refid="table"/>
+		WHERE user_id = #{userId}
+	</delete>
+	<select id="getByGroupId" resultType="User">
+		SELECT user.id AS id, user.user_name AS userName
+		from lf_console_user user
+		JOIN lf_console_user_group_mid mid
+		ON user.id = mid.user_id
+		AND mid.group_id = #{groupId}
+	</select>
+</mapper>

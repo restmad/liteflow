@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.executor.dao.ExecutorAttachmentMapper">
+
+	<sql id="fields">
+		id AS id,
+		name AS name,
+		type AS type,
+		content AS content,
+		user_id AS userId,
+		status AS status,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND name like CONCAT('%', #{nameLike}, '%')
+			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_executor_attachment
+	</sql>
+	  
+	<select id="getById" resultType="ExecutorAttachment">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		name,
+		type,
+		content,
+		user_id,
+		status,
+		create_time,
+		update_time)
+		value(
+		#{name},
+		#{type},
+		#{content},
+		#{userId},
+		#{status},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	<update id="update">
+		UPDATE
+			<include refid="table"/>
+		<set>
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="content != null and content != ''">
+				content = #{content},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			update_time = #{updateTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+	<select id="findList" resultType="ExecutorAttachment">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+</mapper>

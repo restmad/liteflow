@@ -1,0 +1,66 @@
+## 数据源配置
+console:
+  jdbc:
+    url: jdbc:mysql://${db.host}:${db.port}/${db.name}?zeroDateTimeBehavior=convertToNull&useUnicode=yes&characterEncoding=UTF8&serverTimezone=GMT%2B8&useSSL=false
+    username: ${db.user}
+    password: ${db.pwd}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    initialSize: 30
+    maxActive: 60
+    minIdle: 50
+    maxWait: 30
+    validationQuery: select 1
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 25200000
+    removeAbandoned: true
+    removeAbandonedTimeout: 1800
+    logAbandoned: true
+    filters: mergeStat
+    poolPreparedStatements: false
+
+spring:
+  profiles:
+    active: @mvn.profile.active@
+  mvc:
+    static-path-pattern: /static/**
+  aop:
+    # Set true to activate cglib, or it will use default jdk.
+    proxy-target-class: true
+    auto:
+  redis:
+    host: localhost
+    port: 6379
+    password:
+  freemarker:
+    allow-request-override: false
+    cache: false
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html; charset=utf-8
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+    suffix: .ftl
+    template-loader-path: classpath:/static/
+dubbo:
+  application:
+    name: console-provider
+  registry:
+    address: ${dubbo.registry.address}
+    file: ${dubbo.registry.cache}
+  protocol:
+    name: dubbo
+    port: 20888
+  qos:
+    port: 33333
+
+zk:
+  servers: ${zk.servers}
+  namespace: lite-flow-console
+  leader:
+    path: /lite/console/server/leader
+
+

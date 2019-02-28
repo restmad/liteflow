@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.MenuItemMapper">
+
+	<sql id="fields">
+		id AS id,
+		menu_id AS menuId,
+		name AS name,
+		url AS url,
+		order_num as orderNum
+	</sql>
+	<sql id="table">
+		lf_console_menu_item
+	</sql>
+	<select id="findList" resultType="MenuItem">
+		SELECT
+			<include refid="fields"/>
+		FROM
+			<include refid="table"/>
+		<where>
+			<if test="menuId != null">
+				menu_id = #{menuId}
+			</if>
+		</where>
+		<if test="orderByOperation != null">
+			ORDER BY
+			<foreach collection="orderByOperation.itemOperators" item="item" separator=",">
+				${item.column} ${item.operator}
+			</foreach>
+		</if>
+	</select>
+	<select id="getByRoleId" resultType="MenuItem">
+		SELECT item.id as id, item.name as name, item.url as url
+		FROM lf_console_menu_item item
+		JOIN lf_console_role_auth_mid mid
+		ON item.id = mid.menu_item_id
+		AND mid.role_id = #{roleId}
+	</select>
+</mapper>

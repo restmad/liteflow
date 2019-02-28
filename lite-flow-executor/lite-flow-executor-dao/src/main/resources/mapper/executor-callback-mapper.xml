@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.executor.dao.ExecutorCallbackMapper">
+
+	<sql id="fields">
+		id AS id,
+		status AS status,
+		job_id AS jobId,
+		job_source_id AS jobSourceId,
+		job_status AS jobStatus,
+		executor_server_id AS executorServerId,
+		job_msg AS jobMsg,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+			<if test="executorServerId != null">
+				and executor_server_id = #{executorServerId}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_executor_callback
+	</sql>
+	  
+	<select id="getById" resultType="ExecutorCallback">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		status,
+		job_id ,
+		job_source_id,
+		job_status,
+		executor_server_id,
+        job_msg)
+		value(
+		#{status},
+		#{jobId},
+		#{jobSourceId},
+		#{jobStatus},
+		#{executorServerId},
+		#{jobMsg})
+	</insert>
+	<select id="findList" resultType="ExecutorCallback">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+
+	<update id="update">
+		update
+			<include refid="table"/>
+		<set>
+			<if test="status != null">
+				status=#{status},
+			</if>
+			<if test="jobMsg != null">
+                job_msg=#{jobMsg}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="getBySourceId" resultType="ExecutorCallback">
+		select
+		<include refid="fields"/>
+		from
+		<include refid="table"/>
+		where source_id=#{sourceId}
+	</select>
+</mapper>

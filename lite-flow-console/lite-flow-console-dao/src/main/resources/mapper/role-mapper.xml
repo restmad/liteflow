@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.RoleMapper">
+
+	<sql id="fields">
+		id AS id,
+		role_name AS roleName,
+		description AS description,
+		user_id AS userId,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="roleNameLike != null and roleNameLike != ''">
+				role_name LIKE CONCAT('%', #{roleNameLike}, '%')
+			</if>
+			<if test="roleName != null and roleName != ''">
+				AND role_name = #{roleName}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_role
+	</sql>
+	  
+	<select id="getById" resultType="Role">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		role_name,
+		description,
+		user_id,
+		create_time,
+		update_time)
+		value(
+		#{roleName},
+		#{description},
+		#{userId},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="roleName != null and roleName != ''">
+				role_name=#{roleName},
+			</if>
+			<if test="updateTime != null">
+				update_time=#{updateTime},
+			</if>
+			<if test="description != null">
+				description = #{description}
+			</if>
+			
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="Role">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+
+	<select id="getByUserId" resultType="Role">
+		SELECT
+			role.id as id, role_name as roleName, description as description
+		FROM lf_console_role role
+		JOIN lf_console_user_role_mid mid
+		ON role.id = mid.role_id
+		AND mid.user_id = #{userId}
+	</select>
+
+	<delete id="deleteById">
+		DELETE
+		FROM
+			<include refid="table"/>
+		WHERE id = #{id}
+	</delete>
+</mapper>

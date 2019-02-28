@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.TaskInstanceMapper">
+
+    <sql id="fields">
+        id AS id,
+        task_id AS taskId,
+        task_version_id AS taskVersionId,
+        task_version_no AS taskVersionNo,
+        logic_run_time AS logicRunTime,
+        plugin_conf AS pluginConf,
+        plugin_id AS pluginId,
+        status AS status,
+        run_start_time AS runStartTime,
+        run_end_time AS runEndTime,
+        msg AS msg,
+        executor_job_id AS executorJobId,
+        create_time AS createTime,
+        update_time AS updateTime
+    </sql>
+    <sql id="table">
+        lf_console_task_instance
+    </sql>
+
+    <sql id="where_sql">
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="taskId != null">
+                AND task_id = #{taskId}
+            </if>
+            <if test="inVersionIds != null and !inVersionIds.isEmpty()">
+                AND task_version_id IN
+                <foreach collection="inVersionIds" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="ids != null">
+                AND id IN
+                <foreach collection="ids" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="versionId != null">
+                AND task_version_id = #{versionId}
+            </if>
+            <if test="versionNo != null">
+                AND task_version_no = #{versionNo}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="logicRunTimeLessEqual != null">
+                <![CDATA[
+				   and logic_run_time <= #{logicRunTimeLessEqual}
+					]]>
+            </if>
+        </where>
+    </sql>
+
+	<select id="getById" resultType="TaskInstance">
+		select
+		  <include refid="fields"/>
+		from
+          <include refid="table"/>
+        where id=#{1}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+        <include refid="table"/>(
+        task_id,
+        task_version_id,
+        task_version_no,
+        logic_run_time,
+        plugin_id,
+        plugin_conf,
+        status,
+        run_start_time,
+        run_end_time,
+        msg,
+        executor_job_id,
+        create_time,
+        update_time)
+		value(
+        #{taskId},
+        #{taskVersionId},
+        #{taskVersionNo},
+        #{logicRunTime},
+        #{pluginId},
+        #{pluginConf},
+        #{status},
+        #{runStartTime},
+        #{runEndTime},
+        #{msg},
+        #{executorJobId},
+        #{createTime},
+        #{updateTime})
+	</insert>
+    <select id="count" resultType="int">
+        select count(*) from  <include refid="table"/>
+        <include refid="where_sql"/>
+    </select>
+    <select id="findList" resultType="TaskInstance">
+        select
+        <include refid="fields"/>
+        from <include refid="table"/>
+        <include refid="where_sql"/>
+       <if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+        <if test="page != null">
+            limit #{page.offset},#{page.limit}
+        </if>
+    </select>
+    <select id="findIdList" resultType="long">
+        select
+        id
+        from <include refid="table"/>
+        <include refid="where_sql"/>
+       <if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator}
+	         </foreach>
+		</if>
+        <if test="page != null">
+            limit #{page.offset},#{page.limit}
+        </if>
+    </select>
+
+    <update id="updateWithStatus">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            <if test="instance.executorJobId != null">
+                executor_job_id = #{instance.executorJobId},
+            </if>
+            <if test="instance.status != null">
+                status = #{instance.status},
+            </if>
+            <if test="instance.msg != null and instance.msg != ''">
+                msg = #{instance.msg},
+            </if>
+            <if test="instance.runStartTime != null">
+                run_start_time = #{instance.runStartTime},
+            </if>
+            <if test="instance.runEndTime != null">
+                run_end_time = #{instance.runEndTime},
+            </if>
+        </set>
+        WHERE id = #{instance.id} and status = #{originStatus}
+    </update>
+    <update id="update">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            <if test="msg != null">
+                msg = #{msg},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <select id="getLatestInstance" resultType="TaskInstance">
+        SELECT
+          <include refid="fields"/>
+        FROM
+          <include refid="table"/>
+        WHERE
+          task_id = #{taskId} AND task_version_no = #{taskVersionNo}
+        order by id desc limit 1
+    </select>
+    <select id="getVersionLatestInstance" resultType="TaskInstance">
+        SELECT
+          <include refid="fields"/>
+        FROM
+          <include refid="table"/>
+        WHERE
+          task_version_id = #{taskVersionId}
+        order by id desc limit 1
+    </select>
+    <select id="statis" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+          <include refid="table"/>
+        <where>
+            <![CDATA[
+              create_time >= #{startTime} AND create_time <= #{endTime}
+            ]]>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+</mapper>

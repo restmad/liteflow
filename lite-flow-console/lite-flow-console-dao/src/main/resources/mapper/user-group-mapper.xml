@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.UserGroupMapper">
+
+	<sql id="fields">
+		id AS id,
+		description AS description,
+		name AS name,
+		user_id AS userId,
+		create_time AS createTime,
+		update_time AS updateTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="ids != null">
+				id IN
+				<foreach collection="ids" item="item" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND name LIKE CONCAT('%', #{nameLike}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				name
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_user_group
+	</sql>
+	  
+	<select id="getById" resultType="UserGroup">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		name,
+		description,
+		user_id,
+		create_time,
+		update_time)
+		value(
+		#{name},
+		#{description},
+		#{userId},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if>
+			<if test="description != null and description != ''">
+				description=#{description},
+			</if>
+			<if test="updateTime != null">
+				update_time=#{updateTime}
+			</if>
+			
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="UserGroup">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+	<select id="getByUserId" resultType="UserGroup">
+		SELECT ug.*
+		FROM <include refid="table"/> ug
+		INNER JOIN lf_console_user_group_mid mid
+		ON ug.id = mid.group_id
+		AND mid.user_id = #{userId}
+	</select>
+	<delete id="delete">
+		DELETE
+		FROM <include refid="table"/>
+		WHERE id = #{id}
+	</delete>
+</mapper>

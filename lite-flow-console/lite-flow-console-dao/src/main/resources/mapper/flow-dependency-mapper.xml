@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.FlowDependencyMapper">
+
+
+	<sql id="table">
+		lf_console_flow_dependency
+	</sql>
+	<sql id="fields">
+		id AS id,
+		flow_id AS flowId,
+		task_dependency_id AS taskDependencyId,
+		create_time AS createTime
+	</sql>
+
+	<sql id="where_sql">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="flowId != null">
+				AND flow_id = #{flowId}
+			</if>
+			<if test="taskDependencyId != null">
+				AND task_dependency_id = #{taskDependencyId}
+			</if>
+		</where>
+	</sql>
+
+	  
+	<select id="getById" resultType="FlowDependency">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{1}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		flow_id,
+		task_dependency_id,
+		create_time
+		)
+		value(
+		#{flowId},
+		#{taskDependencyId},
+		#{createTime}
+		)
+	</insert>
+
+	<insert id="insertBatch">
+		insert into
+		<include refid="table"/>(
+		flow_id,
+		task_dependency_id,
+		create_time)
+		values
+		<foreach collection="dependencies" item="dependency" separator=",">
+			(#{dependency.flowId},
+			#{dependency.taskDependencyId},
+			#{dependency.createTime})
+		</foreach>
+
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="flowId != null">
+				flow_id=#{flowId},
+			</if>
+			<if test="taskDependencyId != null">
+				task_dependency_id=#{taskDependencyId},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="FlowDependency">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+	<delete id="delete">
+		delete from <include refid="table"/> where flow_id=#{flowId} and task_dependency_id=#{dependencyId}
+	</delete>
+	<delete id="deleteByFlowId">
+		delete from <include refid="table"/> where flow_id=#{0}
+	</delete>
+</mapper>

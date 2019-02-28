@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lite.flow.console.dao.mapper.UserGroupMidMapper">
+
+	<sql id="fields">
+		id AS id,
+		user_id AS userId,
+		groupIds AS groupIds,
+		create_time AS createTime
+	</sql>
+	<sql id="where_sql">
+		<where>
+			<if test="userId != null">
+				user_id = #{userId}
+			</if>
+			<if test="groupIds != null">
+				AND group_id = #{groupIds}
+			</if>
+		</where>
+	</sql>
+	<sql id="table">
+		lf_console_user_group_mid
+	</sql>
+	  
+	<select id="getById" resultType="UserGroupMid">
+		select
+			<include refid="fields"/>
+			from  
+			<include refid="table"/>
+		where id=#{0}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		<include refid="table"/>(
+		user_id,
+		group_id,
+		create_time)
+		value(
+		#{userId},
+		#{groupIds},
+		#{createTime})
+	</insert>
+	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		<include refid="table"/>(
+		user_id,
+		group_id,
+		create_time)
+		VALUES
+		<foreach collection="list" item="item"  separator=",">
+			(#{item.userId}, #{item.groupIds}, #{item.createTime})
+		</foreach>
+	</insert>
+	<update id="update">
+		update <include refid="table"/>
+		<set>
+			<if test="userId != null">
+				user_id=#{userId},
+			</if>
+			<if test="groupIds != null">
+				group_id=#{groupIds}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findList" resultType="UserGroupMid">
+		select 
+			<include refid="fields"/>
+		from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+		<if test="orderByOperation != null">
+			<foreach collection="orderByOperation.itemOperators" item="opr" separator="," open="order by ">
+	           		${opr.column} ${opr.operator} 
+	         </foreach>
+		</if>
+		<if test="page != null">
+			limit #{page.offset},#{page.limit}
+		</if>
+	</select>
+	<select id="count" resultType="int">
+		select count(*) from 
+			<include refid="table"/> 
+		<include refid="where_sql"/>
+	</select>
+	<delete id="deleteByGroupId">
+		DELETE
+	  	FROM <include refid="table"/>
+		WHERE group_id = #{groupIds}
+	</delete>
+</mapper>
