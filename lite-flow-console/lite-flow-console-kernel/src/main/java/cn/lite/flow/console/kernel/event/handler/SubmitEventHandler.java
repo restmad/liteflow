@@ -8,7 +8,6 @@ import cn.lite.flow.console.service.TaskInstanceService;
 import cn.lite.flow.console.service.TaskVersionService;
 import cn.lite.flow.executor.client.ExecutorJobRpcService;
 import cn.lite.flow.executor.client.model.SubmitExecuteJob;
-import cn.lite.flow.executor.model.consts.ExecutorJobType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
