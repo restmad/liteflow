@@ -4,6 +4,9 @@
         <Property name="logpath">/data/logs/lite/</Property>
     </Properties>
     <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
         <!--sql日志-->
         <RollingRandomAccessFile name="sqlFile" fileName="${logpath}/sql.log"
                                  filePattern="${logpath}/%d{yyyyMMdd}/sql.log">
@@ -54,21 +57,18 @@
 
     </Appenders>
     <Loggers>
-        <!-- sql -->
-        <Logger name="cn.lite.business" level="DEBUG" additivity="false">
-            <appenderRef ref="sqlFile" />
-            <appenderRef ref="errorFile" />
-            <appenderRef ref="All" />
+        <Logger name="cn.lite.flow.console.kernel.job" level="ERROR" additivity="false">
+            <appenderRef ref="console" />
         </Logger>
-
-
         <!-- cn.lite INFO ERROR -->
-        <Logger name="cn.lite" level="INFO" additivity="false">
+        <Logger name="cn.lite" level="DEBUG" additivity="false">
             <appenderRef ref="errorFile" />
             <appenderRef ref="All" />
+            <appenderRef ref="console" />
         </Logger>
 
         <Root level="INFO">
+            <appenderRef ref="console" />
             <appenderRef ref="errorFile"/>
             <appenderRef ref="All" />
         </Root>
