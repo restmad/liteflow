@@ -5,12 +5,12 @@ db:
   host: db.liteflow.cn
   port: 3306
   name: lite_flow
-  user: root
-  pwd: root
+  user: lite
+  pwd: lite
 
 ###redis配置
 redis:
-  hostName: redis.liteflow.cn
+  host: redis.liteflow.cn
   port: 6379
   password:
   timeout: 100000
