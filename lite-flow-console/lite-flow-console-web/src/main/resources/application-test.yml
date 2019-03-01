@@ -10,7 +10,7 @@ db:
 
 ###redis配置
 redis:
-  hostName: 127.0.0.1
+  hostName: redis.liteflow.cn
   port: 6379
   password:
   timeout: 100000
@@ -20,14 +20,14 @@ redis:
     maxWaitMillis: 1000
     testOnBorrow: true
 
+logging:
+    config: classpath:log4j2-test.xml
+
 dubbo:
   registry:
-    address: zookeeper://127.0.0.1:2181
+    address: zookeeper://zk.liteflow.cn:2181
     cache: /tmp/dubbo.console.cache
 
 zk:
-  servers: 127.0.0.1:2181
+  servers: zk.liteflow.cn:2181
 
-
-logging:
-    config: classpath:log4j2-test.xml

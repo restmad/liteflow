@@ -30,6 +30,11 @@
             <artifactId>lite-flow-executor-model-basic</artifactId>
             <version>${lite-flow.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
