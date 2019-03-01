@@ -19,11 +19,10 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
-@MapperScan(basePackages = "cn.lite.flow.console.dao.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
+@MapperScan(basePackages = "cn.lite.flow.console.dao.mapper", sqlSessionFactoryRef = "consoleSqlSessionFactory")
 public class ConsoleDaoConfig {
 
-
-    @Bean("dataSource")
+    @Bean("consoleDataSource")
     @Primary
     @ConfigurationProperties(prefix = "console.jdbc")
     public DataSource dataSource() {
@@ -35,7 +34,7 @@ public class ConsoleDaoConfig {
         return new DataSourceTransactionManager(dataSource());
     }
 
-    @Bean(name = "sqlSessionFactory")
+    @Bean(name = "consoleSqlSessionFactory")
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource());
