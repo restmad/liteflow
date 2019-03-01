@@ -1,22 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
+    <Properties>
+        <Property name="logpath">/tmp/logs/lite/executor/</Property>
+    </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
         </Console>
+        <!--sql日志-->
+        <RollingRandomAccessFile name="sqlFile" fileName="${logpath}/sql.log"
+                                 filePattern="${logpath}/%d{yyyyMMdd}/sql.log">
+            <PatternLayout>
+                <Pattern>%d{yyyyMMdd-HH:mm:ss.SSS} [%t] %-5level %l - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- logger.warn\logger.error 输出 -->
+        <RollingRandomAccessFile name="errorFile" fileName="${logpath}/error.log"
+                                 filePattern="${logpath}/%d{yyyyMMdd}/error.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout>
+                <Pattern>%d{yyyyMMdd-HH:mm:ss.SSS} [%t] %-5level %l - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+        <!-- accessLog 输出 -->
+        <RollingRandomAccessFile name="accessFile"
+                                 fileName="${logpath}/access.log"
+                                 filePattern="${logpath}/%d{yyyyMMdd}/access.log">
+            <PatternLayout>
+                <Pattern>%d{yyyyMMdd-HH:mm:ss.SSS} [%t] %-5level %l - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- other -->
+        <RollingRandomAccessFile name="All" fileName="${logpath}/all.log"
+                                 filePattern="${logpath}/%d{yyyyMMdd}/all.log">
+            <PatternLayout>
+                <Pattern>%d{yyyyMMdd-HH:mm:ss.SSS} %logger{36} %-5level %l - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+
     </Appenders>
     <Loggers>
+        <Logger name="cn.lite.flow.console.kernel.job" level="ERROR" additivity="false">
+            <appenderRef ref="console" />
+        </Logger>
+        <!-- cn.lite INFO ERROR -->
         <Logger name="cn.lite" level="DEBUG" additivity="false">
+            <appenderRef ref="errorFile" />
+            <appenderRef ref="All" />
             <appenderRef ref="console" />
         </Logger>
-        <Logger name="com.alibaba.dubbo" level="ERROR" additivity="false">
-            <appenderRef ref="console" />
-        </Logger>
-        <Logger name="cn.lite.flow.executor.kernel.schedule" level="ERROR" additivity="false">
-            <appenderRef ref="console" />
-        </Logger>
+
         <Root level="INFO">
             <appenderRef ref="console" />
+            <appenderRef ref="errorFile"/>
+            <appenderRef ref="All" />
         </Root>
     </Loggers>
 </Configuration>

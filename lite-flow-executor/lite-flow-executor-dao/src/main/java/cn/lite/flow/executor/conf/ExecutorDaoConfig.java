@@ -1,9 +1,10 @@
-package cn.lite.flow.executor.conf.dao;
+package cn.lite.flow.executor.conf;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +20,10 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
-@MapperScan(basePackages = "cn.lite.flow.executor.dao", sqlSessionFactoryRef = "sqlSessionFactory")
+@MapperScan(basePackages = "cn.lite.flow.executor.dao", sqlSessionFactoryRef = "executorSqlSessionFactory")
 public class ExecutorDaoConfig {
 
-    @Bean
+    @Bean("executorDataSource")
     @Primary
     @ConfigurationProperties(prefix = "executor.jdbc")
     public DataSource dataSource() {
@@ -34,10 +35,12 @@ public class ExecutorDaoConfig {
         return new DataSourceTransactionManager(dataSource());
     }
 
-    @Bean(name = "sqlSessionFactory")
+    @Bean(name = "executorSqlSessionFactory")
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource());
+        /**DefaultVFS在获取jar上存在问题 不加此条，打成jar包后报找不到mybatis文件中的别名的错误*/
+        sqlSessionFactoryBean.setVfs(SpringBootVFS.class);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sqlSessionFactoryBean.setTypeAliasesPackage("cn.lite.flow.executor.model.basic");
         sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));

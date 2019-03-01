@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Properties>
-        <Property name="logpath">/tmp/logs/lite/</Property>
+        <Property name="logpath">/tmp/logs/lite/console/</Property>
     </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
