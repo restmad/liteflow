@@ -126,4 +126,18 @@
 			<include refid="table"/> 
 		<include refid="where_sql"/>
 	</select>
+
+	<select id="getLessThanNoCount" resultType="int">
+		select
+		  count(*)
+		from
+			<include refid="table"/>
+			force index(idx_tid_final_status)
+		where
+			task_id=#{taskId}
+			and final_status=#{finalStatus}
+		<![CDATA[
+			and version_no<#{versionNo}
+		]]>
+	</select>
 </mapper>

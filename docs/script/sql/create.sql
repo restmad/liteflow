@@ -170,7 +170,8 @@ CREATE TABLE lf_console_task_version (
   update_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (id),
   UNIQUE KEY idx_uniq_task_id_version_no(task_id,version_no),
-  KEY idx_status(task_id,version_no)
+  KEY idx_tid_status(task_id,status),
+  KEY idx_tid_final_status_no(task_id,final_status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务版本信息表';
 
 -- 任务实例信息表

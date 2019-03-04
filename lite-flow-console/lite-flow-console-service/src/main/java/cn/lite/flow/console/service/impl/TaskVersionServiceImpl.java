@@ -419,4 +419,9 @@ public class TaskVersionServiceImpl implements TaskVersionService {
 
         });
     }
+
+    @Override
+    public int getLessThanNoCount(long taskId, int finalStatus, long versionNo) {
+        return taskVersionMapper.getLessThanNoCount(taskId, finalStatus, versionNo);
+    }
 }

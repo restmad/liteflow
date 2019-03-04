@@ -14,4 +14,12 @@ public interface TaskVersionMapper extends BaseMapper<TaskVersion, TaskVersionQM
 
     TaskVersion getTaskVersion(@Param("taskId")long taskId, @Param("taskVersionNo")long taskVersionNo);
 
+    /**
+     * 获取小于某个任务版本的数量
+     * @param taskId
+     * @param finalStatus
+     * @param versionNo
+     * @return
+     */
+    int getLessThanNoCount(@Param("taskId")long taskId, @Param("finalStatus") int finalStatus, @Param("versionNo")long versionNo);
 }

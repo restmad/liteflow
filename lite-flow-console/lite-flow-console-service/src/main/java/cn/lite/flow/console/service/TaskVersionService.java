@@ -121,4 +121,13 @@ public interface TaskVersionService extends BaseService<TaskVersion, TaskVersion
      * @param endTime
      */
     void calVersionAndInstanceWithDependency(long taskId, Date startTime, Date endTime);
+
+    /**
+     * 获取小于某个版本的数量
+     * @param taskId
+     * @param finalStatus
+     * @param versionNo
+     * @return
+     */
+    int getLessThanNoCount(long taskId, int finalStatus, long versionNo);
 }

@@ -41,17 +41,13 @@ public class TaskConcurrencyChecker implements Checker<TaskInstance> {
         Integer executeStrategy = task.getExecuteStrategy();
 
         if(task.getIsConcurrency() != null && task.getIsConcurrency() == BooleanType.FALSE.getValue()){
-            TaskVersionQM qm = new TaskVersionQM();
-            qm.setTaskId(taskId);
-            qm.setFinalStatus(TaskVersionFinalStatus.NEW.getValue());
-            qm.setPage(Page.getDefaultPage());
-            List<TaskVersion> taskVersions = versionService.list(qm);
-            if(taskVersions.size() > 1){
+            int taskVersions = versionService.getLessThanNoCount(taskId, TaskVersionFinalStatus.NEW.getValue(), taskInstance.getTaskVersionNo());
+            if(taskVersions > 0){
                 /**
                  * 等待其他版本执行结束
                  */
                 if(executeStrategy == ExecuteStrategy.WAIT.getValue()){
-                    String msg = "task is not concurrency, and only one can run at the same time, instanceId:" + taskInstance.getId() + ", taskId:" + taskId;
+                    String msg = "等待之前的任务版本执行完成";
                     LOG.info(msg);
                     return new Tuple<>(false, msg);
                 /**
@@ -62,7 +58,7 @@ public class TaskConcurrencyChecker implements Checker<TaskInstance> {
                      * 要先kill掉，然后才能ignore，要走常规的状态流转
                      */
                     versionService.ignore(versionId);
-                    String msg = "ignore this version(execute strategy is ignore), instanceId:" + taskInstance.getId() + ", taskId:" + taskId;
+                    String msg = "已有任务版本运行中，当前任务版本忽略";
                     LOG.info(msg);
                     return new Tuple<>(false, msg);
                 }

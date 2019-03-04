@@ -19,8 +19,8 @@ public class TaskVersionQM extends BaseQM {
 
     private Integer finalStatus;                  //最终状态
 
-    private Date logicTimeLessTime;
+    public static final String COL_VERSION_NO = "version_no";    //列版本号
 
-    public static final String COL_VERSION_NO = "versionNo";    //列版本号
+
 
 }
