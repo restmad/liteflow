@@ -80,9 +80,7 @@
         run_start_time,
         run_end_time,
         msg,
-        executor_job_id,
-        create_time,
-        update_time)
+        executor_job_id)
 		value(
         #{taskId},
         #{taskVersionId},
@@ -94,9 +92,7 @@
         #{runStartTime},
         #{runEndTime},
         #{msg},
-        #{executorJobId},
-        #{createTime},
-        #{updateTime})
+        #{executorJobId})
 	</insert>
     <select id="count" resultType="int">
         select count(*) from  <include refid="table"/>

@@ -59,6 +59,7 @@ public class TaskVersionDailyInitJob extends AbstractUnstatefullJob {
                 dailyInit.setDay(tomorrowLongDate);
                 dailyInit.setTaskId(task.getId());
                 dailyInits.add(dailyInit);
+                LOG.info("init taskVersion of task:{}, info:{}", task.getId(), dailyInit.toString());
             }
             //批量添加
             dailyInitService.batchAdd(dailyInits);
