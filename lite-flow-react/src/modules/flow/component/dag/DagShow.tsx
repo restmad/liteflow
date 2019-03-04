@@ -50,7 +50,7 @@ const checkDatas = (dagDatas) => {
  * @returns {Event | undefined}
  */
 const getEvent = (isPreventDefault) => {
-     const event = window.event;
+    const event = window.event;
     event.preventDefault ? event.preventDefault() : (event.returnValue = false);
     return event;
 
@@ -448,7 +448,7 @@ class DagShow extends Component<DagProps, any> {
             links.push({
                 taskId: task.id,
                 upstreamTaskId: tk.id,
-                offset: 0
+                config: ""
             });
         }
         this.addNodeAndLinks(tasks, links)
@@ -467,7 +467,7 @@ class DagShow extends Component<DagProps, any> {
             links.push({
                 taskId: tk.id,
                 upstreamTaskId: task.id,
-                offset: 0
+                config: ""
             });
         }
         this.addNodeAndLinks(tasks, links)
@@ -653,7 +653,7 @@ class DagShow extends Component<DagProps, any> {
         let linkDataSet = {};
         let linksData = [];
         for (let lk of resultLinks) {
-            let key = lk.targetId + "-" + lk.sourceId;
+            let key = lk.taskId + "-" + lk.upstreamTaskId;
             if (!linkDataSet[key]) {
                 linksData.push(lk);
                 linkDataSet[key] = true;

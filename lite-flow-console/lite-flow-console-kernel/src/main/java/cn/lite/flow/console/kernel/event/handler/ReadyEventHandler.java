@@ -47,7 +47,7 @@ public class ReadyEventHandler implements EventHandler{
             LOG.info("instance({}) status is not init", instanceId);
             return false;
         }
-        String msg = "ready to submit";
+        String msg = "等待提交";
 
         boolean isPassed = true;
         for(Checker<TaskInstance> checker : checkers){

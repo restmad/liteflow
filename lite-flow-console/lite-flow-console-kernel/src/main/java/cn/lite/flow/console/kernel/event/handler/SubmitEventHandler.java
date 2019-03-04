@@ -41,7 +41,7 @@ public class SubmitEventHandler implements EventHandler{
             LOG.info("instance({}) status is not ready", instanceId);
             return false;
         }
-        String msg = "submitted to executor";
+        String msg = "已提交";
 
         /**
          * 任务添加到executor
