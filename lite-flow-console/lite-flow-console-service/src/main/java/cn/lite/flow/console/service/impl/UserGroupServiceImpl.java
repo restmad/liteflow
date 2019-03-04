@@ -1,6 +1,5 @@
 package cn.lite.flow.console.service.impl;
 
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.UserGroupMapper;
 import cn.lite.flow.console.model.basic.UserGroup;
 import cn.lite.flow.console.model.query.UserGroupQM;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,8 +27,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 
     @Override
     public void add(UserGroup model) {
-        Date now = DateUtils.getNow();
-        model.setCreateTime(now);
         userGroupMapper.insert(model);
     }
 

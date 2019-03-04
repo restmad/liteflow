@@ -1,7 +1,6 @@
 package cn.lite.flow.console.service.impl;
 
 import cn.lite.flow.common.model.consts.StatusType;
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.TaskDependencyMapper;
 import cn.lite.flow.console.model.basic.TaskDependency;
 import cn.lite.flow.console.model.query.TaskDependencyQM;
@@ -11,7 +10,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,8 +26,6 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
         if(dependency.getStatus() == null){
             dependency.setStatus(StatusType.ON.getValue());
         }
-        Date now = DateUtils.getNow();
-        dependency.setCreateTime(now);
         taskDependencyMapper.insert(dependency);
     }
 

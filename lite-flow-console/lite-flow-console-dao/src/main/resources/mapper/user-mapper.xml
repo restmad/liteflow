@@ -58,18 +58,14 @@
 		phone,
 		password,
 		status,
-		is_super,
-		create_time,
-		update_time)
+		is_super)
 		value(
 		#{userName},
 		#{email},
 		#{phone},
 		#{password},
 		#{status},
-		#{isSuper},
-		#{createTime},
-		#{updateTime})
+		#{isSuper})
 	</insert>
 	<update id="update">
 		update <include refid="table"/>
@@ -92,10 +88,7 @@
 			<if test="isSuper != null">
 				is_super = #{isSuper},
 			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime}
-			</if>
-			
+
 		</set>
 		where id=#{id}
 	</update>

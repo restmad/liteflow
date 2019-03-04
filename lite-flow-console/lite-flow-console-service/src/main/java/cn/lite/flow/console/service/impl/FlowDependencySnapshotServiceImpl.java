@@ -1,6 +1,5 @@
 package cn.lite.flow.console.service.impl;
 
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.FlowDependencySnapshotMapper;
 import cn.lite.flow.console.model.basic.FlowDependencySnapshot;
 import cn.lite.flow.console.model.basic.TaskDependency;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,10 +52,6 @@ public class FlowDependencySnapshotServiceImpl implements FlowDependencySnapshot
         if(CollectionUtils.isEmpty(snapshots)){
             return;
         }
-        Date now = DateUtils.getNow();
-        snapshots.forEach(snapshot -> {
-            snapshot.setCreateTime(now);
-        });
         flowDependencySnapshotMapper.insertBatch(snapshots);
     }
 

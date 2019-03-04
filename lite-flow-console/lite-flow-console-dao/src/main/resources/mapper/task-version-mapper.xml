@@ -67,14 +67,12 @@
 		version_no,
 		task_id,
 		status,
-		final_status,
-		create_time)
+		final_status)
 		value(
 		#{versionNo},
 		#{taskId},
 		#{status},
-		#{finalStatus},
-		#{createTime}
+		#{finalStatus}
 		)
 	</insert>
 	<update id="update">
@@ -89,10 +87,7 @@
 			<if test="retryNum != null">
 				retry_num=#{retryNum},
 			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime}
-			</if>
-			
+
 		</set>
 		where id=#{id}
 	</update>
@@ -107,9 +102,6 @@
 			</if>
 			<if test="taskVersion.retryNum != null">
 				retry_num=#{taskVersion.retryNum},
-			</if>
-			<if test="taskVersion.updateTime != null">
-				update_time=#{taskVersion.updateTime}
 			</if>
 		</set>
 		where id=#{taskVersion.id} and status=#{originStatus}

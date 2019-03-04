@@ -1,6 +1,5 @@
 package cn.lite.flow.executor.service.impl;
 
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.executor.dao.ExecutorAttachmentMapper;
 import cn.lite.flow.executor.model.basic.ExecutorAttachment;
 import cn.lite.flow.executor.model.query.ExecutorAttachmentQM;
@@ -8,7 +7,6 @@ import cn.lite.flow.executor.service.ExecutorAttachmentService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,8 +22,6 @@ public class ExecutorAttachmentServiceImpl implements ExecutorAttachmentService 
 
     @Override
     public void add(ExecutorAttachment attachment) {
-        Date now = DateUtils.getNow();
-        attachment.setCreateTime(now);
         executorAttachmentMapper.insert(attachment);
     }
 

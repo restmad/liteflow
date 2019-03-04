@@ -1,6 +1,5 @@
 package cn.lite.flow.executor.service.impl;
 import cn.lite.flow.common.model.consts.StatusType;
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.executor.common.exception.ExecutorRuntimeException;
 import cn.lite.flow.executor.dao.ExecutorServerMapper;
 import cn.lite.flow.executor.model.basic.ExecutorServer;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,8 +34,6 @@ public class ExecutorServerServiceImpl implements ExecutorServerService {
         Preconditions.checkArgument(StringUtils.isNotBlank(executor.getDescription()), "description不能为空");
         Preconditions.checkArgument(executor.getUserId() != null, "userId不能为空");
 
-        Date now = DateUtils.getNow();
-        executor.setCreateTime(now);
         executor.setStatus(StatusType.NEW.getValue());
         try {
             executorServerMapper.insert(executor);

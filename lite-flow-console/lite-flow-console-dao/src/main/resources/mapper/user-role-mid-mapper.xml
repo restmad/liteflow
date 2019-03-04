@@ -34,22 +34,19 @@
 		insert into
 		<include refid="table"/>(
 		user_id,
-		role_id,
-		create_time)
+		role_id)
 		value(
 		#{userId},
-		#{roleId},
-		#{createTime})
+		#{roleId})
 	</insert>
 	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO
 		<include refid="table"/>(
 		user_id,
-		role_id,
-		create_time)
+		role_id)
 		VALUES
 		<foreach collection="list" item="item"  separator=",">
-			(#{item.userId}, #{item.roleId}, #{item.createTime})
+			(#{item.userId}, #{item.roleId})
 		</foreach>
 	</insert>
 	<update id="update">

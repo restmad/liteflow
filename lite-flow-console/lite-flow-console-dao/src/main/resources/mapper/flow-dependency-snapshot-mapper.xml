@@ -63,16 +63,14 @@
 		task_id,
 		upstream_task_id,
 		type,
-		conf,
-		create_time)
+		conf)
 		values
 		<foreach collection="dependencies" item="dependency" separator=",">
 			(#{dependency.flowId},
 			#{dependency.taskId},
 			#{dependency.upstreamTaskId},
 			#{dependency.type},
-			#{dependency.conf},
-			#{dependency.createTime})
+			#{dependency.conf})
 		</foreach>
 
 	</insert>

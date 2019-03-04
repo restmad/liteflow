@@ -68,8 +68,6 @@ public class TaskVersionServiceImpl implements TaskVersionService {
 
     @Override
     public void add(TaskVersion model) {
-        Date now = DateUtils.getNow();
-        model.setCreateTime(now);
         taskVersionMapper.insert(model);
     }
 
@@ -303,7 +301,6 @@ public class TaskVersionServiceImpl implements TaskVersionService {
         taskInstance.setLogicRunTime(logicRunTime);
         taskInstance.setPluginId(pluginId);
         taskInstance.setPluginConf(pluginConfig);
-        taskInstance.setCreateTime(DateUtils.getNow());
         taskInstanceService.add(taskInstance);
         return taskInstance;
     }

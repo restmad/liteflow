@@ -160,8 +160,6 @@ public class ExecutorJobServiceImpl implements ExecutorJobService {
 
     @Override
     public void add(ExecutorJob executorJob) {
-        Date now = DateUtils.getNow();
-        executorJob.setCreateTime(now);
         executorJobMapper.insert(executorJob);
     }
 

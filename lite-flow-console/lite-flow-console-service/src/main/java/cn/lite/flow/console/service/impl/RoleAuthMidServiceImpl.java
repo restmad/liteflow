@@ -1,6 +1,5 @@
 package cn.lite.flow.console.service.impl;
 
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.RoleAuthMidMapper;
 import cn.lite.flow.console.model.basic.RoleAuthMid;
 import cn.lite.flow.console.model.query.RoleAuthMidQM;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +21,6 @@ public class RoleAuthMidServiceImpl implements RoleAuthMidService {
 
     @Override
     public void add(RoleAuthMid model) {
-        model.setCreateTime(DateUtils.getNow());
         roleAuthMidMapper.insert(model);
     }
 
@@ -60,12 +57,10 @@ public class RoleAuthMidServiceImpl implements RoleAuthMidService {
     @Override
     public void addBatchMenuItemIds(Long roleId, List<Long> menuItemIdList) {
         List<RoleAuthMid> roleAuthMidList = new ArrayList<>();
-        Date now = DateUtils.getNow();
         menuItemIdList.forEach(menuItemId -> {
             RoleAuthMid roleAuthMid = new RoleAuthMid();
             roleAuthMid.setRoleId(roleId);
             roleAuthMid.setMenuItemId(menuItemId);
-            roleAuthMid.setCreateTime(now);
             roleAuthMidList.add(roleAuthMid);
         });
         this.addBatch(roleAuthMidList);

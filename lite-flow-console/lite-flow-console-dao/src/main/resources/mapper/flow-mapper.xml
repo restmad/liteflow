@@ -51,16 +51,12 @@
 		name,
 		description,
 		user_id,
-		status,
-		create_time,
-		update_time)
+		status)
 		value(
 		#{name},
 		#{description},
 		#{userId},
-		#{status},
-		#{createTime},
-		#{updateTime})
+		#{status})
 	</insert>
 	<update id="update">
 		update <include refid="table"/>
@@ -77,10 +73,7 @@
 			<if test="userId != null">
 				user_id=#{userId},
 			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime}
-			</if>
-			
+
 		</set>
 		where id=#{id}
 	</update>

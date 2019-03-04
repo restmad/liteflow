@@ -50,17 +50,13 @@
 		type,
 		content,
 		user_id,
-		status,
-		create_time,
-		update_time)
+		status)
 		value(
 		#{name},
 		#{type},
 		#{content},
 		#{userId},
-		#{status},
-		#{createTime},
-		#{updateTime})
+		#{status})
 	</insert>
 	<update id="update">
 		UPDATE
@@ -78,7 +74,6 @@
 			<if test="status != null">
 				status = #{status},
 			</if>
-			update_time = #{updateTime}
 		</set>
 		WHERE id = #{id}
 	</update>

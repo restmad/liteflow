@@ -51,14 +51,12 @@
 		instance_id,
 		upstream_task_id,
 		upstream_task_version_no,
-		status,
-		create_time)
+		status)
 		value(
 		#{instanceId},
 		#{upstreamTaskId},
 		#{upstreamTaskVersionNo},
-		#{status},
-		#{createTime})
+		#{status})
 	</insert>
 	<insert id="insertBatch" keyProperty="id">
 		insert into
@@ -66,16 +64,14 @@
 		instance_id,
 		upstream_task_id,
 		upstream_task_version_no,
-		status,
-		create_time)
+		status)
 		values
 		<foreach collection="dependencies" item="dependency" separator=",">
 			(
 			#{dependency.instanceId},
 			#{dependency.upstreamTaskId},
 			#{dependency.upstreamTaskVersionNo},
-			#{dependency.status},
-			#{dependency.createTime})
+			#{dependency.status})
 		</foreach>
 
 	</insert>

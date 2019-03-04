@@ -11,7 +11,6 @@ import cn.lite.flow.console.common.enums.SourceTypeEnum;
 import cn.lite.flow.console.common.exception.ConsoleRuntimeException;
 import cn.lite.flow.console.common.model.vo.SessionUser;
 import cn.lite.flow.console.common.utils.DagUtils;
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.common.utils.SessionContext;
 import cn.lite.flow.console.dao.mapper.FlowMapper;
 import cn.lite.flow.console.model.basic.Flow;
@@ -41,7 +40,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -79,9 +77,7 @@ public class FlowServiceImpl implements FlowService {
     @Override
     @Transactional("consoleTxManager")
     public void add(Flow model) {
-        Date now = DateUtils.getNow();
         model.setStatus(FlowStatus.NEW.getValue());
-        model.setCreateTime(now);
         flowMapper.insert(model);
 
         /**
@@ -555,7 +551,6 @@ public class FlowServiceImpl implements FlowService {
     @Override
     @Transactional("consoleTxManager")
     public void addOrUpdateDependencies(long flowId, List<TaskDependency> dependencies) {
-        Date now = DateUtils.getNow();
         //任务流原来的依赖关系
         List<FlowDependency> flowOriginalDependencies = flowDependencyService.getFlowDependencies(flowId);
         //任务任务流已经存在的依赖id
@@ -617,7 +612,6 @@ public class FlowServiceImpl implements FlowService {
                     FlowDependency collectionDependency = new FlowDependency();
                     collectionDependency.setFlowId(flowId);
                     collectionDependency.setTaskDependencyId(td.getId());
-                    collectionDependency.setCreateTime(now);
                     collectionDependencies.add(collectionDependency);
                 } else {
                     //任务流已经存在的依赖id
@@ -676,7 +670,6 @@ public class FlowServiceImpl implements FlowService {
                 FlowDependency flowDependency = new FlowDependency();
                 flowDependency.setFlowId(flowId);
                 flowDependency.setTaskDependencyId(dependency.getId());
-                flowDependency.setCreateTime(now);
                 collectionDependencies.add(flowDependency);
             }
         }

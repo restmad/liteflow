@@ -61,8 +61,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional("consoleTxManager")
     public void add(Task model) {
-        Date now = DateUtils.getNow();
-        model.setCreateTime(Optional.ofNullable(model.getCreateTime()).orElse(now));
         model.setStatus(TaskStatus.NEW.getValue());
         taskMapper.insert(model);
 

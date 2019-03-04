@@ -42,15 +42,13 @@
 		field_config,
 		class_name,
 		user_id,
-		status,
-		create_time)
+		status)
 		value(
 		#{name},
 		#{fieldConfig},
 		#{className},
 		#{userId},
-		#{status},
-		#{createTime})
+		#{status)
 	</insert>
 	<select id="findList" resultType="ExecutorContainer">
 		select 

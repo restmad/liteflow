@@ -37,24 +37,17 @@
 		<include refid="table"/>(
 		role_name,
 		description,
-		user_id,
-		create_time,
-		update_time)
+		user_id)
 		value(
 		#{roleName},
 		#{description},
-		#{userId},
-		#{createTime},
-		#{updateTime})
+		#{userId})
 	</insert>
 	<update id="update">
 		update <include refid="table"/>
 		<set>
 			<if test="roleName != null and roleName != ''">
 				role_name=#{roleName},
-			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime},
 			</if>
 			<if test="description != null">
 				description = #{description}

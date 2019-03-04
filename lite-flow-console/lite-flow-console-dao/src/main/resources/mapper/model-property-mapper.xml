@@ -41,8 +41,8 @@
 	</select>
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
 		insert into
-			<include refid="table"/> (type,model_id,name,value,create_time,update_time)
-		value(#{type},#{modelId},#{name},#{value},#{createTime},#{updateTime})
+			<include refid="table"/> (type,model_id,name,value)
+		value(#{type},#{modelId},#{name},#{value})
 	</insert>
 	<update id="update">
 		update <include refid="table"/>
@@ -59,10 +59,7 @@
 			<if test="type != null">
 				type=#{type},
 			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime}
-			</if>
-			
+
 		</set>
 		where id=#{id}
 	</update>

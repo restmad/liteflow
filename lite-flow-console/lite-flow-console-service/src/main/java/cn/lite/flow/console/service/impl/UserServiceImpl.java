@@ -2,8 +2,6 @@ package cn.lite.flow.console.service.impl;
 
 import cn.lite.flow.common.model.consts.StatusType;
 import cn.lite.flow.common.utils.CodecUtils;
-import cn.lite.flow.common.utils.DateUtils;
-import cn.lite.flow.console.common.consts.Constants;
 import cn.lite.flow.console.common.model.vo.SessionUser;
 import cn.lite.flow.console.dao.mapper.UserMapper;
 import cn.lite.flow.console.model.basic.*;
@@ -44,8 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(User model) {
-        Date now = DateUtils.getNow();
-        model.setCreateTime(now);
         model.setPassword(CodecUtils.encodePassword(model.getPassword()));
         model.setStatus(StatusType.NEW.getValue());
         userMapper.insert(model);

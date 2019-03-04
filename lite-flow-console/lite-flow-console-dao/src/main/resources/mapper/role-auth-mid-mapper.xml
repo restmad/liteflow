@@ -40,12 +40,10 @@
 		insert into
 		<include refid="table"/>(
 		role_id,
-		menu_item_id,
-		create_time)
+		menu_item_id)
 		value(
 		#{roleId},
-		#{menu_item_id},
-		#{createTime})
+		#{menu_item_id})
 	</insert>
 	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO

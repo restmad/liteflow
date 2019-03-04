@@ -1,7 +1,6 @@
 package cn.lite.flow.console.service.impl;
 
 import cn.lite.flow.console.common.exception.ConsoleRuntimeException;
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.UserGroupMidMapper;
 import cn.lite.flow.console.model.basic.UserGroupMid;
 import cn.lite.flow.console.model.query.UserGroupMidQM;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,8 +23,6 @@ public class UserGroupMidServiceImpl implements UserGroupMidService {
 
     @Override
     public void add(UserGroupMid model) {
-        Date now = DateUtils.getNow();
-        model.setCreateTime(now);
         userGroupMidMapper.insert(model);
     }
 
@@ -52,8 +48,6 @@ public class UserGroupMidServiceImpl implements UserGroupMidService {
 
     @Override
     public void addBatch(List<UserGroupMid> userGroupMidList) {
-        Date now = DateUtils.getNow();
-        userGroupMidList.forEach(userGroupMid -> userGroupMid.setCreateTime(now));
         userGroupMidMapper.insertBatch(userGroupMidList);
     }
 

@@ -46,16 +46,12 @@
 		task_id,
 		day,
 		status,
-		msg,
-		create_time,
-		update_time)
+		msg)
 		value(
 		#{taskId},
 		#{day},
 		#{status},
-		#{msg},
-		#{createTime},
-		#{updateTime}
+		#{msg}
 		)
 	</insert>
 	<insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
@@ -92,10 +88,7 @@
 			<if test="msg != null">
 				msg=#{msg},
 			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime}
-			</if>
-			
+
 		</set>
 		where id=#{id}
 	</update>

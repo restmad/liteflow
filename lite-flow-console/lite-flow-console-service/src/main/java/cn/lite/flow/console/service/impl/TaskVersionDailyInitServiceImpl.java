@@ -1,17 +1,14 @@
 package cn.lite.flow.console.service.impl;
 
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.TaskVersionDailyInitMapper;
 import cn.lite.flow.console.model.basic.TaskVersionDailyInit;
 import cn.lite.flow.console.model.consts.DailyInitStatus;
-import cn.lite.flow.console.model.consts.TaskVersionStatus;
 import cn.lite.flow.console.model.query.TaskVersionDailyInitQM;
 import cn.lite.flow.console.service.TaskVersionDailyInitService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,9 +27,7 @@ public class TaskVersionDailyInitServiceImpl implements TaskVersionDailyInitServ
         if(CollectionUtils.isEmpty(dailyInits)){
             return;
         }
-        Date now = DateUtils.getNow();
         dailyInits.forEach(dailyInit -> {
-            dailyInit.setCreateTime(now);
             dailyInit.setStatus(DailyInitStatus.NEW.getValue());
         });
         taskVersionDailyInitMapper.batchInsert(dailyInits);
@@ -103,8 +98,6 @@ public class TaskVersionDailyInitServiceImpl implements TaskVersionDailyInitServ
 
     @Override
     public void add(TaskVersionDailyInit dailyInit) {
-        Date now = DateUtils.getNow();
-        dailyInit.setCreateTime(now);
         taskVersionDailyInitMapper.insert(dailyInit);
     }
 

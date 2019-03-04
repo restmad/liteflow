@@ -1,6 +1,5 @@
 package cn.lite.flow.console.service.impl;
 
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.UserGroupAuthMidMapper;
 import cn.lite.flow.console.model.basic.UserGroupAuthMid;
 import cn.lite.flow.console.model.query.UserGroupAuthMidQM;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,8 +25,6 @@ public class UserGroupAuthMidServiceImpl implements UserGroupAuthMidService {
 
     @Override
     public void add(UserGroupAuthMid model) {
-        Date now = DateUtils.getNow();
-        model.setCreateTime(now);
         userGroupAuthMidMapper.insert(model);
     }
 
@@ -67,7 +63,6 @@ public class UserGroupAuthMidServiceImpl implements UserGroupAuthMidService {
         if (StringUtils.isNotBlank(userAuthJson)) {
             JSONArray datas = JSON.parseArray(userAuthJson);
             if (datas != null && datas.size() > 0) {
-                Date now = DateUtils.getNow();
                 List<UserGroupAuthMid> userGroupAuthMids = new ArrayList<>();
                 datas.forEach(obj -> {
                     Long sourceId = (Long) ((JSONObject) obj).get("sourceId");
@@ -81,7 +76,6 @@ public class UserGroupAuthMidServiceImpl implements UserGroupAuthMidService {
                     model.setTargetType(targetType);
                     model.setHasEditAuth(canEdit);
                     model.setHasExecuteAuth(canExecute);
-                    model.setCreateTime(now);
                     userGroupAuthMids.add(model);
                 });
                 this.addBatch(userGroupAuthMids);

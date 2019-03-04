@@ -57,9 +57,7 @@
 		target_type,
 		has_edit_auth,
 		has_execute_auth,
-		user_id,
-		create_time,
-		update_time)
+		user_id)
 		value(
 		#{sourceId},
 		#{sourceType},
@@ -67,9 +65,7 @@
 		#{targetType},
 		#{hasEditAuth},
 		#{hasExecuteAuth},
-		#{userId},
-		#{createTime},
-		#{updateTime})
+		#{userId})
 	</insert>
 	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
 		INSERT ignore INTO
@@ -80,9 +76,7 @@
 		target_type,
 		has_edit_auth,
 		has_execute_auth,
-		user_id,
-		create_time,
-		update_time)
+		user_id)
 		VALUES
 		<foreach collection="list" item="item" separator=",">
 			(
@@ -92,9 +86,7 @@
 			#{item.targetType},
 			#{item.hasEditAuth},
 			#{item.hasExecuteAuth},
-			#{item.userId},
-			#{item.createTime},
-			#{item.updateTime}
+			#{item.userId}
 			)
 		</foreach>
 	</insert>
@@ -118,9 +110,6 @@
 			</if>
 			<if test="hasExecuteAuth != null">
 				has_execute_auth = #{hasExecuteAuth},
-			</if>
-			<if test="updateTime != null">
-				update_time = #{updateTime}
 			</if>
 		</set>
 		where id=#{id}

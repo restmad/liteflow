@@ -1,6 +1,5 @@
 package cn.lite.flow.console.service.impl;
 
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.dao.mapper.RoleMapper;
 import cn.lite.flow.console.model.basic.Role;
 import cn.lite.flow.console.model.query.RoleQM;
@@ -31,8 +30,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void add(Role model) {
-        Date now = DateUtils.getNow();
-        model.setCreateTime(now);
         roleMapper.insert(model);
     }
 

@@ -43,15 +43,11 @@
 		<include refid="table"/>(
 		name,
 		description,
-		user_id,
-		create_time,
-		update_time)
+		user_id)
 		value(
 		#{name},
 		#{description},
-		#{userId},
-		#{createTime},
-		#{updateTime})
+		#{userId})
 	</insert>
 	<update id="update">
 		update <include refid="table"/>
@@ -62,10 +58,7 @@
 			<if test="description != null and description != ''">
 				description=#{description},
 			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime}
-			</if>
-			
+
 		</set>
 		where id=#{id}
 	</update>

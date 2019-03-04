@@ -1,7 +1,6 @@
 package cn.lite.flow.executor.service.impl;
 
 import cn.lite.flow.common.model.consts.StatusType;
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.executor.common.exception.ExecutorRuntimeException;
 import cn.lite.flow.executor.dao.ExecutorContainerMapper;
 import cn.lite.flow.executor.model.basic.ExecutorContainer;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,8 +39,6 @@ public class ExecutorContainerServiceImpl implements ExecutorContainerService {
             throw new ExecutorRuntimeException("该容器名称已经存在");
         }
 
-        Date now = DateUtils.getNow();
-        container.setCreateTime(now);
         container.setStatus(StatusType.ON.getValue());
         try {
             executorContainerMapper.insert(container);

@@ -47,17 +47,13 @@
 		upstream_task_id,
 		type,
 		config,
-		status,
-		create_time,
-		update_time)
+		status)
 		value(
 		#{taskId},
 		#{upstreamTaskId},
 		#{type},
 		#{config},
-		#{status},
-		#{createTime},
-		#{updateTime})
+		#{status})
 	</insert>
 	<update id="update">
 		update <include refid="table"/>
@@ -76,9 +72,6 @@
 			</if>
 			<if test="status != null">
 				status=#{status},
-			</if>
-			<if test="updateTime != null">
-				update_time=#{updateTime}
 			</if>
 
 		</set>

@@ -45,7 +45,6 @@ public class TaskVersion implements Serializable {
         taskVersion.setVersionNo(taskVersionNo);
         taskVersion.setStatus(TaskVersionStatus.INIT.getValue());
         taskVersion.setFinalStatus(TaskVersionFinalStatus.NEW.getValue());
-        taskVersion.setCreateTime(new Date());
 
         return taskVersion;
     }

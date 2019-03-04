@@ -41,17 +41,13 @@
 		ip,
 		status,
 		description,
-		user_id,
-		create_time,
-		update_time)
+		user_id)
 		value(
 		#{name},
 		#{ip},
 		#{status},
 		#{description},
-		#{userId},
-		#{createTime},
-		#{updateTime})
+		#{userId})
 	</insert>
 	<update id="update">
 		UPDATE
@@ -66,7 +62,6 @@
 			<if test="description != null and description != ''">
 				description = #{description},
 			</if>
-			update_time = #{updateTime}
 		</set>
 		WHERE id = #{id}
 	</update>

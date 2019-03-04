@@ -54,13 +54,11 @@
 		insert into
 		<include refid="table"/>(
 		flow_id,
-		task_dependency_id,
-		create_time)
+		task_dependency_id)
 		values
 		<foreach collection="dependencies" item="dependency" separator=",">
 			(#{dependency.flowId},
-			#{dependency.taskDependencyId},
-			#{dependency.createTime})
+			#{dependency.taskDependencyId})
 		</foreach>
 
 	</insert>

@@ -1,7 +1,6 @@
 package cn.lite.flow.executor.service.impl;
 
 import cn.lite.flow.common.model.consts.StatusType;
-import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.executor.common.exception.ExecutorRuntimeException;
 import cn.lite.flow.executor.dao.ExecutorPluginMapper;
 import cn.lite.flow.executor.model.basic.ExecutorPlugin;
@@ -16,7 +15,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,8 +50,6 @@ public class ExecutorPluginServiceImpl implements ExecutorPluginService {
             throw new ExecutorRuntimeException("该容器不存在");
         }
 
-        Date now = DateUtils.getNow();
-        executorPlugin.setCreateTime(now);
         executorPlugin.setStatus(StatusType.ON.getValue());
         try {
             executorPluginMapper.insert(executorPlugin);
