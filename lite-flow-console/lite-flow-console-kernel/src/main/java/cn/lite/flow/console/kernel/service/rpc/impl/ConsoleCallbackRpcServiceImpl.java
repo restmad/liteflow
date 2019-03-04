@@ -9,6 +9,7 @@ import cn.lite.flow.console.model.consts.TaskVersionFinalStatus;
 import cn.lite.flow.console.model.consts.TaskVersionStatus;
 import cn.lite.flow.console.service.TaskInstanceService;
 import cn.lite.flow.console.service.TaskVersionService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +134,7 @@ public class ConsoleCallbackRpcServiceImpl implements ConsoleCallbackRpcService 
         updateInstance.setId(instanceId);
         updateInstance.setStatus(targetStatus);
         updateInstance.setRunEndTime(now);
+        updateInstance.setMsg(msg);
         if (taskInstanceService.updateWithStatus(updateInstance, currentStatus) == 1) {
 
             Long taskVersionId = taskInstance.getTaskVersionId();
@@ -181,6 +183,9 @@ public class ConsoleCallbackRpcServiceImpl implements ConsoleCallbackRpcService 
         updateInstance.setId(instanceId);
         updateInstance.setStatus(targetStatus);
         updateInstance.setRunEndTime(now);
+        if(StringUtils.isBlank(msg)){
+            msg = "";
+        }
         updateInstance.setMsg(msg);
         if (taskInstanceService.updateWithStatus(updateInstance, currentStatus) == 1) {
 
