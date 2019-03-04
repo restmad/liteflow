@@ -52,7 +52,7 @@ public class JavaProcessContainer extends SyncContainer {
     public void runInternal() throws Exception {
         try{
             javaProcessJob.run();
-        }finally {
+        } finally {
             ExecutorLoggerFactory.stop(executorJob.getId());
         }
     }

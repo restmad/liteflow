@@ -1,6 +1,8 @@
 package cn.lite.flow.executor.model.kernel;
 
 import cn.lite.flow.executor.model.basic.ExecutorJob;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @description: 抽象container
@@ -24,6 +26,7 @@ public abstract class AbstractContainer implements Container {
             return;
         }
         this.isRunning = true;
+
         runInternal();
     }
 
