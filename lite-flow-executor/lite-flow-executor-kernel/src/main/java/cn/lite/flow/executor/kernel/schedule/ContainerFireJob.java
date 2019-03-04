@@ -1,6 +1,7 @@
 package cn.lite.flow.executor.kernel.schedule;
 
 import cn.lite.flow.common.job.basic.AbstractUnstatefullJob;
+import cn.lite.flow.common.utils.ExceptionUtils;
 import cn.lite.flow.executor.common.utils.ContainerMetadata;
 import cn.lite.flow.executor.common.utils.LiteThreadPool;
 import cn.lite.flow.executor.model.kernel.AbstractContainer;
@@ -39,7 +40,7 @@ public class ContainerFireJob extends AbstractUnstatefullJob {
                             container.run();
                             LOG.info("container start run, container:{}", container.toString());
                         } catch (Throwable e) {
-                            String errorMsg = "run container error,errMsg:" + e.getMessage();
+                            String errorMsg = "run container error,errMsg:" + ExceptionUtils.collectStackMsg(e);
                             LOG.error(errorMsg, e);
                             /**
                              * 设置任务为失败
