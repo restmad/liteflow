@@ -53,6 +53,6 @@ public class InstanceDependencyChecker implements Checker<TaskInstance> {
             }
         }
 
-        return new Tuple<>(false, "unknown error");
+        return new Tuple<>(true, "");
     }
 }

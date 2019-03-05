@@ -266,7 +266,6 @@ public class TaskVersionServiceImpl implements TaskVersionService {
     @Override
     @Transactional("consoleTxManager")
     public boolean ignore(long taskVersionId) {
-        TaskVersion taskVersion = taskVersionMapper.getById(taskVersionId);
         /**
          * kill executor任务，不用回调
          */
@@ -277,13 +276,13 @@ public class TaskVersionServiceImpl implements TaskVersionService {
         taskVersionUpdate.setId(taskVersionId);
         taskVersionUpdate.setStatus(TaskVersionStatus.SUCCESS.getValue());
         taskVersionUpdate.setFinalStatus(TaskVersionFinalStatus.SUCCESS.getValue());
-        this.update(taskVersion);
+        this.update(taskVersionUpdate);
 
         //任务实例置为成功状态
         TaskInstance instance = getLatestInstance(taskVersionId);
         TaskInstance instanceUpdate = new TaskInstance();
         instanceUpdate.setId(instance.getId());
-        instanceUpdate.setMsg("ignore this version");
+        instanceUpdate.setMsg("手动忽略");
         instanceUpdate.setStatus(TaskVersionStatus.SUCCESS.getValue());
 
         taskInstanceService.update(instanceUpdate);
