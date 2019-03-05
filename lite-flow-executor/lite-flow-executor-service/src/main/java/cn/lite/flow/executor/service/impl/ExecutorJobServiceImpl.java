@@ -123,12 +123,12 @@ public class ExecutorJobServiceImpl implements ExecutorJobService {
         if (executorJob == null) {
             throw new ExecutorRuntimeException("该任务不存在");
         }
-        Container container = ContainerMetadata.getContainer(id);
-        if (container == null) {
-            throw new ExecutorRuntimeException("该任务对应的执行器已经不存在");
-        }
+
         try {
-            container.kill();
+            Container container = ContainerMetadata.getContainer(id);
+            if (container != null) {
+                container.kill();
+            }
         } catch (Exception e) {
             LOG.error("job kill error, id:{}", id, e);
             throw new ExecutorRuntimeException("操作失败");
