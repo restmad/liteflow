@@ -134,6 +134,9 @@ public class ConsoleCallbackRpcServiceImpl implements ConsoleCallbackRpcService 
         updateInstance.setId(instanceId);
         updateInstance.setStatus(targetStatus);
         updateInstance.setRunEndTime(now);
+        if(StringUtils.isBlank(msg)){
+            msg = "";
+        }
         updateInstance.setMsg(msg);
         if (taskInstanceService.updateWithStatus(updateInstance, currentStatus) == 1) {
 

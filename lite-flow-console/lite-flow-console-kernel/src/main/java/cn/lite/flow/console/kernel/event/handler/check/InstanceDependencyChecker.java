@@ -42,12 +42,12 @@ public class InstanceDependencyChecker implements Checker<TaskInstance> {
                 long upstreamTaskVersionNo = dependency.getUpstreamTaskVersionNo();
                 TaskVersion taskVersion = versionService.getTaskVersion(upstreamTaskId, upstreamTaskVersionNo);
                 if(taskVersion == null){
-                    String msg = String.format("不存在任务版本(任务id:%d, 版本:%d)", taskVersion.getId(), taskVersion.getVersionNo());
+                    String msg = String.format("不存在任务版本(任务id:%d, 版本:%d)", taskVersion.getTaskId(), taskVersion.getVersionNo());
                     LOG.info(msg);
                     return new Tuple<>(false, msg);
                 }
                 if(taskVersion.getFinalStatus() != TaskVersionFinalStatus.SUCCESS.getValue()){
-                    String msg = String.format("等待任务版本(任务id:%d, 版本:%d)执行完成", taskVersion.getId(), taskVersion.getVersionNo());
+                    String msg = String.format("等待任务版本(任务id:%d, 版本:%d)执行完成", taskVersion.getTaskId(), taskVersion.getVersionNo());
                     return new Tuple<>(false, msg);
                 }
             }

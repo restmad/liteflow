@@ -108,7 +108,7 @@ CREATE TABLE lf_console_task (
   status tinyint NOT NULL DEFAULT '0' COMMENT '状态',
   version tinyint NOT NULL DEFAULT '0' COMMENT '任务版本',
   is_concurrency tinyint NOT NULL DEFAULT '0' COMMENT '是否可以并发',
-  executeStrategy varchar(128) DEFAULT '' COMMENT '当并发发生时的执行策略',
+  execute_etrategy varchar(128) DEFAULT '' COMMENT '当并发发生时的执行策略',
   plugin_id int DEFAULT NULL COMMENT '插件id',
   plugin_conf varchar(255) DEFAULT NULL COMMENT '插件配置',
   is_retry tinyint NOT NULL DEFAULT '0' COMMENT '失败是否重试',

@@ -267,9 +267,6 @@ public class TaskVersionServiceImpl implements TaskVersionService {
     @Transactional("consoleTxManager")
     public boolean ignore(long taskVersionId) {
         TaskVersion taskVersion = taskVersionMapper.getById(taskVersionId);
-        if(taskVersion.getFinalStatus() != TaskVersionFinalStatus.FAIL.getValue()){
-            throw new CommonRuntimeException("task version can not set to be list");
-        }
         /**
          * kill executor任务，不用回调
          */

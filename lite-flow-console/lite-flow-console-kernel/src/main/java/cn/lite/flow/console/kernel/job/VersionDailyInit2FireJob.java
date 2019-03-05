@@ -89,6 +89,7 @@ public class VersionDailyInit2FireJob extends AbstractUnstatefullJob {
                         }catch (Throwable e){
                             String errorMsg = ExceptionUtils.collectStackMsg(e);
                             dailyInitService.failDailyInit(dailyInit.getId(), errorMsg);
+                            LOG.info("daily init error of task:{}", taskId, e);
                         }finally {
                             countDownLatch.countDown();
                         }
