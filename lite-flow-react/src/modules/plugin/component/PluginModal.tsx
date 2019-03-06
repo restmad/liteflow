@@ -76,7 +76,7 @@ class PluginModal extends Component<ModalProps, {allContainers, selectedContaine
             const selectedNames = [];
             if(plugin.config){
                 for(let configKey in plugin.config){
-                    selectedNames.push(configKey + "");
+                    selectedNames.push(CONFIG_PREFIX + configKey);
                 }
             }
             const containerId = plugin.containerId;
@@ -182,7 +182,7 @@ class PluginModal extends Component<ModalProps, {allContainers, selectedContaine
                             if(fieldExist){
                                 pluginAddedFieldConfig.push(fcConfig);
                             }
-                            containerFieldOptions.push(<option key={name + ""  }>{label}</option>);
+                            containerFieldOptions.push(<option key={name}>{label}</option>);
                         }
                     }
                     break;
