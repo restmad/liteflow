@@ -84,10 +84,10 @@ public class PluginController extends BaseController {
                         JSONObject containerObj = new JSONObject();
                         containerObj.put(CommonConstants.PARAM_ID, executorContainer.getId());
                         containerObj.put(CommonConstants.PARAM_NAME, executorContainer.getName());
-                        String fieldConfig = executorContainer.getFieldConfig();
-                        if(StringUtils.isNotBlank(fieldConfig)){
-                            JSONArray fields = JSONArray.parseArray(fieldConfig);
-                            obj.put(CommonConstants.PARAM_FIELD_CONFIG, fields);
+                        String containerFieldConfig = executorContainer.getFieldConfig();
+                        if(StringUtils.isNotBlank(containerFieldConfig)){
+                            JSONArray fields = JSONArray.parseArray(containerFieldConfig);
+                            containerObj.put(CommonConstants.PARAM_FIELD_CONFIG, fields);
                         }
                         obj.put(CommonConstants.PARAM_CONTAINER, containerObj);
                     }

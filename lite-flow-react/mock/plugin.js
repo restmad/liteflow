@@ -81,7 +81,7 @@ module.exports = {
                     {
                         "editable": true,
                         "defaultValue": "",
-                        "name": "pluginConf.command",
+                        "name": "command",
                         "label": "shell",
                         "type": "Input",
                         "required": true
@@ -109,7 +109,7 @@ module.exports = {
                         ],
                         "editable": false,
                         "defaultValue": "123",
-                        "name": "pluginConf.mainJarPath",
+                        "name": "mainJarPath",
                         "label": "jar路径",
                         "type": "Input",
                         "required": true
@@ -124,7 +124,7 @@ module.exports = {
                         ],
                         "editable": false,
                         "defaultValue": "",
-                        "name": "pluginConf.mainClass",
+                        "name": "mainClass",
                         "label": "主类",
                         "type": "Input",
                         "required": true
@@ -139,7 +139,7 @@ module.exports = {
                         ],
                         "editable": false,
                         "defaultValue": "",
-                        "name": "pluginConf.jvmArgs",
+                        "name": "jvmArgs",
                         "label": "jvm参数",
                         "type": "Input",
                         "required": true
