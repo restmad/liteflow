@@ -114,8 +114,12 @@ public class ExecutorCommonController extends BaseController {
         if (CollectionUtils.isNotEmpty(executorContainers)) {
             executorContainers.forEach(o -> {
                 JSONObject obj = new JSONObject();
-                obj.put("id", o.getId());
-                obj.put("name", o.getName());
+                obj.put(CommonConstants.PARAM_ID, o.getId());
+                obj.put(CommonConstants.PARAM_NAME, o.getName());
+                String fieldConfig = o.getFieldConfig();
+                if(StringUtils.isNotBlank(fieldConfig)){
+                    obj.put(CommonConstants.PARAM_FIELD_CONFIG, JSONArray.parseArray(fieldConfig));
+                }
                 datas.add(obj);
             });
         }
