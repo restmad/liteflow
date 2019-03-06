@@ -82,9 +82,14 @@ public class PluginController extends BaseController {
                     ExecutorContainer executorContainer = executorContainerRpcService.getById(plugin.getContainerId());
                     if (executorContainer != null) {
                         JSONObject containerObj = new JSONObject();
-                        containerObj.put("id", executorContainer.getId());
-                        containerObj.put("name", executorContainer.getName());
-                        obj.put("container", containerObj);
+                        containerObj.put(CommonConstants.PARAM_ID, executorContainer.getId());
+                        containerObj.put(CommonConstants.PARAM_NAME, executorContainer.getName());
+                        String fieldConfig = executorContainer.getFieldConfig();
+                        if(StringUtils.isNotBlank(fieldConfig)){
+                            JSONArray fields = JSONArray.parseArray(fieldConfig);
+                            obj.put(CommonConstants.PARAM_FIELD_CONFIG, fields);
+                        }
+                        obj.put(CommonConstants.PARAM_CONTAINER, containerObj);
                     }
                     datas.add(obj);
                 });
@@ -107,6 +112,7 @@ public class PluginController extends BaseController {
             @RequestParam(value = "id") Long id,
             @RequestParam(value = "name") String name,
             @RequestParam(value = "fieldConfig") String fieldConfig,
+            @RequestParam(value = "conf") String conf,
             @RequestParam(value = "description") String description,
             @RequestParam(value = "containerId") Long containerId
     ) {
@@ -115,6 +121,7 @@ public class PluginController extends BaseController {
         plugin.setName(name);
         plugin.setDescription(description);
         plugin.setContainerId(containerId);
+        plugin.setConfig(conf);
         plugin.setUserId(getUser().getId());
 
         /**

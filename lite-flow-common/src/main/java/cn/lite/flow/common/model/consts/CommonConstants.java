@@ -48,7 +48,7 @@ public class CommonConstants {
 
     public final static String PARAM_NAME = "name";                                          //名称
 
-    public final static String PARAM_CONTAINER = "container";                                          //名称
+    public final static String PARAM_CONTAINER = "container";                                //名称
 
     public final static String PARAM_FIELD_CONFIG = "fieldConfig";                           //字段配置
 

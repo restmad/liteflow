@@ -17,6 +17,7 @@ export class Plugin {
     status: number;
     containerId: number;
     fieldConfig : string;
+    config : any;
     description ?: string;
     createTime: number;
     updateTime: number;

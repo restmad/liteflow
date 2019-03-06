@@ -155,6 +155,13 @@ public class ModelUtils {
         obj.put("status", plugin.getStatus());
         String fieldConfig = plugin.getFieldConfig();
         obj.put("fieldConfig", fieldConfig);
+        obj.put("containerId", plugin.getContainerId());
+
+        String config = plugin.getConfig();
+        if(StringUtils.isNotBlank(config)){
+            JSONObject confObj = JSONObject.parseObject(config);
+            obj.put("config", confObj);
+        }
         obj.put("description", plugin.getDescription());
         obj.put("containerId", plugin.getContainerId());
         obj.put("createTime", plugin.getCreateTime());

@@ -5,6 +5,8 @@ import {ContainerModel} from "../../container/model/ContainerModel"
 import {FormComponentProps} from "antd/lib/form/Form";
 import {kernel} from "../../../common/utils/IOC"
 import CommonUtils from "../../../common/utils/CommonUtils";
+import {DynamicFormUtils} from "../../../common/utils/DynamicFormUtils";
+import EnumUtils from "../../../common/utils/EnumUtils";
 
 const formItemLayout = {
     labelCol: {
@@ -17,28 +19,66 @@ const formItemLayout = {
 
 const modalWidth = 800;
 
+const FIELD_CONFIG_MAP = "fieldConfigMap";
+
+const FIELD_CONFIG = "fieldConfig";
+
+const CONFIG = "config";
+
+const CONFIG_PREFIX = CONFIG + ".";
+
+const NAME = "name";
+
+const LABEL = "label";
+
 export interface ModalProps extends FormComponentProps{
     plugin: Plugin;
     onOk: any;
     onCancel: any;
 }
 
-class PluginModal extends Component<ModalProps, {allContainers}> {
+class PluginModal extends Component<ModalProps, {allContainers, addedFieldConfigs, selectedFields}> {
 
     constructor(props){
         super(props);
-        this.state = {allContainers: []}
+        this.state = {
+            allContainers: [],
+            addedFieldConfigs: [],
+            selectedFields: []
+        }
     }
     componentWillMount(){
         const that = this;
         const containerModel = kernel.get(ContainerModel);
         containerModel.listAllContainers().then(data => {
-            if (data) {
+            if (data && data.length > 1) {
+                for(let container of data){
+                    let containerFieldConfigs = container.fieldConfig;
+                    if(containerFieldConfigs){
+                        let formFieldMap = {};
+                        for(let containerField of containerFieldConfigs ){
+                            const name = containerField[NAME];
+                            containerField[NAME] = CONFIG_PREFIX + name;
+                            formFieldMap[name] = containerField;
+                            container[FIELD_CONFIG_MAP] = formFieldMap;
+                        }
+                    }
+                }
+                console.log(data);
                 that.setState({
                     allContainers: data
                 })
             }
         });
+
+        const plugin = this.props.plugin;
+        if(plugin && plugin.config){
+            const selectedOption = [];
+            for(let configKey in plugin.config){
+                selectedOption.push(configKey + "");
+            }
+            this.setState({selectedFields: selectedOption});
+        }
     }
 
     render() {
@@ -47,7 +87,7 @@ class PluginModal extends Component<ModalProps, {allContainers}> {
         if(this.props.plugin && this.props.plugin.id){
             isUpdate = true;
         }
-        let pluginItem = this.props.plugin ? this.props.plugin : new Plugin;
+        let pluginItem = this.props.plugin ? this.props.plugin : new Plugin();
         let handleOk = (e) => {
             e.preventDefault();
             this.props.form.validateFields((errors) => {
@@ -58,6 +98,13 @@ class PluginModal extends Component<ModalProps, {allContainers}> {
                     ...this.props.form.getFieldsValue(),
                     id: pluginItem.id ? pluginItem.id : ''
                 };
+                let config = data[CONFIG];
+                if(config){
+                    data[CONFIG] = JSON.stringify(config);
+                }else{
+                    data[CONFIG] = "";
+                }
+
                 this.props.onOk(data)
             })
         };
@@ -73,14 +120,62 @@ class PluginModal extends Component<ModalProps, {allContainers}> {
         /**
          * 初始化option
          */
-        let containerOptions = [];
+        const {selectedFields, addedFieldConfigs, allContainers} = this.state;
 
-        if (this.state.allContainers) {
-            for(let val of this.state.allContainers){
-                containerOptions.push(<option key={val.id + ""  }>{val.name}</option>);
+        let containerOptions = [];
+        if (allContainers) {
+            for(let container of allContainers){
+                containerOptions.push(<option key={container.id + ""  }>{container.name}</option>);
             }
         }
 
+
+        /**
+         * containerFieldOption
+         */
+        let containerFieldOptions = [];
+        let pluginAddedFieldConfig = [];
+
+        let pluginConf = pluginItem.config;
+
+        if (allContainers && pluginConf) {
+
+            for(let container of allContainers){
+                containerOptions.push(<option key={container.id + ""  }>{container.name}</option>);
+                if(container.id == pluginItem.containerId){
+                    const containerFieldConfigArray = container[FIELD_CONFIG];
+                    if(containerFieldConfigArray && containerFieldConfigArray.length > 0){
+                        for(let fcConfig of containerFieldConfigArray){
+                            const name = fcConfig[NAME];
+                            const lable = fcConfig[LABEL];
+
+                            const fieldValue = CommonUtils.getValueFromModel(name, pluginConf, null);
+                            if(fieldValue != null){
+                                pluginAddedFieldConfig.push(fcConfig);
+                            }
+                            containerFieldOptions.push(<option key={name + ""  }>{lable}</option>);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        let dynamicDoms = [];
+        const isDomEdit = isUpdate && pluginItem["status"] == EnumUtils.statusOnline;
+        if(pluginAddedFieldConfig){
+            for(let formField of pluginAddedFieldConfig){
+                let dom = DynamicFormUtils.getComponent({
+                    property: formField,
+                    model: pluginConf,
+                    isEdit: isDomEdit,
+                    formParent: this
+                });
+                if(dom){
+                    dynamicDoms.push(dom);
+                }
+            }
+        }
 
         return (<Modal {...modalOpts}>
             <Form layout={'horizontal'} >
@@ -110,6 +205,20 @@ class PluginModal extends Component<ModalProps, {allContainers}> {
                                 {containerOptions}
                             </Select>)}
                         </Form.Item>
+                        <Form.Item label='容器参数' hasFeedback {...formItemLayout}>
+                            {this.props.form.getFieldDecorator('containerFields', {
+                                initialValue: selectedFields,
+                                rules: [
+                                    {
+                                        required: false,
+                                        message: '不能为空'
+                                    }
+                                ]
+                            })(<Select>
+                                {containerFieldOptions}
+                            </Select>)}
+                        </Form.Item>
+                        {dynamicDoms}
                         <Form.Item label='描述：' hasFeedback {...formItemLayout}>
                             {this.props.form.getFieldDecorator('description', {
                                 initialValue: CommonUtils.getStringValueFromModel("description", pluginItem, ""),

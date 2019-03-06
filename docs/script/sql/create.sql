@@ -42,7 +42,7 @@ CREATE TABLE lf_console_user_group_mid (
 -- 菜单表
 DROP TABLE if EXISTS lf_console_menu;
 CREATE TABLE lf_console_menu (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  id int NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	name VARCHAR(12) NOT NULL DEFAULT '' COMMENT '名称',
 	icon VARCHAR(128) DEFAULT '' COMMENT '图标',
   description varchar(128) DEFAULT '' COMMENT '说明',
@@ -54,7 +54,7 @@ CREATE TABLE lf_console_menu (
 -- 子菜单表
 DROP TABLE if EXISTS lf_console_menu_item;
 CREATE TABLE lf_console_menu_item (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  id int NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	menu_id INT NOT NULL DEFAULT '0' COMMENT '子菜单id',
 	name VARCHAR(12) NOT NULL DEFAULT '' COMMENT '名称',
 	url VARCHAR(64) NOT NULL DEFAULT '' COMMENT '对应url',
@@ -149,7 +149,7 @@ CREATE TABLE lf_console_task_version_daily_init (
   task_id int NOT NULL DEFAULT '0' COMMENT '实例id',
   day int NOT NULL DEFAULT '0' COMMENT '日期yyyyMMdd格式',
   status tinyint NOT NULL DEFAULT '0' COMMENT '状态',
-  msg varchar(255) DEFAULT NULL COMMENT '信息',
+  msg text DEFAULT NULL COMMENT '信息',
   create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   update_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (id),

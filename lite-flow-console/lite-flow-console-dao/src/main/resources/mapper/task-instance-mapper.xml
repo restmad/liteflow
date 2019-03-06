@@ -137,7 +137,7 @@
             <if test="instance.status != null">
                 status = #{instance.status},
             </if>
-            <if test="instance.msg != null and instance.msg != ''">
+            <if test="instance.msg != null">
                 msg = #{instance.msg},
             </if>
             <if test="instance.runStartTime != null">
