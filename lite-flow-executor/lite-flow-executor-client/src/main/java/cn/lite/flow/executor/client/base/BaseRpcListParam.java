@@ -1,4 +1,4 @@
-package cn.lite.flow.common.model.rpc;
+package cn.lite.flow.executor.client.base;
 
 import lombok.Data;
 import lombok.ToString;

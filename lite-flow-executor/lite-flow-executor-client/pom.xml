@@ -8,15 +8,9 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>lite-flow-executor-client</name>
 
-    <parent>
-        <groupId>cn.lite.flow</groupId>
-        <artifactId>lite-flow-executor</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-
     <properties>
         <lombok.version>1.16.18</lombok.version>
-        <lite-flow.version>1.0.0-SNAPSHOT</lite-flow.version>
+        <lite-flow-model-basic.version>1.0.0-SNAPSHOT</lite-flow-model-basic.version>
     </properties>
     <packaging>jar</packaging>
     <dependencies>
@@ -24,7 +18,7 @@
         <dependency>
             <groupId>cn.lite.flow</groupId>
             <artifactId>lite-flow-executor-model-basic</artifactId>
-            <version>${lite-flow.version}</version>
+            <version>${lite-flow-model-basic.version}</version>
         </dependency>
         <!-- lombok -->
         <dependency>

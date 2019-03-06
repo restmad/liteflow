@@ -3,7 +3,6 @@ package cn.lite.flow.executor.client.model;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -15,9 +14,8 @@ import java.io.Serializable;
 @ToString
 public class SubmitExecuteJob implements Serializable {
 
-    @NotNull
     private Long instanceId;            //console任务实例id
-    @NotNull
+
     private Long pluginId;              //插件id
 
     private String pluginConf;          //插件配置信息

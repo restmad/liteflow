@@ -1,6 +1,6 @@
 package cn.lite.flow.executor.client.model;
 
-import cn.lite.flow.common.model.rpc.BaseRpcListParam;
+import cn.lite.flow.executor.client.base.BaseRpcListParam;
 import lombok.Data;
 import lombok.ToString;
 

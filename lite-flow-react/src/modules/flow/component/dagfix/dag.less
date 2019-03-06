@@ -1,0 +1,84 @@
+:global .dag-container{
+  background-color: #e5e5e5;
+  .node{
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  .node rect {
+    stroke: #fff999;
+    color: #fff;
+    stroke-width: 0.5px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  .edgePath path {
+    stroke: #333;
+    stroke-width: 1.5px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  .edgeLabel {
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+  /* 节点相关处理 */
+  tspan{
+    fill: #fff;
+  }
+  /* 菜单相关 */
+  .menu-container{
+    position: absolute;
+    width: 100px;
+    //height: 100px;
+    background-color: #FFF;
+    border-color: #fff;
+
+    .ant-btn{
+      border: 0px solid #FFF;
+      width: 100%;
+    }
+
+  }
+  /* 详情相关 */
+  .detail-container{
+    width: 280px;
+    word-wrap: break-word;
+    word-break: break-all;
+    position: absolute;
+    opacity: 0.9;
+    padding: 10px;
+    background-color: #FFF;
+    border-color: #fff;
+
+    .ant-btn{
+      border: 0px solid #FFF;
+      width: 100%;
+    }
+    p{
+      margin-bottom: 2px;
+    }
+
+  }
+
+/*头部菜单*/
+  .top-menu-container{
+    width:150px;
+    position: absolute;
+    top: 80px;
+    left: 30px;
+    opacity: 0.9;
+    padding: 10px 10px;
+    background-color: #FFF;
+    border-color: #fff;
+
+    .ant-btn {
+      width: 100%;
+    }
+
+  }
+}

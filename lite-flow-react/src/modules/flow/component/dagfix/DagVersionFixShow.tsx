@@ -4,9 +4,6 @@ import * as dagreD3 from 'dagre-d3/dist/dagre-d3'
 import d3 from 'd3';
 import './dag.less';
 import * as ReactDOM from 'react-dom';
-import TaskChooseModal from "./TaskChooseModal";
-import TaskFirstModal from "./TaskFirstModal";
-import LinkConfModal from "./LinkConfModal";
 import EnumUtils from "../../../../common/utils/EnumUtils";
 import CommonUtils from "../../../../common/utils/CommonUtils";
 
@@ -24,9 +21,8 @@ const getMousePosition = () => {
     return {'x': x, 'y': y};
 }
 
-export interface DagProps {
+export interface DagFixProps {
     height: number;          //宽度
-    isFlow: boolean;         //是不是展示任务流
     data: any;               //数据
     getViewData: any;        //获取图表的方法
     updateLinks?: any;       //更新任务流连接
@@ -56,7 +52,10 @@ const getEvent = (isPreventDefault) => {
 
 };
 
-class DagShow extends Component<DagProps, any> {
+/**
+ * 任务流修复
+ */
+class DagVersionFixShow extends Component<DagFixProps, any> {
 
     private dagData: any = {};
 
@@ -67,12 +66,6 @@ class DagShow extends Component<DagProps, any> {
     constructor(pros) {
         super(pros);
         this.state = {
-            haveNode: false,
-            //第一个任务添加
-            showFirstModal: false,
-            //lable右键菜单
-            showLinkConfigModal: false,
-            showLabelMenu: false,
             labelTop: 0,
             labelLeft: 0,
             //node右键菜单
@@ -90,12 +83,7 @@ class DagShow extends Component<DagProps, any> {
     }
 
     componentDidMount() {
-        let that = this;
-        if (this.props.isFlow) {
-            this.getDataAndRender();
-        } else {
-            this.getDataAndRenderTask();
-        }
+        this.getDataAndRender();
     }
 
     /**
@@ -107,18 +95,6 @@ class DagShow extends Component<DagProps, any> {
         this.props.getViewData(id).then((result) => {
             let dagDataNew = that.shuffleAndArrange(result.data);
             that.renderDag(dagDataNew);
-        });
-    }
-
-    /**
-     * 获取并渲染任务
-     */
-    getDataAndRenderTask() {
-        let that = this;
-        let id = this.props.data.id;
-        this.props.getViewData(id).then((result) => {
-            that.dagData = result.data;
-            that.renderDag(that.dagData);
         });
     }
 
@@ -313,30 +289,6 @@ class DagShow extends Component<DagProps, any> {
                 that.hideAllWindow();
             }
         });
-        /**
-         * 右键label
-         */
-        svg.selectAll("g.edgeLabel").on("contextmenu", function (data) {
-            const event = getEvent(true);
-            let btnCode = event["button"];
-            if (btnCode != 2) {
-                return;
-            }
-            const taskId = Number(data["w"]);
-            const upstreamTaskId = Number(data["v"]);
-            that.linkData = that.getLink(taskId, upstreamTaskId);
-
-            let position = getMousePosition();
-
-            that.setState({
-                showLabelMenu: true,
-                labelTop: position["y"],
-                labelLeft: position["x"]
-
-            });
-
-
-        });
 
         //画布居中
         let svgWidth = svg.attr("width") ? svg.attr("width") : svg.style("width");
@@ -352,126 +304,6 @@ class DagShow extends Component<DagProps, any> {
         svg.attr('height', g.graph().height * initialScale + 40);
     }
 
-    /**
-     * 判断任务是否存在
-     */
-    isTaskExists = (task) => {
-        let dagData = this.dagData;
-        let nodes = dagData["nodes"];
-        for (let tk of nodes) {
-            if (tk.id == task.id) {
-                notification["error"]({
-                    message: "异常",
-                    duration: 0,
-                    description: `${task.name}任务已存在`
-                });
-                return true;
-            }
-        }
-        return false;
-    }
-    isTasksExists = (tasks) => {
-        for (let tk of tasks) {
-            if (this.isTaskExists(tk)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * 弹窗相关
-     * @returns {any}
-     */
-    hideChooseTask = () => {
-        this.setState({
-            showTaskChooseModal: false
-        })
-    }
-    /**
-     * 添加节点和连接
-     * @param nodes
-     * @param links
-     */
-    addNodeAndLinks = (newNodes, newLinks) => {
-        let dagData = this.dagData;
-        let nodes = dagData["nodes"];
-        let links = dagData["links"];
-        for (let nd of newNodes) {
-            //节点排重
-            let containNode = false;
-            for (let node of nodes) {
-                if (node.id == nd.id) {
-                    containNode = true;
-                    console.log("node " + nd.id + " is already exist")
-                    break;
-                }
-            }
-            if (!containNode) {
-                nodes.push(nd);
-            }
-        }
-        if (links) {
-            for (let lk of newLinks) {
-                //link排重
-                let containLink = false;
-                for (let link of links) {
-                    if (lk.taskId == link.taskId && lk.upstreamTaskId == link.upstreamTaskId) {
-                        containLink = true;
-                        console.log("link " + link.upstreamTaskId + "->" + link.taskId + " is aleady exist")
-                        break;
-                    }
-                }
-                if (!containLink) {
-                    links.push(lk);
-                }
-            }
-        } else {
-            dagData["links"] = newLinks;
-        }
-        let dagDataNew = this.shuffleAndArrange(dagData);
-        this.renderDag(dagDataNew);
-    }
-
-    /**
-     * 添加上游
-     * @param task
-     * @param tasks
-     */
-    addUpstream = (task, tasks) => {
-        if (!tasks || tasks.length < 0) {
-            return;
-        }
-        let links = [];
-        for (let tk of tasks) {
-            links.push({
-                taskId: task.id,
-                upstreamTaskId: tk.id,
-                config: ""
-            });
-        }
-        this.addNodeAndLinks(tasks, links)
-    }
-    /**
-     * 添加下游
-     * @param task
-     * @param tasks
-     */
-    addDownstream = (task, tasks) => {
-        if (!tasks || tasks.length < 0) {
-            return;
-        }
-        let links = [];
-        for (let tk of tasks) {
-            links.push({
-                taskId: tk.id,
-                upstreamTaskId: task.id,
-                config: ""
-            });
-        }
-        this.addNodeAndLinks(tasks, links)
-    }
     /**
      * 通过任务id获取任务数据
      * @param id
@@ -490,84 +322,9 @@ class DagShow extends Component<DagProps, any> {
         }
         return current;
     }
-    /**
-     * 获取link
-     * @param taskId
-     * @param upstreamTaskId
-     * @returns {any}
-     */
-    getLink = (taskId, upstreamTaskId) => {
-        let dagData = this.dagData;
-        let links = dagData["links"];
-        for (let lk of links) {
-            if (lk.taskId == taskId
-                && lk.upstreamTaskId == upstreamTaskId) {
-                return lk;
-            }
-        }
-        return null;
-    }
 
-    /**
-     * 上下游弹窗相关
-     * @returns {{task: any; isUp: any; allTasks: Array; onCancel: (() => any); onOk: ((task, tasks) => any)}}
-     */
-    chooseTaskProps = () => {
-        let that = this;
-        let nodeId = this.nodeId;
-
-        return {
-            task: this.getTaskById(nodeId),
-            isUp: this.state.isUp,
-            onCancel() {
-                that.hideChooseTask();
-            },
-            onOk(task, tasks) {
-                if (that.state.isUp) {
-                    that.addUpstream(task, tasks);
-                } else {
-                    that.addDownstream(task, tasks);
-                }
-                that.hideChooseTask();
-            }
-        }
-    }
-    /**
-     * 编辑link
-     */
-    linkConfigProps = () => {
-        let that = this;
-        return {
-            link: that.linkData,
-            onOk(config) {
-                that.editLinkConfig(config);
-                that.hideLinkConfigModal()
-            },
-            onCancel() {
-                that.hideLinkConfigModal()
-            }
-        };
-    }
     showLinkConfModal = () => {
         this.setState({showLinkConfigModal: true});
-    }
-
-    hideLinkConfigModal = () => {
-        this.setState({showLinkConfigModal: false});
-        this.hideAllWindow();
-
-    }
-    /**
-     * 编辑link config
-     * @param config
-     */
-    editLinkConfig = (config) => {
-        let dagData = this.dagData;
-        let linkData = this.linkData;
-        const lk = this.getLink(linkData.taskId, linkData.upstreamTaskId);
-        lk["config"] = config;
-        let dagDataNew = this.shuffleAndArrange(dagData);
-        this.renderDag(dagDataNew);
     }
 
 
@@ -684,25 +441,6 @@ class DagShow extends Component<DagProps, any> {
 
     }
 
-    /**
-     * 为集合添加第一个任务
-     */
-    firstTaskProps = () => {
-        let that = this;
-
-        return {
-            onCancel() {
-                that.hideFirstTask();
-            },
-            onOk(task) {
-                that.addFirstTask2Flow(task);
-                that.hideFirstTask();
-            }
-        }
-    }
-    hideFirstTask = () => {
-        this.setState({showFirstModal: false})
-    }
     showFirstTask = () => {
         let that = this;
         that.setState({
@@ -710,21 +448,39 @@ class DagShow extends Component<DagProps, any> {
         })
     }
 
-    addFirstTask2Flow = (task) => {
-        let dagData = {
-            nodes: [task]
-        };
-
-        this.dagData = dagData;
-
-        this.renderDag(dagData);
+    /**
+     * kill掉任务版本
+     * @returns {any}
+     */
+    killVersion(){
 
     }
 
+    /**
+     * kill掉任务版本
+     * @returns {any}
+     */
+    ignoreVersion(){
+
+    }
 
     render() {
+
+        const killBtn = (<div key={"kill-versionBtn"}>
+            <Popconfirm title={"是否KIll当前任务？"} key={"killVersionPop"}
+                        onConfirm={this.killVersion.bind(this)}>
+                <Button key={"killVersionBtn"}>KIll当前任务</Button>
+            </Popconfirm>
+        </div>);
+        const ingnoreBtn = (<div key={"ignore-versionBtn"}>
+            <Popconfirm title={"是否当前任务置为成功？"} key={"ingoreVersionPop"}
+                        onConfirm={this.ignoreVersion.bind(this)}>
+                <Button key={"successVersionBtn"}>当前任务置为成功</Button>
+            </Popconfirm>
+        </div>);
+
+
         const currentTask = this.getTaskById(this.nodeId);
-        const isFlow = this.props.isFlow;   //是不是任务流
         //按钮添加
         let topBtns = [];
         //有节点显示“提交”
@@ -745,13 +501,11 @@ class DagShow extends Component<DagProps, any> {
             <div className={"dag-container"} key={"dagContainer"}
                  style={{width: "100%", height: this.props.height, margin: "0 auto"}}>
                 <svg ref={"dag"} style={{width: "100%", height: "100%"}}></svg>
-                {
-                    isFlow ? <div className={"top-menu-container"}>
+                     <div className={"top-menu-container"}>
                         {topBtns}
                     </div> : ""
-                }
 
-                {this.state.showMenu && isFlow ?
+                {this.state.showMenu?
                     <div className={"menu-container"} key={"menu1Container"}
                          style={{top: this.state.nodeTop, left: this.state.nodeLeft}}>
                         <div>
@@ -766,7 +520,7 @@ class DagShow extends Component<DagProps, any> {
                             </Popconfirm>
                         </div>
                     </div> : ""}
-                {this.state.showLabelMenu && isFlow ?
+                {this.state.showLabelMenu  ?
                     <div className={"menu-container"} key={"menu2Container"}
                          style={{top: this.state.labelTop, left: this.state.labelLeft}}>
                         <div>
@@ -791,12 +545,6 @@ class DagShow extends Component<DagProps, any> {
                         <p><strong>创建时间:&nbsp;</strong>{CommonUtils.dateFormat(currentTask.createTime)}</p>
                         <p><strong>更新时间:&nbsp;</strong>{CommonUtils.dateFormat(currentTask.updateTime)}</p>
                     </div> : ""}
-                {this.state.showTaskChooseModal && isFlow ?
-                    <TaskChooseModal {...this.chooseTaskProps()}></TaskChooseModal> : ""}
-                {this.state.showFirstModal && isFlow ?
-                    <TaskFirstModal {...this.firstTaskProps()}></TaskFirstModal> : ""}
-                {this.state.showLinkConfigModal && isFlow ?
-                    <LinkConfModal {...this.linkConfigProps()}></LinkConfModal> : ""}
             </div>
         )
     }
@@ -804,4 +552,4 @@ class DagShow extends Component<DagProps, any> {
 }
 
 
-export default DagShow;
+export default DagVersionFixShow;
