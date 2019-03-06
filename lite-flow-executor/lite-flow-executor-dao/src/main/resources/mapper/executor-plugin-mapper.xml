@@ -8,6 +8,7 @@
 		name AS name,
 		status AS status,
 		field_config AS fieldConfig,
+		config AS config,
 		user_id AS userId,
 		description AS description,
 		container_id AS containerId,
@@ -44,6 +45,7 @@
 		name,
 		status,
 		field_config,
+		config,
 		user_id,
 		description,
 		container_id)
@@ -51,6 +53,7 @@
 		#{name},
 		#{status},
 		#{fieldConfig},
+		#{config},
 		#{userId},
 		#{description},
 		#{containerId})
@@ -94,6 +97,9 @@
 			</if>
 			<if test="fieldConfig != null">
 				field_config = #{fieldConfig},
+			</if>
+			<if test="config != null">
+				config = #{config},
 			</if>
 			<if test="description != null and description != ''">
 				description = #{description},

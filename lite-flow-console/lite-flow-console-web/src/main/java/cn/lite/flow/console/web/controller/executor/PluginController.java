@@ -51,7 +51,7 @@ public class PluginController extends BaseController {
      */
     @RequestMapping("list")
     public String list(
-            @RequestParam(value = "nameLike", required = false) String nameLike,
+            @RequestParam(value = "name", required = false) String nameLike,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
     ) {
@@ -112,7 +112,7 @@ public class PluginController extends BaseController {
             @RequestParam(value = "id") Long id,
             @RequestParam(value = "name") String name,
             @RequestParam(value = "fieldConfig") String fieldConfig,
-            @RequestParam(value = "conf") String conf,
+            @RequestParam(value = "config") String config,
             @RequestParam(value = "description") String description,
             @RequestParam(value = "containerId") Long containerId
     ) {
@@ -121,7 +121,7 @@ public class PluginController extends BaseController {
         plugin.setName(name);
         plugin.setDescription(description);
         plugin.setContainerId(containerId);
-        plugin.setConfig(conf);
+        plugin.setConfig(config);
         plugin.setUserId(getUser().getId());
 
         /**

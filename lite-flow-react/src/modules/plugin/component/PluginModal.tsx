@@ -37,16 +37,13 @@ export interface ModalProps extends FormComponentProps{
     onCancel: any;
 }
 
-class PluginModal extends Component<ModalProps, {allContainers, selectedContainerId, addedFieldConfigs, selectedFieldNames}> {
+class PluginModal extends Component<ModalProps, {allContainers, selectedContainerId, selectedFieldNames}> {
 
     constructor(props){
         super(props);
-        const plugin = props.plugin;
-        let containerId = null;
         this.state = {
             allContainers: [],
-            selectedContainerId: 3,
-            addedFieldConfigs: [],
+            selectedContainerId: null,
             selectedFieldNames: []
         }
     }
@@ -75,18 +72,39 @@ class PluginModal extends Component<ModalProps, {allContainers, selectedContaine
         });
 
         const plugin = this.props.plugin;
-        if(plugin && plugin.config){
+        if(plugin){
             const selectedNames = [];
-            for(let configKey in plugin.config){
-                selectedNames.push(configKey + "");
+            if(plugin.config){
+                for(let configKey in plugin.config){
+                    selectedNames.push(configKey + "");
+                }
             }
+            const containerId = plugin.containerId;
             that.setState({
                 selectedFieldNames: selectedNames,
-                selectedContainerId: plugin.containerId
+                selectedContainerId: containerId
             });
         }
     }
-
+    /**
+     * 容器变更
+     * @returns {any}
+     */
+    onContainerChange(value){
+        this.setState({
+            selectedContainerId: value,
+            selectedFieldNames: []
+        });
+    }
+    /**
+     * 容器字段变更
+     * @returns {any}
+     */
+    onContainerFieldsChange(value){
+        this.setState({
+            selectedFieldNames: value
+        });
+    }
     render() {
 
         let isUpdate = false;
@@ -152,8 +170,16 @@ class PluginModal extends Component<ModalProps, {allContainers, selectedContaine
                             const name = fcConfig[NAME];
                             const label = fcConfig[LABEL];
 
-                            const fieldValue = CommonUtils.getValueFromModel(name, pluginObj, null);
-                            if(fieldValue != null){
+                            let fieldExist = false;
+                            if(selectedFieldNames){
+                                for(let fieldName of selectedFieldNames){
+                                    if(fieldName == name){
+                                        fieldExist = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(fieldExist){
                                 pluginAddedFieldConfig.push(fcConfig);
                             }
                             containerFieldOptions.push(<option key={name + ""  }>{label}</option>);
@@ -163,6 +189,23 @@ class PluginModal extends Component<ModalProps, {allContainers, selectedContaine
                 }
             }
         }
+        let fieldSelectedDoms = [];
+        fieldSelectedDoms.push(<Form.Item label='容器参数' hasFeedback {...formItemLayout}>
+            {this.props.form.getFieldDecorator("containerFields-" + selectedContainerId, {
+                initialValue: selectedFieldNames,
+                rules: [
+                    {
+                        required: false,
+                        message: '不能为空'
+                    }
+                ]
+            })(<Select
+                allowClear={true}
+                onChange={this.onContainerFieldsChange.bind(this)}
+                mode="multiple">
+                {containerFieldOptions}
+            </Select>)}
+        </Form.Item>);
 
         let dynamicDoms = [];
         const isDomEdit = isUpdate && pluginObj["status"] == EnumUtils.statusOnline;
@@ -172,13 +215,22 @@ class PluginModal extends Component<ModalProps, {allContainers, selectedContaine
                     property: formField,
                     model: pluginObj,
                     isEdit: isDomEdit,
-                    formParent: this
+                    formParent: this,
+                    layout: {
+                        labelCol: {
+                            span: 4
+                        },
+                        wrapperCol: {
+                            span: 20
+                        }
+                    }
                 });
                 if(dom){
                     dynamicDoms.push(dom);
                 }
             }
         }
+
 
         return (<Modal {...modalOpts}>
             <Form layout={'horizontal'} >
@@ -204,24 +256,15 @@ class PluginModal extends Component<ModalProps, {allContainers, selectedContaine
                                         message: '不能为空'
                                     }
                                 ]
-                            })(<Select>
+                            })(<Select onChange={this.onContainerChange.bind(this)}>
                                 {containerOptions}
                             </Select>)}
                         </Form.Item>
-                        <Form.Item label='容器参数' hasFeedback {...formItemLayout}>
-                            {this.props.form.getFieldDecorator('containerFields', {
-                                initialValue: selectedFieldNames,
-                                rules: [
-                                    {
-                                        required: false,
-                                        message: '不能为空'
-                                    }
-                                ]
-                            })(<Select>
-                                {containerFieldOptions}
-                            </Select>)}
-                        </Form.Item>
+
+                        {fieldSelectedDoms}
+
                         {dynamicDoms}
+
                         <Form.Item label='描述：' hasFeedback {...formItemLayout}>
                             {this.props.form.getFieldDecorator('description', {
                                 initialValue: CommonUtils.getStringValueFromModel("description", pluginObj, ""),

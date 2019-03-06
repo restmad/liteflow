@@ -110,7 +110,7 @@ CREATE TABLE lf_console_task (
   is_concurrency tinyint NOT NULL DEFAULT '0' COMMENT '是否可以并发',
   execute_etrategy varchar(128) DEFAULT '' COMMENT '当并发发生时的执行策略',
   plugin_id int DEFAULT NULL COMMENT '插件id',
-  plugin_conf varchar(255) DEFAULT NULL COMMENT '插件配置',
+  plugin_conf varchar(512) DEFAULT NULL COMMENT '插件配置',
   is_retry tinyint NOT NULL DEFAULT '0' COMMENT '失败是否重试',
   retry_conf varchar(128) DEFAULT NULL COMMENT '失败时的重试配置',
   max_run_time int DEFAULT NULL COMMENT '最长运行时长',
@@ -306,7 +306,7 @@ CREATE TABLE lf_executor_container (
 
 -- 执行任务信息表
 DROP TABLE if EXISTS lf_executor_job;
-CREATE TABLE lf_executor_job (
+CREATE TABLE lf_executor_job
   id int NOT NULL AUTO_INCREMENT COMMENT '主键id',
   application_id varchar(64) DEFAULT NULL COMMENT '应用id',
   executor_server_id int NOT NULL DEFAULT '0' COMMENT '执行者id',
@@ -348,6 +348,7 @@ CREATE TABLE lf_executor_plugin (
   id int NOT NULL AUTO_INCREMENT COMMENT '主键id',
   name varchar(64) DEFAULT NULL COMMENT '插件名称',
   field_config text COMMENT '插件需要实现的参数',
+  config varchar(512) COMMENT '插件实现容器的参数',
   description varchar(64) NOT NULL DEFAULT '' COMMENT '说明',
   container_id int NOT NULL DEFAULT '0' COMMENT '容器id',
   user_id int NOT NULL DEFAULT '0' COMMENT '创建者id',
