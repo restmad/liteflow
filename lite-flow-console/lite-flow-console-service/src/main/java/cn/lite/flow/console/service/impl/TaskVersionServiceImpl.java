@@ -330,9 +330,13 @@ public class TaskVersionServiceImpl implements TaskVersionService {
                             });
                         }
                     }
+                }else {
+                    LOG.error("dependency:{} is offline,msg:{}", dependency.getId(), dependency.toString());
                 }
             });
-            instanceDependencyService.addBatch(instanceDependencies);
+            if(CollectionUtils.isNotEmpty(instanceDependencies)){
+                instanceDependencyService.addBatch(instanceDependencies);
+            }
         }
 
     }

@@ -23,9 +23,7 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
 
     @Override
     public void add(TaskDependency dependency) {
-        if(dependency.getStatus() == null){
-            dependency.setStatus(StatusType.ON.getValue());
-        }
+        dependency.setStatus(StatusType.ON.getValue());
         taskDependencyMapper.insert(dependency);
     }
 
@@ -95,13 +93,12 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
         return null;
     }
 
-    @Override
-    public int invalidDependency(long dependencyId) {
-        TaskDependency taskDependency = new TaskDependency();
-        taskDependency.setId(dependencyId);
-        taskDependency.setStatus(StatusType.OFF.getValue());
-        return taskDependencyMapper.update(taskDependency);
-    }
+//    public int invalidDependency(long dependencyId) {
+//        TaskDependency taskDependency = new TaskDependency();
+//        taskDependency.setId(dependencyId);
+//        taskDependency.setStatus(StatusType.OFF.getValue());
+//        return taskDependencyMapper.update(taskDependency);
+//    }
 
     @Override
     public void delete(long dependencyId) {

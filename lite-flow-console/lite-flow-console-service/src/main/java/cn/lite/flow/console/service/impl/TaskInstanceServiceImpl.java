@@ -1,7 +1,9 @@
 package cn.lite.flow.console.service.impl;
 
 import cn.lite.flow.common.model.consts.CommonConstants;
+import cn.lite.flow.common.model.query.Page;
 import cn.lite.flow.common.utils.DateUtils;
+import cn.lite.flow.console.common.consts.Constants;
 import cn.lite.flow.console.dao.mapper.TaskInstanceMapper;
 import cn.lite.flow.console.model.basic.TaskInstance;
 import cn.lite.flow.console.model.consts.TaskVersionStatus;
@@ -32,6 +34,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
     @Autowired
     private DirectExecutorService directExecutorService;
+
+    private final static int MAX_COUNT_PER_TIME = 200;        //每次获取的最大数
 
     @Override
     public void add(TaskInstance model) {
@@ -116,28 +120,38 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
         return taskInstanceMapper.update(msgUpdateInstance);
     }
 
-    @Override
-    public List<Long> listReady2RunInstance() {
+    /**
+     * 获取某个状态下，按照logicTime升序的QM
+     * @param status
+     * @return
+     */
+    private TaskInstanceQM getStatusOrderByLogicTimeAscQm(int status){
         TaskInstanceQM qm = new TaskInstanceQM();
-        qm.setStatus(TaskVersionStatus.INIT.getValue());
+        qm.setStatus(status);
         qm.setLogicRunTimeLessEqual(DateUtils.getNow());
         qm.addOrderAsc(TaskInstanceQM.COL_LOGIC_RUN_TIME);
+        /**
+         * 控制每次获取数量，避免任务堆积时获取大量数据
+         */
+        qm.setPage(Page.getPage(Constants.ZERO, MAX_COUNT_PER_TIME));
+        return qm;
+    }
+
+    @Override
+    public List<Long> listReady2RunInstance() {
+        TaskInstanceQM qm = getStatusOrderByLogicTimeAscQm(TaskVersionStatus.INIT.getValue());
         return taskInstanceMapper.findIdList(qm);
     }
 
     @Override
     public List<Long> listReady2SubmitInstance() {
-        TaskInstanceQM qm = new TaskInstanceQM();
-        qm.setStatus(TaskVersionStatus.READY.getValue());
-        qm.addOrderAsc(TaskInstanceQM.COL_ID);
+        TaskInstanceQM qm = getStatusOrderByLogicTimeAscQm(TaskVersionStatus.READY.getValue());
         return taskInstanceMapper.findIdList(qm);
     }
 
     @Override
     public List<Long> listSubmitedInstance() {
-        TaskInstanceQM qm = new TaskInstanceQM();
-        qm.setStatus(TaskVersionStatus.SUBMITTED.getValue());
-        qm.addOrderAsc(TaskInstanceQM.COL_ID);
+        TaskInstanceQM qm = getStatusOrderByLogicTimeAscQm(TaskVersionStatus.SUBMITTED.getValue());
         return taskInstanceMapper.findIdList(qm);
     }
 

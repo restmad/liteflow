@@ -154,12 +154,12 @@ public class TaskServiceImpl implements TaskService {
         if(!tryResult.getA()){
             return false;
         }
-        List<TaskDependency> dependencies = tryResult.getB();
-        if(CollectionUtils.isNotEmpty(dependencies)){
-            dependencies.forEach(dependency -> {
-                dependencyService.invalidDependency(dependency.getId());
-            });
-        }
+//        List<TaskDependency> dependencies = tryResult.getB();
+//        if(CollectionUtils.isNotEmpty(dependencies)){
+//            dependencies.forEach(dependency -> {
+//                dependencyService.invalidDependency(dependency.getId());
+//            });
+//        }
 
         //状态置为下线
         Task updateTask = new Task();

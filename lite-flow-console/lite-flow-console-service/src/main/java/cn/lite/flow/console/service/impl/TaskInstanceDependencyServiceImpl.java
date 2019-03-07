@@ -5,6 +5,9 @@ import cn.lite.flow.console.dao.mapper.TaskInstanceDependencyMapper;
 import cn.lite.flow.console.model.basic.TaskInstanceDependency;
 import cn.lite.flow.console.model.query.TaskInstanceDependencyQM;
 import cn.lite.flow.console.service.TaskInstanceDependencyService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.util.List;
  */
 @Service
 public class TaskInstanceDependencyServiceImpl implements TaskInstanceDependencyService {
+
+    private final static Logger LOG = LoggerFactory.getLogger(TaskInstanceDependencyServiceImpl.class);
 
     @Autowired
     private TaskInstanceDependencyMapper taskInstanceDependencyMapper;
@@ -46,7 +51,12 @@ public class TaskInstanceDependencyServiceImpl implements TaskInstanceDependency
 
     @Override
     public void addBatch(List<TaskInstanceDependency> instanceDependencies) {
-        taskInstanceDependencyMapper.insertBatch(instanceDependencies);
+        if(CollectionUtils.isNotEmpty(instanceDependencies)){
+            taskInstanceDependencyMapper.insertBatch(instanceDependencies);
+        }else{
+            LOG.error("instance dependencies is empty");
+        }
+
     }
 
     @Override

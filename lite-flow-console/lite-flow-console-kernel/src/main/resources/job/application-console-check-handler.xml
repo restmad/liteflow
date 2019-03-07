@@ -4,6 +4,7 @@
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
        ">
     <!-- 是否可以运行校验 -->
+    <bean id="runTimeChecker" class="cn.lite.flow.console.kernel.event.handler.check.RunTimeChecker"/>
     <bean id="taskConcurrencyChecker" class="cn.lite.flow.console.kernel.event.handler.check.TaskConcurrencyChecker"/>
     <bean id="instanceDependencyChecker" class="cn.lite.flow.console.kernel.event.handler.check.InstanceDependencyChecker"/>
 
@@ -13,6 +14,7 @@
     <bean id="readyEventHandler" class="cn.lite.flow.console.kernel.event.handler.ReadyEventHandler">
         <constructor-arg name="checkers">
             <list>
+                <ref bean="runTimeChecker"/>
                 <ref bean="instanceDependencyChecker"/>
                 <ref bean="taskConcurrencyChecker"/>
             </list>

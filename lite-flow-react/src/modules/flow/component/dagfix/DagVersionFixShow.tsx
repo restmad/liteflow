@@ -6,6 +6,7 @@ import './dag.less';
 import * as ReactDOM from 'react-dom';
 import EnumUtils from "../../../../common/utils/EnumUtils";
 import CommonUtils from "../../../../common/utils/CommonUtils";
+import {Flow} from "../../model/FlowModel";
 
 
 /**
@@ -23,9 +24,9 @@ const getMousePosition = () => {
 
 export interface DagFixProps {
     height: number;          //宽度
-    data: any;               //数据
-    getViewData: any;        //获取图表的方法
-    updateLinks?: any;       //更新任务流连接
+    flow: Flow;               //任务流
+    firstTaskVersion: number;               //数据
+    getViewData: any;           //获取图表的方法
 }
 
 /***
@@ -47,7 +48,9 @@ const checkDatas = (dagDatas) => {
  */
 const getEvent = (isPreventDefault) => {
     const event = window.event;
-    event.preventDefault ? event.preventDefault() : (event.returnValue = false);
+    if(isPreventDefault && isPreventDefault == true){
+        event.preventDefault ? event.preventDefault() : (event.returnValue = false);
+    }
     return event;
 
 };
@@ -58,8 +61,6 @@ const getEvent = (isPreventDefault) => {
 class DagVersionFixShow extends Component<DagFixProps, any> {
 
     private dagData: any = {};
-
-    private linkData: any = {};
 
     private nodeId: Number = 0;
 
@@ -72,9 +73,6 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
             showMenu: false,
             nodeTop: 0,
             nodeLeft: 0,
-            //node编辑上下游
-            showTaskChooseModal: false,
-            isUp: false,
             //任务详情
             detailTop: 0,
             detailLeft: 0,
@@ -91,7 +89,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      */
     getDataAndRender() {
         let that = this;
-        let id = this.props.data.id;
+        let id = this.props.flow.id;
         this.props.getViewData(id).then((result) => {
             let dagDataNew = that.shuffleAndArrange(result.data);
             that.renderDag(dagDataNew);
@@ -103,30 +101,6 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      */
     hideAllWindow = () => {
         this.setState({showMenu: false, showDetail: false, showLabelMenu: false})
-    }
-
-    /**
-     * 添加上游
-     * @param id
-     */
-    onAddUpStream = () => {
-        let that = this;
-        that.setState({
-            showTaskChooseModal: true,
-            isUp: true
-        });
-        this.hideAllWindow();
-    }
-    /**
-     * 添加下游
-     */
-    onAddDownStream = () => {
-        let that = this;
-        that.setState({
-            showTaskChooseModal: true,
-            isUp: false
-        })
-        this.hideAllWindow();
     }
 
     /**
@@ -309,7 +283,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @param id
      * @returns {any}
      */
-    getTaskById = (id) => {
+    getTaskVersionById = (id) => {
         let tasks = this.dagData["nodes"];
         let current = null;
         if (tasks) {
@@ -323,121 +297,30 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
         return current;
     }
 
-    showLinkConfModal = () => {
-        this.setState({showLinkConfigModal: true});
-    }
-
-
-    /**
-     * 删除link
-     */
-    onDeleteLink = () => {
-        let dagData = this.dagData;
-        let linkData = this.linkData;
-        let nodes = dagData["nodes"];
-        let links = dagData["links"];
-        let linksNew = [];
-        for (let lk of links) {
-            if (lk.taskId == linkData.taskId
-                && lk.upstreamTaskId == linkData.upstreamTaskId) {
-                console.log(`delete link ${lk.upstreamTaskId}->${lk.taskId}`);
-            } else {
-                linksNew.push(lk);
-
-            }
-        }
-        dagData["links"] = linksNew;
-        this.hideAllWindow();
-        let dagDataNew = this.shuffleAndArrange(dagData);
-        this.renderDag(dagDataNew);
-    }
-    /**
-     * 删除任务
-     */
-    onDeleteTask = () => {
-        let taskId = this.nodeId;
-        let dagData = this.dagData;
-        let nodes = dagData["nodes"];
-        let links = dagData["links"];
-
-        let nodesNew = [];
-        if (nodes && nodes.length > 0) {
-            nodesNew = nodes.filter((d) => {
-                if (d.id == taskId) {
-                    return false;
-                } else {
-                    return true;
-                }
-            });
-        }
-
-        let linksNew = [];
-        if (links && links.length > 0) {
-            linksNew = links.filter((d) => {
-                if (d.taskId == taskId || d.upstreamTaskId == taskId) {
-                    return false;
-                } else {
-                    return true;
-                }
-            });
-        }
-
-        let dagDataNew = this.shuffleAndArrange({nodes: nodesNew, links: linksNew});
-        this.renderDag(dagDataNew);
-        this.hideAllWindow();
-    }
 
     /**
      * 提交任务流
      * @returns {any}
      */
-    submitFlow() {
-        let that = this;
-        let dagData = this.dagData;
-        let links = dagData["links"];
-        console.dir(links);
-        if (!links || links.length == 0) {
-            return;
-        }
-        let resultLinks = links.map((d) => {
-            return {
-                taskId: d.taskId,
-                upstreamTaskId: d.upstreamTaskId,
-                config: d.config
-            }
-        });
-        //添加排重
-        let linkDataSet = {};
-        let linksData = [];
-        for (let lk of resultLinks) {
-            let key = lk.taskId + "-" + lk.upstreamTaskId;
-            if (!linkDataSet[key]) {
-                linksData.push(lk);
-                linkDataSet[key] = true;
-            } else {
-                console.log(key);
-            }
-        }
+    fixFlow() {
 
-        console.log(linksData);
-        const linkJson = JSON.stringify(linksData);
 
-        this.props.updateLinks(this.props.data.id, linkJson)
-            .then((result) => {
-                if (result.status == 0) {
-                    notification["success"]({
-                        message: '成功',
-                        description: '操作成功',
-                    });
-                    that.getDataAndRender();
-                } else {
-                    notification["error"]({
-                        message: "异常",
-                        duration: 0,
-                        description: result.data
-                    });
-                }
-            });
+        // this.props.updateLinks(this.props.flow.id, linkJson)
+        //     .then((result) => {
+        //         if (result.status == 0) {
+        //             notification["success"]({
+        //                 message: '成功',
+        //                 description: '操作成功',
+        //             });
+        //             that.getDataAndRender();
+        //         } else {
+        //             notification["error"]({
+        //                 message: "异常",
+        //                 duration: 0,
+        //                 description: result.data
+        //             });
+        //         }
+        //     });
 
     }
 
@@ -480,22 +363,14 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
         </div>);
 
 
-        const currentTask = this.getTaskById(this.nodeId);
+        const currentTask = this.getTaskVersionById(this.nodeId);
         //按钮添加
         let topBtns = [];
-        //有节点显示“提交”
-        //没有节点显示“添加任务”
-        if (this.state.haveNode) {
-            topBtns.push(<div>
-                <Popconfirm title={"确认提交？"} onConfirm={this.submitFlow.bind(this)}>
-                    <Button size={"large"} type={"primary"} icon={"to-top"}>提交</Button>
-                </Popconfirm>
-            </div>);
-        } else {
-            topBtns.push(<div>
-                <Button size={"large"} type={"primary"} icon={"plus"} onClick={this.showFirstTask}>添加任务</Button>
-            </div>);
-        }
+        topBtns.push(<div>
+            <Popconfirm title={"确定修复任务流？"} onConfirm={this.fixFlow.bind(this)}>
+                <Button size={"large"} type={"primary"} icon={"to-top"}>修复任务流</Button>
+            </Popconfirm>
+        </div>);
 
         return (
             <div className={"dag-container"} key={"dagContainer"}
@@ -506,31 +381,9 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
                     </div> : ""
 
                 {this.state.showMenu?
-                    <div className={"menu-container"} key={"menu1Container"}
-                         style={{top: this.state.nodeTop, left: this.state.nodeLeft}}>
-                        <div>
-                            <Button onClick={this.onAddUpStream}>添加上游</Button>
-                        </div>
-                        <div>
-                            <Button onClick={this.onAddDownStream}>添加下游</Button>
-                        </div>
-                        <div>
-                            <Popconfirm title={"是否删除任务？"} onConfirm={this.onDeleteTask}>
-                                <Button>删除任务</Button>
-                            </Popconfirm>
-                        </div>
-                    </div> : ""}
-                {this.state.showLabelMenu  ?
                     <div className={"menu-container"} key={"menu2Container"}
-                         style={{top: this.state.labelTop, left: this.state.labelLeft}}>
-                        <div>
-                            <Button onClick={this.showLinkConfModal}>编辑依赖关系</Button>
-                        </div>
-                        <div>
-                            <Popconfirm title={"是否删除关联？"} onConfirm={this.onDeleteLink}>
-                                <Button>删除关联</Button>
-                            </Popconfirm>
-                        </div>
+                         style={{top: this.state.nodeTop, left: this.state.nodeLeft}}>
+                        {topBtns}
                     </div> : ""}
                 {this.state.showDetail ?
                     <div className={"detail-container"}

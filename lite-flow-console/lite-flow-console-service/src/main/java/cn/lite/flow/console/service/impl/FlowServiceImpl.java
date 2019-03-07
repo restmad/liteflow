@@ -592,7 +592,7 @@ public class FlowServiceImpl implements FlowService {
                     //如果已经存在，查看config是否有更新
                     if (td.getType() != dependency.getType()
                             || StringUtils.equals(td.getConfig(), dependency.getConfig())) {
-                        //offset有更新并且当前任务流是第一个把这个依赖添加进来的
+                        //config有更新并且当前任务流是第一个把这个依赖添加进来的
                         if (dependencyFirstFlow == 0 || dependencyFirstFlow == flowId) {
                             td.setType(dependency.getType());
                             td.setConfig(dependency.getConfig());
@@ -616,7 +616,7 @@ public class FlowServiceImpl implements FlowService {
                 } else {
                     //任务流已经存在的依赖id
                     alreadyExitFlowDepenIdSet.add(td.getId());
-                    //如果已经存在，查看offset是否有更新,设置offset来更新
+                    //如果已经存在，查看config是否有更新,设置config来更新
                     if (td.getType() != dependency.getType()
                             || StringUtils.equals(td.getConfig(), dependency.getConfig())) {
                         if (dependencyFirstFlow == 0 || dependencyFirstFlow == flowId) {
@@ -630,7 +630,7 @@ public class FlowServiceImpl implements FlowService {
                     }
                 }
             } else {
-                //依赖不存在，则添加
+                //依赖不存在，需要添加
                 newDependencies.add(dependency);
             }
         }

@@ -24,7 +24,7 @@ public class TaskDependency implements Serializable {
     private String config;                                        //依赖配置信息
     
     private Integer status;                                       //当前状态
-    
+
     private Date createTime;                                      //创建时间
 
     private Date updateTime;                                      //更新时间

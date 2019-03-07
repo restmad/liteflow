@@ -49,7 +49,7 @@ public class QuartzUtils {
             CronExpression cronExpression = new CronExpression(crontab);
             /**
              * 由于开始时间可能与第一次触发时间相同而导致拿不到第一个时间
-             * 所以，其实起始时间较少1ms
+             * 所以，起始时间较少1ms
              */
             DateTime startDateTime = new DateTime(startTime).minusMillis(1);
             Date runtime = startDateTime.toDate();

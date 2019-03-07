@@ -51,7 +51,9 @@ const checkDatas = (dagDatas) => {
  */
 const getEvent = (isPreventDefault) => {
     const event = window.event;
-    event.preventDefault ? event.preventDefault() : (event.returnValue = false);
+    if(isPreventDefault && isPreventDefault == true){
+        event.preventDefault ? event.preventDefault() : (event.returnValue = false);
+    }
     return event;
 
 };

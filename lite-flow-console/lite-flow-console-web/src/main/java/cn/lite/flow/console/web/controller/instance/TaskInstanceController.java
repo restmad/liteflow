@@ -1,5 +1,6 @@
 package cn.lite.flow.console.web.controller.instance;
 
+import cn.lite.flow.common.model.consts.StatusType;
 import cn.lite.flow.console.common.exception.ConsoleRuntimeException;
 import cn.lite.flow.console.common.utils.ResponseUtils;
 import cn.lite.flow.console.model.basic.Task;
@@ -216,5 +217,30 @@ public class TaskInstanceController extends BaseController {
             return ResponseUtils.success("操作成功");
         }
         return ResponseUtils.error("操作失败");
+    }
+
+    /**
+     * 实例依赖置为无效状态
+     * @return
+     */
+    @RequestMapping(value = "dependency/off")
+    public String offDependency(@RequestParam(value = "id") long id) {
+        TaskInstanceDependency instanceDependency = new TaskInstanceDependency();
+        instanceDependency.setId(id);
+        instanceDependency.setStatus(StatusType.OFF.getValue());
+        taskInstanceDependencyService.update(instanceDependency);
+        return ResponseUtils.success("操作成功");
+    }
+    /**
+     * 实例依赖置为有效状态
+     * @return
+     */
+    @RequestMapping(value = "dependency/on")
+    public String onDependency(@RequestParam(value = "id") long id) {
+        TaskInstanceDependency instanceDependency = new TaskInstanceDependency();
+        instanceDependency.setId(id);
+        instanceDependency.setStatus(StatusType.ON.getValue());
+        taskInstanceDependencyService.update(instanceDependency);
+        return ResponseUtils.success("操作成功");
     }
 }
