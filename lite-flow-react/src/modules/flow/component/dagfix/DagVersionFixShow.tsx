@@ -21,7 +21,7 @@ const getMousePosition = () => {
     let scrollY = document.documentElement.scrollTop || document.body.scrollTop;
     let x = e["pageX"] || e["clientX"] + scrollX;
     let y = e["pageY"] || e["clientY"] + scrollY;
-    return {'x': x, 'y': y};
+    return {'x': x + 10, 'y': y + 10};
 }
 
 export interface DagFixProps {

@@ -25,7 +25,7 @@
             <ref bean="taskVersionDailyInitJobDetail" />
         </property>
         <property name="cronExpression">
-            <value>0 */20 23,22 * * ?</value>
+            <value>0 */20 21,22,23 * * ?</value>
         </property>
         <!-- 为了保证主切换后，阻塞的任务不会触发 -->
         <property name="misfireInstruction" value="2"></property>
@@ -52,7 +52,7 @@
             <ref bean="versionDailyInitTriggerJobDetail" />
         </property>
         <property name="cronExpression">
-            <value>0 0/10 22,23,0,1,2 * * ?</value>
+            <value>0 0/10 * * * ?</value>
         </property>
         <!-- 为了保证主切换后，阻塞的任务不会触发 -->
         <property name="misfireInstruction" value="2"></property>
@@ -97,7 +97,6 @@
             <value>execute</value>
         </property>
         <property name="concurrent" value="false" />
-
     </bean>
     <bean id="instanceSubmit2FireJobTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
