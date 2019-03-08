@@ -91,7 +91,7 @@ class DagShow extends Component<DagProps, any> {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
         let that = this;
         if (this.props.isFlow) {
             this.getDataAndRender();

@@ -23,11 +23,12 @@ class FlowShowModal extends Component<ModalProps> {
 
     render() {
 
-        let height = document.body.clientHeight  - 110;
-        let width = document.body.clientWidth - 60;
+        const height = document.body.clientHeight  - 110;
+        const width = document.body.clientWidth - 60;
         const modalOpts = {
             title: `任务流:${this.props.flow.name}`,
             visible: true,
+            maskClosable: false,
             width: width,
             style: {top: 10, height: height},
             footer: "",

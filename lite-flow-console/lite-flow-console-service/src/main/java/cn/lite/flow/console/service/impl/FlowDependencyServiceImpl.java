@@ -142,6 +142,7 @@ public class FlowDependencyServiceImpl implements FlowDependencyService {
         FlowDependencyQM qm = new FlowDependencyQM();
         qm.setTaskDependencyIds(dependencyIds);
         List<FlowDependency> flowDependencies = flowDependencyMapper.findList(qm);
-        return flowDependencies;    }
+        return flowDependencies;
+    }
 
 }

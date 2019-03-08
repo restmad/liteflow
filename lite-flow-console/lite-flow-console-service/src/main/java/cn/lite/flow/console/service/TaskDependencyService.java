@@ -46,12 +46,19 @@ public interface TaskDependencyService extends BaseService<TaskDependency, TaskD
      * @return
      */
     TaskDependency get(long taskId, long upstreamTaskId);
-//    /**
-//     * 依赖置为无效
-//     * @param dependencyId
-//     * @return
-//     */
-//    int invalidDependency(long dependencyId);
+    /**
+     * 依赖置为无效
+     * @param dependencyId
+     * @return
+     */
+    int invalidDependency(long dependencyId);
+
+    /**
+     * 依赖设置为有效
+     * @param dependencyId
+     * @return
+     */
+    int validDependency(long dependencyId);
 
     /**
      * 删除依赖

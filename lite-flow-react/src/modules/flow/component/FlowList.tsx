@@ -7,6 +7,7 @@ import EnumUtils from "../../../common/utils/EnumUtils";
 import CommonUtils from "../../../common/utils/CommonUtils";
 import FlowTaskModal from "./FlowTaskModal";
 import CommonAuthModal from "../../auth/view/CommonAuthModal";
+import FlowFixModal from "./FlowFixModal";
 export interface FlowListProps {
     dataSource: Array<Flow>;
     loading: boolean;
@@ -14,7 +15,13 @@ export interface FlowListProps {
     flowModel: FlowModel;
 }
 
-export class FlowList extends Component<FlowListProps, {showModal, showDagModal, showTaskModal, showAuthModal, flow}> {
+export class FlowList extends Component<FlowListProps, {
+    showModal,
+    showDagModal,
+    showFixDagModal,
+    showTaskModal,
+    showAuthModal,
+    flow}> {
 
     constructor(props) {
         super(props);
@@ -22,6 +29,7 @@ export class FlowList extends Component<FlowListProps, {showModal, showDagModal,
             showModal: false,
             showTaskModal: false,
             showDagModal: false,
+            showFixDagModal: false,
             showAuthModal: false,
             flow: new Flow()
         }
@@ -81,6 +89,32 @@ export class FlowList extends Component<FlowListProps, {showModal, showDagModal,
     hideDagModal(){
         this.setState({
             showDagModal: false
+        });
+    }
+
+    /**
+     * FIX DAG
+     */
+    getFixDagModalProps(){
+        let that = this;
+        return {
+            flow: this.state.flow,
+            onCancel() {
+                that.hideFixDagModal();
+            }
+        };
+    }
+    showFixDagModal(flow, e){
+        let that = this;
+        that.setState({
+            showFixDagModal: true,
+            flow: flow
+        });
+    }
+
+    hideFixDagModal(){
+        this.setState({
+            showFixDagModal: false
         });
     }
     /**
@@ -230,7 +264,7 @@ export class FlowList extends Component<FlowListProps, {showModal, showDagModal,
                     <Button type='ghost' size={'small'} className={"margin-right5"} onClick={e => this.showAuthModal(record , e)}>
                         权限
                     </Button>
-                    <Button type='ghost' size={'small'} className={"margin-right5"} onClick={e => this.showAuthModal(record , e)}>
+                    <Button type='ghost' size={'small'} className={"margin-right5"} onClick={e => this.showFixDagModal(record , e)}>
                         修复
                     </Button>
                 </p>
@@ -248,6 +282,7 @@ export class FlowList extends Component<FlowListProps, {showModal, showDagModal,
                 {this.state.showDagModal ? <FlowShowModal {...this.getDagModalProps()}/> : ''}
                 {this.state.showTaskModal ? <FlowTaskModal {...this.getTaskModalProps()}/> : ''}
                 {this.state.showAuthModal ? <CommonAuthModal {...this.getAuthModalProps()}/> : ''}
+                {this.state.showFixDagModal ? <FlowFixModal {...this.getFixDagModalProps()}/> : ''}
 
             </div>
         );

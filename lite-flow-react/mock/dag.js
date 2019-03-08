@@ -49,11 +49,7 @@ module.exports = {
                 {
                     "id": 1,
                     "name": "t1",
-                    "scheduleType": 0,
                     "period": 2,
-                    "maxRunningtime": -1,
-                    "startOvertime": 0,
-                    "queueName": null,
                     "status": 1,
                 },
                 {
@@ -70,9 +66,7 @@ module.exports = {
                     "scheduleType": 0,
                     "period": 2,
                     "cronExpression": "45 4 * * ?",
-                    "status": 0,
-                    "createdTime": 1510282709000,
-                    "modifiedTime": 1510361752000
+                    "status": 0
                 },
                 {
                     "id": 4,
@@ -80,9 +74,7 @@ module.exports = {
                     "scheduleType": 0,
                     "period": 2,
                     "cronExpression": "45 4 * * ?",
-                    "status": -1,
-                    "createTime": 1510282709000,
-                    "updateTime": 1510361752000
+                    "status": -1
                 },
                 {
                     "id": 5,

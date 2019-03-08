@@ -93,12 +93,21 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
         return null;
     }
 
-//    public int invalidDependency(long dependencyId) {
-//        TaskDependency taskDependency = new TaskDependency();
-//        taskDependency.setId(dependencyId);
-//        taskDependency.setStatus(StatusType.OFF.getValue());
-//        return taskDependencyMapper.update(taskDependency);
-//    }
+    @Override
+    public int validDependency(long dependencyId) {
+        TaskDependency taskDependency = new TaskDependency();
+        taskDependency.setId(dependencyId);
+        taskDependency.setStatus(StatusType.ON.getValue());
+        return taskDependencyMapper.update(taskDependency);
+    }
+
+    @Override
+    public int invalidDependency(long dependencyId) {
+        TaskDependency taskDependency = new TaskDependency();
+        taskDependency.setId(dependencyId);
+        taskDependency.setStatus(StatusType.OFF.getValue());
+        return taskDependencyMapper.update(taskDependency);
+    }
 
     @Override
     public void delete(long dependencyId) {

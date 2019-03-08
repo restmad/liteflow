@@ -8,5 +8,10 @@ module.exports = {
         offUrl:"/console/flow/offline",
         updateLinksUrl: "/console/flow/editLinks",
         viewDagUrl: "/console/flow/viewDag",
+        fixDagViewUrl: "/console/flow/fix/viewDag",
+        fixFlowUrl: "/console/flow/fix/fixFlow",
+        fixFromNodeUrl: "/console/flow/fix/fixFromNode",
+        fixGetLatestVersionUrl: "/console/flow/fix/getHeadTaskVersionNos",
+        fixGetHeadTaskVersionsUrl: "/console/flow//getLatestVersionNos",
     }
 }

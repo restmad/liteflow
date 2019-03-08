@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import {Row, Col, notification, Input, Button, Popconfirm} from 'antd'
 import * as dagreD3 from 'dagre-d3/dist/dagre-d3'
 import d3 from 'd3';
-import './dag.less';
+import './dagFix.less';
 import * as ReactDOM from 'react-dom';
 import EnumUtils from "../../../../common/utils/EnumUtils";
 import CommonUtils from "../../../../common/utils/CommonUtils";
-import {Flow} from "../../model/FlowModel";
+import {Flow, FlowModel} from "../../model/FlowModel";
+import {kernel} from "../../../../common/utils/IOC";
+import {TaskVersionModel} from "../../../taskVersion/model/TaskVersionModel";
 
 
 /**
@@ -23,10 +25,9 @@ const getMousePosition = () => {
 }
 
 export interface DagFixProps {
-    height: number;          //宽度
-    flow: Flow;               //任务流
-    firstTaskVersion: number;               //数据
-    getViewData: any;           //获取图表的方法
+    height: number;                          //宽度
+    flow: Flow;                              //任务流
+    firstTaskVersionNo: number;              //数据
 }
 
 /***
@@ -48,7 +49,7 @@ const checkDatas = (dagDatas) => {
  */
 const getEvent = (isPreventDefault) => {
     const event = window.event;
-    if(isPreventDefault && isPreventDefault == true){
+    if (isPreventDefault && isPreventDefault == true) {
         event.preventDefault ? event.preventDefault() : (event.returnValue = false);
     }
     return event;
@@ -60,9 +61,13 @@ const getEvent = (isPreventDefault) => {
  */
 class DagVersionFixShow extends Component<DagFixProps, any> {
 
+    private flowModel: FlowModel;
+
+    private taskVersionModel: TaskVersionModel;
+
     private dagData: any = {};
 
-    private nodeId: Number = 0;
+    private nodeId: number = 0;
 
     constructor(pros) {
         super(pros);
@@ -80,7 +85,9 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
+        this.flowModel = kernel.get(FlowModel);
+        this.taskVersionModel = kernel.get(TaskVersionModel);
         this.getDataAndRender();
     }
 
@@ -90,9 +97,13 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
     getDataAndRender() {
         let that = this;
         let id = this.props.flow.id;
-        this.props.getViewData(id).then((result) => {
-            let dagDataNew = that.shuffleAndArrange(result.data);
-            that.renderDag(dagDataNew);
+        const {flow, firstTaskVersionNo} = this.props;
+        this.flowModel.fixViewDag(flow.id, firstTaskVersionNo).then((result) => {
+            if (result.status == 0) {
+                that.hideAllWindow();
+                that.dagData = result.data;
+                that.renderDag(result.data);
+            }
         });
     }
 
@@ -103,45 +114,6 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
         this.setState({showMenu: false, showDetail: false, showLabelMenu: false})
     }
 
-    /**
-     * 清洗并整理数据，避免展示的时候出现交叉线
-     */
-    shuffleAndArrange = (dagDatas) => {
-        if (!checkDatas(dagDatas)) {
-            return null;
-        }
-        let nodes = dagDatas["nodes"];
-        let links = dagDatas["links"];
-        if (nodes && nodes.length > 0) {
-            this.setState({haveNode: true});
-        } else {
-            this.setState({haveNode: false});
-        }
-        let nodesNew = [];
-        /**
-         * 去除掉任何没有关联的任务
-         */
-        for (let node of nodes) {
-            let nodeId = node.id;
-            for (let link of links) {
-                let taskId = link.taskId;
-                let upstreamId = link.upstreamTaskId;
-                if (nodeId == taskId || nodeId == upstreamId) {
-                    nodesNew.push(node);
-                    break;
-                }
-            }
-        }
-
-        let dagDatasNew = {
-            nodes: nodesNew,
-            links: links
-        };
-        this.dagData = dagDatasNew;
-
-
-        return dagDatasNew;
-    }
     /**
      * 渲染dag图
      */
@@ -174,9 +146,9 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
         //添加节点
         for (let node of nodes) {
             g.setNode(node.id, {
-                label: node.name,
+                label: node.taskName,
                 width: 266,
-                class: "dag-node-" + node.status
+                class: "dag-fix-node-" + node.finalStatus
             });
 
         }
@@ -184,8 +156,8 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
         // 添加节点关系
         if (links && links.length > 0) {
             for (let link of links) {
-                g.setEdge(link.upstreamTaskId, link.taskId, {
-                    label: link.config ? "range" : "none",
+                g.setEdge(link.upstreamVersionId, link.versionId, {
+                    label: "",
                     labelStyle: 'width: 25px;height: 25px;text-align: center;line-height: 25px;'
                 });
 
@@ -284,12 +256,12 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @returns {any}
      */
     getTaskVersionById = (id) => {
-        let tasks = this.dagData["nodes"];
+        let versions = this.dagData["nodes"];
         let current = null;
-        if (tasks) {
-            for (let task of tasks) {
-                if (task.id == id) {
-                    current = task;
+        if (versions) {
+            for (let version of versions) {
+                if (version.id == id) {
+                    current = version;
                     break;
                 }
             }
@@ -303,39 +275,18 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @returns {any}
      */
     fixFlow() {
-
-
-        // this.props.updateLinks(this.props.flow.id, linkJson)
-        //     .then((result) => {
-        //         if (result.status == 0) {
-        //             notification["success"]({
-        //                 message: '成功',
-        //                 description: '操作成功',
-        //             });
-        //             that.getDataAndRender();
-        //         } else {
-        //             notification["error"]({
-        //                 message: "异常",
-        //                 duration: 0,
-        //                 description: result.data
-        //             });
-        //         }
-        //     });
-
-    }
-
-    showFirstTask = () => {
-        let that = this;
-        that.setState({
-            showFirstModal: true
-        })
-    }
-
-    /**
-     * kill掉任务版本
-     * @returns {any}
-     */
-    killVersion(){
+        const that = this;
+        const {flow, firstTaskVersionNo} = this.props;
+        this.flowModel.fixFlow(flow.id, firstTaskVersionNo)
+            .then((result) => {
+                if (result.status == 0) {
+                    notification["success"]({
+                        message: '成功',
+                        description: '操作成功',
+                    });
+                    that.getDataAndRender();
+                }
+            });
 
     }
 
@@ -343,60 +294,152 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * kill掉任务版本
      * @returns {any}
      */
-    ignoreVersion(){
+    killVersion() {
+        const versionId = this.nodeId;
+        const that = this;
+        this.taskVersionModel.fixById(versionId).then(result => {
+            if (result.status == 0) {
+                notification["success"]({
+                    message: '成功',
+                    description: '操作成功',
+                });
+                that.getDataAndRender();
+            }
+        });
+    }
 
+    /**
+     * kill掉任务版本
+     * @returns {any}
+     */
+    fixVersion() {
+        const versionId = this.nodeId;
+        const that = this;
+        this.taskVersionModel.fixById(versionId).then(result => {
+            if (result.status == 0) {
+                notification["success"]({
+                    message: '成功',
+                    description: '操作成功',
+                });
+                that.getDataAndRender();
+            }
+        });
+    }
+
+    /**
+     * kill掉任务版本
+     * @returns {any}
+     */
+    fixVersionFromNode() {
+        const versionId = this.nodeId;
+        const {flow, firstTaskVersionNo} = this.props;
+        const that = this;
+        this.flowModel.fixFromNode(flow.id, firstTaskVersionNo, versionId).then(result => {
+            if (result.status == 0) {
+                notification["success"]({
+                    message: '成功',
+                    description: '操作成功',
+                });
+                that.getDataAndRender();
+            }
+        });
+    }
+
+    /**
+     * 忽略任务版本
+     * @returns {any}
+     */
+    ignoreVersion() {
+        const versionId = this.nodeId;
+        const that = this;
+        this.taskVersionModel.ignoreById(versionId).then(result => {
+            if (result.status == 0) {
+                notification["success"]({
+                    message: '成功',
+                    description: '操作成功',
+                });
+                that.getDataAndRender();
+            }
+        });
     }
 
     render() {
+        const currentVersion = this.getTaskVersionById(this.nodeId);
 
         const killBtn = (<div key={"kill-versionBtn"}>
-            <Popconfirm title={"是否KIll当前任务？"} key={"killVersionPop"}
+            <Popconfirm title={"确定KIll？"} key={"killVersionPop"}
                         onConfirm={this.killVersion.bind(this)}>
-                <Button key={"killVersionBtn"}>KIll当前任务</Button>
+                <Button key={"killVersionBtn"}>KILL</Button>
             </Popconfirm>
         </div>);
+
         const ingnoreBtn = (<div key={"ignore-versionBtn"}>
-            <Popconfirm title={"是否当前任务置为成功？"} key={"ingoreVersionPop"}
+            <Popconfirm title={"确定忽略？"} key={"ignoreVersionPop"}
                         onConfirm={this.ignoreVersion.bind(this)}>
-                <Button key={"successVersionBtn"}>当前任务置为成功</Button>
+                <Button key={"successVersionBtn"}>忽略</Button>
             </Popconfirm>
         </div>);
+        /**
+         * 右键按钮判断
+         * @type {any[]}
+         */
+        let rightMenuBtns = [];
+        if (currentVersion) {
+            const finalStatus = currentVersion.finalStatus;
+            if (finalStatus == EnumUtils.taskVersionFinalStatusUndefined) {
+                rightMenuBtns.push(killBtn);
+            }
+            if (finalStatus != EnumUtils.taskVersionFinalStatusSuccess) {
+                rightMenuBtns.push(ingnoreBtn);
+            }
+        }
 
-
-        const currentTask = this.getTaskVersionById(this.nodeId);
         //按钮添加
         let topBtns = [];
         topBtns.push(<div>
             <Popconfirm title={"确定修复任务流？"} onConfirm={this.fixFlow.bind(this)}>
-                <Button size={"large"} type={"primary"} icon={"to-top"}>修复任务流</Button>
+                <Button size={"large"} type={"primary"} icon={"tool"}>修复任务流</Button>
             </Popconfirm>
         </div>);
 
         return (
-            <div className={"dag-container"} key={"dagContainer"}
+            <div className={"dag-fix-container"} key={"dagContainer"}
                  style={{width: "100%", height: this.props.height, margin: "0 auto"}}>
                 <svg ref={"dag"} style={{width: "100%", height: "100%"}}></svg>
-                     <div className={"top-menu-container"}>
-                        {topBtns}
-                    </div> : ""
+                <div className={"top-menu-container"}>
+                    {topBtns}
+                </div>
+                : ""
 
-                {this.state.showMenu?
+                {this.state.showMenu ?
                     <div className={"menu-container"} key={"menu2Container"}
                          style={{top: this.state.nodeTop, left: this.state.nodeLeft}}>
-                        {topBtns}
+                        <div>
+                            <Popconfirm title={"是否修复？"} key={"fixVersionPop"}
+                                        onConfirm={this.fixVersion.bind(this)}>
+                                <Button key={"fixVersionBtn"}>修复当前节点</Button>
+                            </Popconfirm>
+                        </div>
+                        <div>
+                            <Popconfirm title={"是否从该节点修复任务流？"} key={"fixFlowPop"}
+                                        onConfirm={this.fixVersionFromNode.bind(this)}>
+                                <Button key={"fixFlowBtn"}>从该节点修复</Button>
+                            </Popconfirm>
+                        </div>
+                        {rightMenuBtns}
                     </div> : ""}
                 {this.state.showDetail ?
                     <div className={"detail-container"}
                          style={{top: this.state.detailTop, left: this.state.detailLeft}}>
-                        <p><strong>id:&nbsp;</strong>{currentTask.id}</p>
-                        <p><strong>名称:&nbsp;</strong>{currentTask.name}</p>
-                        <p><strong>状态:&nbsp;</strong>{EnumUtils.getStatusName(currentTask.status)}</p>
-                        <p><strong>时间粒度:&nbsp;</strong>{EnumUtils.getPeriodName(currentTask.period)}</p>
-                        <p><strong>时间规则:&nbsp;</strong>{currentTask.cronExpression}</p>
-                        <p><strong>创建人:&nbsp;</strong>{currentTask.user ? currentTask.user.name : ""}</p>
-                        <p><strong>描述:&nbsp;</strong>{currentTask.description}</p>
-                        <p><strong>创建时间:&nbsp;</strong>{CommonUtils.dateFormat(currentTask.createTime)}</p>
-                        <p><strong>更新时间:&nbsp;</strong>{CommonUtils.dateFormat(currentTask.updateTime)}</p>
+                        <p><strong>id:&nbsp;</strong>{currentVersion.id}</p>
+                        <p><strong>任务id:&nbsp;</strong>{currentVersion.taskId}</p>
+                        <p><strong>任务名称:&nbsp;</strong>{currentVersion.taskName}</p>
+                        <p><strong>状态:&nbsp;</strong>{EnumUtils.getTaskVersionStatusName(currentVersion.status)}</p>
+                        <p><strong>时间粒度:&nbsp;</strong>{EnumUtils.getPeriodName(currentVersion.taskPeriod)}</p>
+                        <p><strong>时间规则:&nbsp;</strong>{currentVersion.taskCronExpression}</p>
+                        <p><strong>描述:&nbsp;</strong>{currentVersion.taskDescription}</p>
+                        <p><strong>创建时间:&nbsp;</strong>{CommonUtils.dateFormat(currentVersion.createTime)}</p>
+                        <p><strong>更新时间:&nbsp;</strong>{CommonUtils.dateFormat(currentVersion.updateTime)}</p>
                     </div> : ""}
             </div>
         )

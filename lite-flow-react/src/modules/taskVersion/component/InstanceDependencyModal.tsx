@@ -102,19 +102,23 @@ class InstanceDependencyModal extends Component<ModalProps> {
                 title: "关联状态",
                 dataIndex: 'status',
                 key: 'status',
-                render: (state, row) => {
+                render: (status, row) => {
                     const {upstreamTaskVersion} = row;
-                    if(!upstreamTaskVersion ||  upstreamTaskVersion.finalStatus != EnumUtils.taskVersionFinalStatusSuccess){
-                        return <strong style={{color: "red"}}>异常</strong>;
+                    if(!upstreamTaskVersion){
+                        return <strong style={{color: "red"}}>任务版本不存在</strong>;
                     }
+                    if(upstreamTaskVersion.finalStatus == EnumUtils.taskVersionFinalStatusFail){
+                        return <strong style={{color: "red"}}>运行失败</strong>;
+                    }
+
                     return "正常";
                 }
             }, {
                 title: "状态",
                 dataIndex: 'status',
                 key: 'status',
-                render: (state) => {
-                    if(state == 0){
+                render: (status) => {
+                    if(status == EnumUtils.commonStatusOff){
                         return "无效";
                     }
                     return "有效";
@@ -147,7 +151,7 @@ class InstanceDependencyModal extends Component<ModalProps> {
                     </Popconfirm>);
 
                     let buttons = [];
-                    if(record.state == 0){
+                    if(record.state == EnumUtils.commonStatusOff){
                         buttons.push(onBtn);
                     }else{
                         buttons.push(offBtn);

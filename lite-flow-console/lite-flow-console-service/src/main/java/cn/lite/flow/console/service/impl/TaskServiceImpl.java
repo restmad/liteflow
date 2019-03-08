@@ -30,7 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by luya on 2018/7/23.
@@ -119,6 +121,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Map<Long, Task> getTaskInfo(List<Long> taskIds) {
+        List<Task> tasks = this.getByIds(taskIds);
+        if(CollectionUtils.isNotEmpty(tasks)){
+            Map<Long, Task> taskMap = tasks.stream().collect(Collectors.toMap(Task::getId, task -> task));
+            return taskMap;
+        }
+        return null;
+    }
+
+    @Override
     @Transactional("consoleTxManager")
     public boolean online(long taskId) {
         Task task = taskMapper.getById(taskId);
@@ -131,6 +143,28 @@ public class TaskServiceImpl implements TaskService {
         updateTask.setStatus(TaskStatus.ONLINE.getValue());
         updateTask.setId(taskId);
         update(updateTask);
+
+        /**
+         * 将相关依赖置为有效
+         */
+        List<TaskDependency> dependencies = Lists.newArrayList();
+        List<TaskDependency> upstreamDependencies = dependencyService.getUpstreamDependencies(taskId);
+        if(CollectionUtils.isNotEmpty(upstreamDependencies)){
+            dependencies.addAll(upstreamDependencies);
+        }
+        List<TaskDependency> downstreamDependencies = dependencyService.getDownstreamDependencies(taskId);
+        if(CollectionUtils.isNotEmpty(downstreamDependencies)){
+            dependencies.addAll(downstreamDependencies);
+        }
+
+        if(CollectionUtils.isNotEmpty(dependencies)){
+            dependencies.forEach(dependency -> {
+                dependencyService.invalidDependency(dependency.getId());
+            });
+        }
+        /**
+         * 计算任务版本以及依赖
+         */
 
         Date startTime = DateUtils.getNow();
         Date endTime = DateUtils.getEndTimeOfDay(startTime);
@@ -154,12 +188,7 @@ public class TaskServiceImpl implements TaskService {
         if(!tryResult.getA()){
             return false;
         }
-//        List<TaskDependency> dependencies = tryResult.getB();
-//        if(CollectionUtils.isNotEmpty(dependencies)){
-//            dependencies.forEach(dependency -> {
-//                dependencyService.invalidDependency(dependency.getId());
-//            });
-//        }
+
 
         //状态置为下线
         Task updateTask = new Task();

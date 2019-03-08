@@ -174,7 +174,7 @@ public class TaskVersionController extends BaseController {
     }
 
     /**
-     * 深度修复，从错误节点修复直到根节点
+     * 深度修复，从错误节点修复直到叶子节点
      *
      * @param id
      * @return

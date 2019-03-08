@@ -2,6 +2,7 @@ package cn.lite.flow.console.web.utils;
 
 import cn.lite.flow.console.common.consts.Constants;
 import cn.lite.flow.console.common.consts.TimeUnit;
+import cn.lite.flow.console.common.model.vo.DependencyVo;
 import cn.lite.flow.console.model.basic.Flow;
 import cn.lite.flow.console.model.basic.Task;
 import cn.lite.flow.console.model.basic.TaskInstance;
@@ -117,6 +118,30 @@ public class ModelUtils {
     }
     /**
      * 获取任务版本
+     * @param taskVersion
+     * @return
+     */
+    public static JSONObject getTaskVersionWithTaskObj(TaskVersion taskVersion, Task task){
+        if(taskVersion == null){
+            return null;
+        }
+        JSONObject obj = getTaskVersionObj(taskVersion);
+        if(task != null){
+            obj.put("taskId", task);
+            obj.put("taskName", task);
+            obj.put("taskCronExpression", task);
+            obj.put("taskPeriod", task);
+            obj.put("taskStatus", task);
+            obj.put("taskDescription", task);
+            obj.put("taskCreateTime", task);
+            obj.put("taskUpdateTime", task);
+            obj.put("taskUserId", task);
+        }
+
+        return obj;
+    }
+    /**
+     * 获取任务版本
      * @param instance
      * @return
      */
@@ -207,6 +232,40 @@ public class ModelUtils {
         }
 
 
+    }
+
+    /**
+     * 获取容器
+     * @param dependency
+     * @return
+     */
+    public static JSONObject getDependencyVoObj(DependencyVo dependency){
+        if(dependency == null){
+            return null;
+        }
+        JSONObject obj = new JSONObject();
+        obj.put("versionId", dependency.getId());
+        obj.put("upstreamVersionId", dependency.getUpstreamId());
+        return obj;
+    }
+    /**
+     * 获取容器
+     * @param dependencies
+     * @return
+     */
+    public static JSONArray getDependencyVoArray(List<DependencyVo> dependencies){
+        if(CollectionUtils.isNotEmpty(dependencies)){
+            return null;
+        }
+        JSONArray datas = new JSONArray();
+        dependencies.stream().forEach(dependencyVo ->  {
+            JSONObject obj = getDependencyVoObj(dependencyVo);
+            if(obj != null){
+                datas.add(obj);
+            }
+        });
+
+        return datas;
     }
 
 }

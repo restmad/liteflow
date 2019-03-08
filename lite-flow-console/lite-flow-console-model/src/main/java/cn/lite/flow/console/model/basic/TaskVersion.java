@@ -23,7 +23,7 @@ public class TaskVersion implements Serializable {
 
     private Integer status;                                     //数据版本状态
 
-    private Integer finalStatus;                                //最终状态:1:未定义,2:成功,3:失败:4:忽略
+    private Integer finalStatus;                                //最终状态 cn.lite.flow.console.model.consts.TaskVersionFinalStatus
 
     private Integer retryNum;                                   //尝试次数,默认为0
 

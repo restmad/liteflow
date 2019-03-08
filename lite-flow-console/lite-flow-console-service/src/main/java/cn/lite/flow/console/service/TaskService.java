@@ -7,6 +7,7 @@ import cn.lite.flow.console.model.basic.TaskDependency;
 import cn.lite.flow.console.model.query.TaskQM;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by luya on 2018/7/23.
@@ -14,6 +15,13 @@ import java.util.List;
 public interface TaskService extends BaseService<Task, TaskQM> {
 
     List<Task> getByIds(List<Long> taskIds);
+
+    /**
+     * 批量获取任务信息并返回map
+     * @param taskIds
+     * @return
+     */
+    Map<Long, Task> getTaskInfo(List<Long> taskIds);
 
     /**
      * 上线

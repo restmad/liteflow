@@ -76,8 +76,7 @@ public class FlowDependencySnapshotServiceImpl implements FlowDependencySnapshot
         queryModel.setFlowId(flowId);
         List<FlowDependencySnapshot> snapshots = flowDependencySnapshotMapper.findList(queryModel);
         List<TaskDependency> dependencies = getTaskDependencies(snapshots);
-        if (dependencies != null) return dependencies;
-        return null;
+        return dependencies;
     }
 
     @Override
@@ -96,10 +95,7 @@ public class FlowDependencySnapshotServiceImpl implements FlowDependencySnapshot
     public List<TaskDependency> getUpstreamDependencies(long taskId) {
         List<FlowDependencySnapshot> snapshots = this.getUpstreamDependencySnapshots(taskId);
         List<TaskDependency> dependencies = getTaskDependencies(snapshots);
-        if (dependencies != null){
-            return dependencies;
-        }
-        return null;
+        return dependencies;
     }
 
     @Override
@@ -126,10 +122,7 @@ public class FlowDependencySnapshotServiceImpl implements FlowDependencySnapshot
     public List<TaskDependency> getDownstreamDependencies(long taskId) {
         List<FlowDependencySnapshot> snapshots = this.getDownstreamDependencySnapshots(taskId);
         List<TaskDependency> dependencies = getTaskDependencies(snapshots);
-        if (dependencies != null){
-            return dependencies;
-        }
-        return null;
+        return dependencies;
     }
 
     @Override

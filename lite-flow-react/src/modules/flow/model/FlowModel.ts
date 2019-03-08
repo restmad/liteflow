@@ -11,7 +11,12 @@ import {
     onFlow,
     offFlow,
     addOrUpdateFlowLinks,
-    viewFlowDag
+    viewFlowDag,
+    fixGetHeadTaskVersionNos,
+    fixGetLatestVersionNos,
+    fixViewFlowDag,
+    fixFlowByVersion,
+    fixFlowFromNode
 } from "../service/FlowService"
 
 /**
@@ -142,4 +147,34 @@ export class FlowModel extends BaseListModel{
         const result = yield addOrUpdateFlowLinks(id, links);
         return result;
     }
+
+    /**
+     * 任务流修复相关
+     */
+    @asyncAction
+    * fixGetVersionNos(id, startTime, endTime):any {
+        const result = yield fixGetHeadTaskVersionNos(id, startTime, endTime);
+        return result;
+    }
+    @asyncAction
+    * fixGetLatestVersionNos(id):any {
+        const result = yield fixGetLatestVersionNos(id);
+        return result;
+    }
+    @asyncAction
+    * fixViewDag(id, versionNo):any {
+        const result = yield fixViewFlowDag(id, versionNo);
+        return result;
+    }
+    @asyncAction
+    * fixFlow(id, versionNo):any {
+        const result = yield fixFlowByVersion(id, versionNo);
+        return result;
+    }
+    @asyncAction
+    * fixFromNode(id, versionNo, versionId):any {
+        const result = yield fixFlowFromNode(id, versionNo, versionId);
+        return result;
+    }
+
 }

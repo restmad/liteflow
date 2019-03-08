@@ -67,6 +67,11 @@ export class TaskVersionModel extends BaseListModel{
         }
         this.loading = false;
     }
+    @asyncAction
+    * fixById(id: number): any {
+        const result = yield fixVersion(id);
+        return result;
+    }
 
     @asyncAction
     * deepFix(id: number) {
@@ -96,6 +101,11 @@ export class TaskVersionModel extends BaseListModel{
         }
         this.loading = false;
     }
+    @asyncAction
+    * ignoreById(id: number): any {
+        const result = yield ignoreVersion(id);
+        return result;
+    }
 
     @asyncAction
     * kill(id: number) {
@@ -109,6 +119,12 @@ export class TaskVersionModel extends BaseListModel{
             this.refresh();
         }
         this.loading = false;
+    }
+
+    @asyncAction
+    * killById(id: number): any {
+        const result = yield killVersion(id);
+        return result;
     }
 
     @asyncAction
