@@ -12,6 +12,6 @@ module.exports = {
         fixFlowUrl: "/console/flow/fix/fixFlow",
         fixFromNodeUrl: "/console/flow/fix/fixFromNode",
         fixGetLatestVersionUrl: "/console/flow/fix/getHeadTaskVersionNos",
-        fixGetHeadTaskVersionsUrl: "/console/flow//getLatestVersionNos",
+        fixGetHeadTaskVersionsUrl: "/console/flow/fix/getLatestVersionNos",
     }
 }
