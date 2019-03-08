@@ -657,7 +657,6 @@ public class FlowServiceImpl implements FlowService {
          */
         if (CollectionUtils.isNotEmpty(toDeleteDependencies)) {
             for (Long dependencyId : toDeleteDependencies) {
-                flowDependencyService.isFlowUnique(dependencyId, flowId);
                 flowDependencyService.delete(dependencyId, flowId);
             }
         }
