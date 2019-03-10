@@ -73,5 +73,6 @@ public class TaskInstanceDependencyServiceImpl implements TaskInstanceDependency
         qm.setUpstreamTaskId(upstreamTaskId);
         qm.setUpstreamTaskVersionNo(upstreamTaskVersionNo);
         qm.setStatus(StatusType.ON.getValue());
-        return taskInstanceDependencyMapper.findList(qm);    }
+        return taskInstanceDependencyMapper.findList(qm);
+    }
 }

@@ -4,6 +4,7 @@ import cn.lite.flow.common.model.Tuple;
 import cn.lite.flow.common.model.query.Page;
 import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.common.consts.TimeUnit;
+import cn.lite.flow.console.common.enums.AuthCheckTypeEnum;
 import cn.lite.flow.console.common.model.vo.DependencyVo;
 import cn.lite.flow.console.common.utils.QuartzUtils;
 import cn.lite.flow.console.common.utils.ResponseUtils;
@@ -15,6 +16,7 @@ import cn.lite.flow.console.service.FlowOperateService;
 import cn.lite.flow.console.service.FlowService;
 import cn.lite.flow.console.service.TaskService;
 import cn.lite.flow.console.service.TaskVersionService;
+import cn.lite.flow.console.web.annotation.AuthCheck;
 import cn.lite.flow.console.web.controller.BaseController;
 import cn.lite.flow.console.web.utils.ModelUtils;
 import com.alibaba.fastjson.JSONArray;
@@ -54,7 +56,7 @@ public class TaskFlowFixController extends BaseController {
      */
     @RequestMapping(value = "getLatestVersionNos")
     public String getLatestVersion(
-               @RequestParam(value = "flowId") long flowId) {
+               @RequestParam(value = "id") long flowId) {
 
         JSONArray datas = new JSONArray();
         Long headTaskId = flowService.getHeadTask(flowId);
@@ -81,7 +83,7 @@ public class TaskFlowFixController extends BaseController {
      */
     @RequestMapping(value = "viewDag")
     public String viewDag(
-               @RequestParam(value = "flowId") long flowId,
+               @RequestParam(value = "id") long flowId,
                @RequestParam(value = "headTaskVersionNo") long headTaskVersionNo) {
         List<Long> taskIds = flowService.getTaskIds(flowId);
         if(CollectionUtils.isEmpty(taskIds)){
@@ -112,7 +114,7 @@ public class TaskFlowFixController extends BaseController {
      */
     @RequestMapping(value = "getHeadTaskVersionNos")
     public String getFirstTaskVersions(
-               @RequestParam(value = "flowId") long flowId,
+               @RequestParam(value = "id") long flowId,
                @RequestParam(value = "startTime") String  startTime,
                @RequestParam(value = "endTime") String endTime) {
 
@@ -144,9 +146,10 @@ public class TaskFlowFixController extends BaseController {
     /**
      * 修复整个任务流
      */
+    @AuthCheck(checkType = AuthCheckTypeEnum.AUTH_CHECK_FLOW)
     @RequestMapping(value = "fixFlow")
     public String fixFlow(
-            @RequestParam(value = "flowId") long flowId,
+            @RequestParam(value = "id") long flowId,
             @RequestParam(value = "headTaskVersionNo") long headTaskVersionNo) {
          flowOperateService.fix(flowId, headTaskVersionNo);
         return ResponseUtils.success("操作成功");
@@ -155,9 +158,10 @@ public class TaskFlowFixController extends BaseController {
     /**
      * 获取版本dag数据
      */
+    @AuthCheck(checkType = AuthCheckTypeEnum.AUTH_CHECK_FLOW)
     @RequestMapping(value = "fixFromNode")
     public String fix(
-            @RequestParam(value = "flowId") long flowId,
+            @RequestParam(value = "id") long flowId,
             @RequestParam(value = "fixVersionId") long fixVersionId,
             @RequestParam(value = "headTaskVersionNo") long headTaskVersionNo) {
          flowOperateService.fixFromNode(flowId, headTaskVersionNo, fixVersionId);

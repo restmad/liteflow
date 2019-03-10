@@ -11,7 +11,7 @@ module.exports = {
         fixDagViewUrl: "/console/flow/fix/viewDag",
         fixFlowUrl: "/console/flow/fix/fixFlow",
         fixFromNodeUrl: "/console/flow/fix/fixFromNode",
-        fixGetLatestVersionUrl: "/console/flow/fix/getHeadTaskVersionNos",
-        fixGetHeadTaskVersionsUrl: "/console/flow/fix/getLatestVersionNos",
+        fixGetLatestVersionUrl: "/console/flow/fix/getLatestVersionNos",
+        fixGetHeadTaskVersionsUrl: "/console/flow/fix/getHeadTaskVersionNos",
     }
 }

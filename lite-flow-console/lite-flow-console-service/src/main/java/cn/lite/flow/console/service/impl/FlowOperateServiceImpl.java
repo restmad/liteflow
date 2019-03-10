@@ -42,27 +42,29 @@ public class FlowOperateServiceImpl implements FlowOperateService {
         if(CollectionUtils.isEmpty(dependencies)){
             throw new ConsoleRuntimeException("任务流没有任务");
         }
-        List<Long> headTaskIds = DagUtils.getHeadTaskIds(dependencies, DagUtils.getTaskIds(dependencies));
+        List<Long> taskIds = DagUtils.getTaskIds(dependencies);
+        List<Long> headTaskIds = DagUtils.getHeadTaskIds(dependencies, taskIds);
         Long headTaskId = headTaskIds.get(0);
 
-        List<Long> taskIds = DagUtils.getTaskIds(dependencies);
         List<List<Long>> taskIdLevelList = DagUtils.getTaskIdDagLevel(dependencies, taskIds);
 
         if (CollectionUtils.isEmpty(taskIdLevelList)) {
             return null;
         }
-        Map<Long, Set<Long>> taskDependencyMap = DagUtils.getUpstreamDependencyMap(dependencies);
+        Map<Long, Set<Long>> downstreamDependencyMap = DagUtils.getDownstreamDependencyMap(dependencies);
         List<DependencyVo> dependencyVos = Lists.newArrayList();
+        /**
+         * 获取头任务版本
+         */
         TaskVersion taskVersion = taskVersionService.getTaskVersion(headTaskId, headTaskVersionNo);
+        if(taskVersion == null){
+            throw new ConsoleRuntimeException("不存在任务版本:" + headTaskVersionNo);
+        }
         SortedMap<Integer, List<TaskVersion>> levelVersionMap = Maps.newTreeMap();
 
-        this.dagDeepTravel(0, taskVersion, levelVersionMap, dependencyVos, taskDependencyMap);
+        Set<Long> traveledTaskVersionIdSet = Sets.newHashSet();
+        this.dagDeepTravel(0, taskVersion, traveledTaskVersionIdSet, levelVersionMap, dependencyVos, downstreamDependencyMap);
         List<List<TaskVersion>> resultLevelVersions = Lists.newArrayList(levelVersionMap.values());
-        if(levelVersionMap != null && levelVersionMap.size() > 0){
-            for(Map.Entry<Integer, List<TaskVersion>> levelKV : levelVersionMap.entrySet()){
-                resultLevelVersions.add(levelKV.getValue());
-            }
-        }
         return new Tuple<>(resultLevelVersions, dependencyVos);
     }
 
@@ -72,19 +74,40 @@ public class FlowOperateServiceImpl implements FlowOperateService {
      * @param taskVersion
      * @param levelVersionMap
      * @param dependencyVos
-     * @param taskDependencyMap
+     * @param downstreamTaskDependencyMap
      */
     private void dagDeepTravel(
             int level,
             TaskVersion taskVersion,
+            Set<Long> traveledTaskVersionIdSet,
             SortedMap<Integer, List<TaskVersion>> levelVersionMap,
             List<DependencyVo> dependencyVos,
-            Map<Long, Set<Long>> taskDependencyMap){
+            Map<Long, Set<Long>> downstreamTaskDependencyMap){
 
         Long taskId = taskVersion.getTaskId();
         Long taskVersionId = taskVersion.getId();
+        /**
+         * 已经遍历过的不在遍历
+         */
+        if(traveledTaskVersionIdSet.contains(taskVersionId)){
+            return;
+        }else{
+            traveledTaskVersionIdSet.add(taskVersionId);
+        }
 
-        Set<Long> downstreamTaskIdSet = taskDependencyMap.get(taskId);
+        /**
+         * 放入当前层级
+         */
+        List<TaskVersion> levelTaskVersions = levelVersionMap.get(level);
+        if(levelTaskVersions == null){
+            levelTaskVersions = Lists.newArrayList();
+            levelVersionMap.put(level, levelTaskVersions);
+        }
+        levelTaskVersions.add(taskVersion);
+        /**
+         * 获取下游任务版本
+         */
+        Set<Long> downstreamTaskIdSet = downstreamTaskDependencyMap.get(taskId);
         //没有下游直接退出
         if(CollectionUtils.isEmpty(downstreamTaskIdSet)){
             return;
@@ -105,31 +128,14 @@ public class FlowOperateServiceImpl implements FlowOperateService {
                 resultVersions.add(version);
             }
         });
-
-        List<TaskVersion> levelTaskVersions = levelVersionMap.get(level);
-        if(levelTaskVersions == null){
-            levelTaskVersions = Lists.newArrayList();
-            levelVersionMap.put(level, levelTaskVersions);
+        //下游任务版本没有找到
+        if(CollectionUtils.isEmpty(resultVersions)){
+            throw new ConsoleRuntimeException("任务%d下游缺失任务版本");
         }
 
-        List<TaskVersion> nextLevelTaskVersions = Lists.newArrayList();
-        for(TaskVersion version : resultVersions){
-            boolean isExist = false;
-            if(CollectionUtils.isNotEmpty(levelTaskVersions)){
-                for(TaskVersion tv : levelTaskVersions){
-                    if(tv.getId().longValue() == version.getId().longValue()){
-                        isExist = true;
-                    }
-                }
-                if(!isExist){
-                    levelTaskVersions.add(version);
-                    nextLevelTaskVersions.add(version);
-                }
-            }
-        }
-        if(CollectionUtils.isNotEmpty(nextLevelTaskVersions)){
-            for(TaskVersion version : nextLevelTaskVersions){
-                dagDeepTravel(level + 1, version, levelVersionMap, dependencyVos, taskDependencyMap);
+        if(CollectionUtils.isNotEmpty(resultVersions)){
+            for(TaskVersion version : resultVersions){
+                dagDeepTravel(level + 1, version, traveledTaskVersionIdSet, levelVersionMap, dependencyVos, downstreamTaskDependencyMap);
             }
         }
 

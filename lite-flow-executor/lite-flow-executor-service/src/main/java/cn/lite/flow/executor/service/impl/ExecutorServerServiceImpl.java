@@ -31,8 +31,6 @@ public class ExecutorServerServiceImpl implements ExecutorServerService {
         Preconditions.checkArgument(executor != null, "executor不能为空");
         Preconditions.checkArgument(StringUtils.isNotBlank(executor.getName()), "name不能为空");
         Preconditions.checkArgument(StringUtils.isNotBlank(executor.getIp()), "ip不能为空");
-        Preconditions.checkArgument(StringUtils.isNotBlank(executor.getDescription()), "description不能为空");
-        Preconditions.checkArgument(executor.getUserId() != null, "userId不能为空");
 
         executor.setStatus(StatusType.NEW.getValue());
         try {

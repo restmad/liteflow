@@ -46,7 +46,7 @@ export async function fixGetHeadTaskVersionNos(id, startTime, endTime) {
     return requestGet(FlowConfig.urls.fixGetHeadTaskVersionsUrl, {id: id, startTime: startTime, endTime: endTime});
 }
 export async function fixFlowFromNode(id, versionNo, versionId) {
-    return requestGet(FlowConfig.urls.fixGetHeadTaskVersionsUrl, {id: id, headTaskVersionNo: versionNo, fixVersionId: versionId});
+    return requestGet(FlowConfig.urls.fixFromNodeUrl, {id: id, headTaskVersionNo: versionNo, fixVersionId: versionId});
 }
 export async function fixFlowByVersion (id, versionNo) {
     return requestGet(FlowConfig.urls.fixFlowUrl, {id: id, headTaskVersionNo: versionNo});

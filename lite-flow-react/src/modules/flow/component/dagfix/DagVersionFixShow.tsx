@@ -275,6 +275,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @returns {any}
      */
     fixFlow() {
+        this.hideAllWindow();
         const that = this;
         const {flow, firstTaskVersionNo} = this.props;
         this.flowModel.fixFlow(flow.id, firstTaskVersionNo)
@@ -295,6 +296,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @returns {any}
      */
     killVersion() {
+        this.hideAllWindow();
         const versionId = this.nodeId;
         const that = this;
         this.taskVersionModel.fixById(versionId).then(result => {
@@ -313,6 +315,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @returns {any}
      */
     fixVersion() {
+        this.hideAllWindow();
         const versionId = this.nodeId;
         const that = this;
         this.taskVersionModel.fixById(versionId).then(result => {
@@ -331,6 +334,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @returns {any}
      */
     fixVersionFromNode() {
+        this.hideAllWindow();
         const versionId = this.nodeId;
         const {flow, firstTaskVersionNo} = this.props;
         const that = this;
@@ -350,6 +354,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
      * @returns {any}
      */
     ignoreVersion() {
+        this.hideAllWindow();
         const versionId = this.nodeId;
         const that = this;
         this.taskVersionModel.ignoreById(versionId).then(result => {
@@ -373,7 +378,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
             </Popconfirm>
         </div>);
 
-        const ingnoreBtn = (<div key={"ignore-versionBtn"}>
+        const ignoreBtn = (<div key={"ignore-versionBtn"}>
             <Popconfirm title={"确定忽略？"} key={"ignoreVersionPop"}
                         onConfirm={this.ignoreVersion.bind(this)}>
                 <Button key={"successVersionBtn"}>忽略</Button>
@@ -390,7 +395,7 @@ class DagVersionFixShow extends Component<DagFixProps, any> {
                 rightMenuBtns.push(killBtn);
             }
             if (finalStatus != EnumUtils.taskVersionFinalStatusSuccess) {
-                rightMenuBtns.push(ingnoreBtn);
+                rightMenuBtns.push(ignoreBtn);
             }
         }
 

@@ -66,7 +66,7 @@ public class DagUtils {
             throw new ConsoleRuntimeException("任务流的开始任务只能有一个");
         }
 
-        Map<Long, Set<Long>> dowmstreamDependencyMap = getDowmstreamDependencyMap(dependencies);
+        Map<Long, Set<Long>> dowmstreamDependencyMap = getDownstreamDependencyMap(dependencies);
 
         /**
          * 从头节点开始，遍历图
@@ -212,7 +212,7 @@ public class DagUtils {
      * @param dependencies
      * @return
      */
-    public static Map<Long, Set<Long>> getDowmstreamDependencyMap(List<TaskDependency> dependencies) {
+    public static Map<Long, Set<Long>> getDownstreamDependencyMap(List<TaskDependency> dependencies) {
         Map<Long, Set<Long>> dependencyMap = Maps.newHashMap();
         if(CollectionUtils.isNotEmpty(dependencies)){
             dependencies.forEach(dependency -> {

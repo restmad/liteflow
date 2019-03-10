@@ -6,7 +6,7 @@
 
 
     <!--
-        每天初始化数据
+        1.每天初始化数据
     -->
     <bean id="taskVersionDailyInitJob" class="cn.lite.flow.console.kernel.job.TaskVersionDailyInitJob" />
     <bean id="taskVersionDailyInitJobDetail"
@@ -33,7 +33,7 @@
 
 
     <!--
-        Versiondailyinit数据生成taskVersion
+        2.Versiondailyinit数据生成taskVersion
     -->
     <bean id="versionDailyInitTriggerJob" class="cn.lite.flow.console.kernel.job.VersionDailyInit2FireJob" />
     <bean id="versionDailyInitTriggerJobDetail"
@@ -59,7 +59,7 @@
     </bean>
 
     <!--
-        到达时间允许的任务
+        3.到达时间允许的任务
     -->
     <bean id="instanceReady2FireJob" class="cn.lite.flow.console.kernel.job.InstanceReady2FireJob" />
     <bean id="instanceReady2FireJobDetail"
@@ -85,7 +85,7 @@
     </bean>
 
     <!--
-        可以提交到executor的任务
+        4.可以提交到executor的任务
     -->
     <bean id="instanceSubmit2FireJob" class="cn.lite.flow.console.kernel.job.InstanceSubmit2FireJob" />
     <bean id="instanceSubmit2FireJobDetail"
@@ -111,7 +111,7 @@
     </bean>
 
     <!--
-        处理事件的任务
+        5.处理事件的任务
     -->
     <bean id="consumerEventQueueJob" class="cn.lite.flow.console.kernel.job.ConsumerEventQueueJob" />
     <bean id="consumerEventQueueJobDetail"

@@ -81,7 +81,8 @@ class FlowFixModal extends Component<ModalProps, ModalState> {
             if(result.status == 0){
                 const versionNos = result.data;
                 that.setState({
-                    versionNos: versionNos
+                    versionNos: versionNos,
+                    selectedVersionNo: null
                 });
             }
         });
@@ -112,16 +113,29 @@ class FlowFixModal extends Component<ModalProps, ModalState> {
             }
         }
 
+        /**
+         * select筛选
+         */
+
+
+
+        /**
+         * dag修复component
+         * @type {any[]}
+         */
         let dagView = [];
         if (selectedVersionNo && selectedVersionNo > 0) {
             dagView.push(<DagVersionFixShow key={"fix-show-" + selectedVersionNo} {...fixDagProps()}></DagVersionFixShow>)
         }
 
         const versionNoOption = [];
+        const versionNoSelected = [];
         if(versionNos){
             for(let versionNo of versionNos){
+                if(selectedVersionNo == versionNo){
+                    versionNoSelected.push(selectedVersionNo);
+                }
                 versionNoOption.push(<Option key={versionNo} value={versionNo + ""}>{versionNo}</Option>);
-
             }
         }
 
@@ -152,8 +166,9 @@ class FlowFixModal extends Component<ModalProps, ModalState> {
                     </Col>
                     <Col span={12}>
                         <Form layout={'inline'} className={"float-right"} onSubmit={handleOk}>
-                            <Form.Item label="任务版本" className={"margin-right5"} {...formItemLayout}>
+                            <Form.Item label="任务版本" className={"margin-right5"} {...formItemLayout} key={"version-no-select-" + selectedVersionNo}>
                                 {this.props.form.getFieldDecorator("selectedVersionNo", {
+                                    initialValue: versionNoSelected,
                                     rules: [
                                         {
                                             required: false,

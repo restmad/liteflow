@@ -132,8 +132,12 @@ public class TaskVersionServiceImpl implements TaskVersionService {
     @Transactional("consoleTxManager")
     public boolean fix(long taskVersionId) {
         TaskVersion taskVersion = taskVersionMapper.getById(taskVersionId);
+        /**
+         * 还在运行中的直接kill掉
+         */
         if(taskVersion.getFinalStatus() == TaskVersionFinalStatus.NEW.getValue()){
-            throw new CommonRuntimeException("task version can not fix, versionId:" + taskVersionId);
+            this.kill(taskVersionId);
+
         }
         Task task = taskService.getById(taskVersion.getTaskId());
         Long pluginId = task.getPluginId();
@@ -369,8 +373,8 @@ public class TaskVersionServiceImpl implements TaskVersionService {
             if(CollectionUtils.isNotEmpty(instanceIds)){
                 List<TaskInstance> instances = taskInstanceService.getByIds(instanceIds);
                 if(CollectionUtils.isNotEmpty(instances)){
-                    List<Long> versionIds = instances.stream().map(TaskInstance::getTaskVersionId).collect(Collectors.toList());
-                    return versionIds;
+                    Set<Long> versionIds = instances.stream().map(TaskInstance::getTaskVersionId).collect(Collectors.toSet());
+                    return Lists.newArrayList(versionIds);
                 }
             }
         }

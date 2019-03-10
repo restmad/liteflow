@@ -49,6 +49,7 @@ lite:
   flow:
     executor:
       workspace: ${lite.flow.executor.workspace}
+      isAutoRegisterToDB: true
 
 
 

@@ -2,6 +2,7 @@ package cn.lite.flow.executor.kernel.conf;
 
 import cn.lite.flow.common.model.consts.CommonConstants;
 import cn.lite.flow.common.utils.IpUtils;
+import cn.lite.flow.executor.common.exception.ExecutorRuntimeException;
 import cn.lite.flow.executor.model.basic.ExecutorServer;
 import cn.lite.flow.executor.service.ExecutorServerService;
 import org.slf4j.Logger;
@@ -21,12 +22,15 @@ public class ExecutorMetadata implements InitializingBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExecutorMetadata.class);
 
-    private static long SERVER_ID = 1;
+    private static Long SERVER_ID;
 
     private static String SERVER_IP;
 
     @Autowired
     private ExecutorServerService executorServerService;
+
+    @Value("${lite.flow.executor.isAutoRegisterToDB}")
+    private boolean isAutoRegisterToDB;
 
     private static String EXECUTOR_WORKSPACE;
 
@@ -43,8 +47,19 @@ public class ExecutorMetadata implements InitializingBean {
 
         SERVER_IP = IpUtils.getIp();
         LOG.info("get local ip {}", SERVER_IP);
-//        ExecutorServer executorServer = executorServerService.getByIp(SERVER_IP);
-//        SERVER_ID = executorServer.getId();
+        ExecutorServer executorServer = executorServerService.getByIp(SERVER_IP);
+        if(executorServer == null && isAutoRegisterToDB){
+            executorServer = new ExecutorServer();
+            executorServer.setIp(SERVER_IP);
+            executorServer.setName(SERVER_IP);
+            executorServer.setDescription("自动注册");
+            executorServerService.add(executorServer);
+            LOG.info("executor is auto registered,ip:{}", SERVER_IP);
+        }else {
+            String errorMsg = "ip:" + SERVER_IP + " executor is not registered";
+            throw new ExecutorRuntimeException(errorMsg);
+        }
+        SERVER_ID = executorServer.getId();
 
     }
 

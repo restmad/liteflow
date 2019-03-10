@@ -127,15 +127,15 @@ public class ModelUtils {
         }
         JSONObject obj = getTaskVersionObj(taskVersion);
         if(task != null){
-            obj.put("taskId", task);
-            obj.put("taskName", task);
-            obj.put("taskCronExpression", task);
-            obj.put("taskPeriod", task);
-            obj.put("taskStatus", task);
-            obj.put("taskDescription", task);
-            obj.put("taskCreateTime", task);
-            obj.put("taskUpdateTime", task);
-            obj.put("taskUserId", task);
+            obj.put("taskId", task.getId());
+            obj.put("taskName", task.getName());
+            obj.put("taskCronExpression", task.getCronExpression());
+            obj.put("taskPeriod", task.getPeriod());
+            obj.put("taskStatus", task.getStatus());
+            obj.put("taskDescription", task.getDescription());
+            obj.put("taskCreateTime", task.getCreateTime());
+            obj.put("taskUpdateTime", task.getUpdateTime());
+            obj.put("taskUserId", task.getUserId());
         }
 
         return obj;
@@ -235,7 +235,7 @@ public class ModelUtils {
     }
 
     /**
-     * 获取容器
+     * 获取任务版本依赖
      * @param dependency
      * @return
      */
@@ -249,12 +249,12 @@ public class ModelUtils {
         return obj;
     }
     /**
-     * 获取容器
+     * 获取任务版本依赖
      * @param dependencies
      * @return
      */
     public static JSONArray getDependencyVoArray(List<DependencyVo> dependencies){
-        if(CollectionUtils.isNotEmpty(dependencies)){
+        if(CollectionUtils.isEmpty(dependencies)){
             return null;
         }
         JSONArray datas = new JSONArray();

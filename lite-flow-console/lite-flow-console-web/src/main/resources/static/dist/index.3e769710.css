@@ -10090,6 +10090,19 @@ body {
 .dag-node--1 {
   fill: #c9302c;
 }
+/*dag-fix-node*/
+.dag-fix-node-0 {
+  fill: #31b0d5;
+}
+.dag-fix-node-1 {
+  fill: #449d44;
+}
+.dag-fix-node--1 {
+  fill: #c9302c;
+}
+.dag-fix-node--2 {
+  fill: #c9302c;
+}
 .welcome___nf8Na {
   color: #fff;
   height: 100%;
@@ -13486,7 +13499,7 @@ textarea.ant-pagination-options-quick-jumper input {
   fill: #fff;
 }
 .dag-container .menu-container {
-  position: absolute;
+  position: fixed;
   width: 100px;
   background-color: #FFF;
   border-color: #fff;
@@ -13499,7 +13512,7 @@ textarea.ant-pagination-options-quick-jumper input {
   width: 280px;
   word-wrap: break-word;
   word-break: break-all;
-  position: absolute;
+  position: fixed;
   opacity: 0.9;
   padding: 10px;
   background-color: #FFF;
@@ -13515,7 +13528,7 @@ textarea.ant-pagination-options-quick-jumper input {
 .dag-container .top-menu-container {
   width: 150px;
   position: absolute;
-  top: 80px;
+  top: 90px;
   left: 30px;
   opacity: 0.9;
   padding: 10px 10px;
@@ -16267,6 +16280,78 @@ textarea.ant-time-picker-input {
     margin-left: 0;
   }
 }
+.dag-fix-container {
+  background-color: #e5e5e5;
+  position: relative;
+  /* 节点相关处理 */
+  /* 菜单相关 */
+  /* 详情相关 */
+  /*头部菜单*/
+}
+.dag-fix-container .node:hover {
+  cursor: pointer;
+}
+.dag-fix-container .node rect {
+  stroke: #fff999;
+  color: #fff;
+  stroke-width: 0.5px;
+}
+.dag-fix-container .node rect:hover {
+  cursor: pointer;
+}
+.dag-fix-container .edgePath path {
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+.dag-fix-container .edgePath path:hover {
+  cursor: pointer;
+}
+.dag-fix-container .edgeLabel:hover {
+  cursor: pointer;
+}
+.dag-fix-container tspan {
+  fill: #fff;
+}
+.dag-fix-container .menu-container {
+  position: fixed;
+  width: 100px;
+  background-color: #FFF;
+  border-color: #fff;
+}
+.dag-fix-container .menu-container .ant-btn {
+  border: 0px solid #FFF;
+  width: 100%;
+}
+.dag-fix-container .detail-container {
+  width: 280px;
+  word-wrap: break-word;
+  word-break: break-all;
+  position: fixed;
+  opacity: 0.9;
+  padding: 10px;
+  background-color: #FFF;
+  border-color: #fff;
+}
+.dag-fix-container .detail-container .ant-btn {
+  border: 0px solid #FFF;
+  width: 100%;
+}
+.dag-fix-container .detail-container p {
+  margin-bottom: 2px;
+}
+.dag-fix-container .top-menu-container {
+  width: 150px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  opacity: 0.9;
+  padding: 10px 10px;
+  background-color: #FFF;
+  border-color: #fff;
+}
+.dag-fix-container .top-menu-container .ant-btn {
+  width: 100%;
+}
 .error___24F-2 {
   color: black;
   text-align: center;
@@ -16516,5 +16601,18 @@ body {
   fill: #31b0d5;
 }
 .dag-node--1 {
+  fill: #c9302c;
+}
+/*dag-fix-node*/
+.dag-fix-node-0 {
+  fill: #31b0d5;
+}
+.dag-fix-node-1 {
+  fill: #449d44;
+}
+.dag-fix-node--1 {
+  fill: #c9302c;
+}
+.dag-fix-node--2 {
   fill: #c9302c;
 }
