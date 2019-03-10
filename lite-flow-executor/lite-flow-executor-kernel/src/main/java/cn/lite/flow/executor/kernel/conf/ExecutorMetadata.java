@@ -52,6 +52,7 @@ public class ExecutorMetadata implements InitializingBean {
             executorServer = new ExecutorServer();
             executorServer.setIp(SERVER_IP);
             executorServer.setName(SERVER_IP);
+            executorServer.setUserId(0l);
             executorServer.setDescription("自动注册");
             executorServerService.add(executorServer);
             LOG.info("executor is auto registered,ip:{}", SERVER_IP);
