@@ -21,9 +21,7 @@ class ExecutorSearch extends Component<ExecutorSearchProps, {}> {
                 if (errors) {
                     return
                 }
-
-                let data = new ExecutorSearchParam();
-                data.nameLike = this.props.form.getFieldValue('name');
+                let data = this.props.form.getFieldsValue();
                 this.props.executorModel.query(data);
             })
         };
@@ -32,7 +30,7 @@ class ExecutorSearch extends Component<ExecutorSearchProps, {}> {
             <Form layout={'inline'} onSubmit={handleOk} className={"float-right"}>
                 <Form.Item label='名称：' className={"margin-right5"}>
                         <span>
-                        {this.props.form.getFieldDecorator('name', {
+                        {this.props.form.getFieldDecorator('nameLike', {
                             initialValue: '',
                         })(
                             <Input/>

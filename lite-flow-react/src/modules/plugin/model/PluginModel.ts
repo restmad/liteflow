@@ -7,10 +7,6 @@ import pluginConfig from "../config/PluginConfig";
 import {notification} from 'antd';
 
 
-export class PluginSearchParam {
-    id?: number;
-    nameLike?: String;
-}
 export class Plugin {
     id: number;
     name: string;
@@ -48,7 +44,7 @@ export class PluginModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: PluginSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

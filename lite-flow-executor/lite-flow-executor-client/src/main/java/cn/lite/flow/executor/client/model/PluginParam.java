@@ -4,6 +4,8 @@ import cn.lite.flow.executor.client.base.BaseRpcListParam;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @description: 插件请求
  * @author: yueyunyue

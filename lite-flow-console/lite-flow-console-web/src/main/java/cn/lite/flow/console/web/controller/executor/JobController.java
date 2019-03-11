@@ -9,6 +9,7 @@ import cn.lite.flow.executor.model.basic.ExecutorJob;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,11 +42,17 @@ public class JobController extends BaseController {
     @RequestMapping(value = "list")
     public String list(
             @RequestParam(value = "id", required = false) Long id,
-            @RequestParam(value = "applicationId", required = false) Long applicationId,
+            @RequestParam(value = "applicationId", required = false) String applicationId,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
     ) {
         JobParam param = new JobParam();
+        if(id != null){
+            param.setId(id);
+        }
+        if(StringUtils.isNotBlank(applicationId)){
+            param.setApplicationId(applicationId);
+        }
         param.setPageNum(pageNum);
         param.setPageSize(pageSize);
         List<ExecutorJob> jobs = executorJobRpcService.list(param);

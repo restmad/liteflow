@@ -13,9 +13,11 @@ import lombok.ToString;
 @ToString
 public class JobParam extends BaseRpcListParam {
 
-    private long sourceId;
+    private Long sourceId;
 
-    private long id;
+    private String applicationId;
+
+    private Integer status;
 
 
 }

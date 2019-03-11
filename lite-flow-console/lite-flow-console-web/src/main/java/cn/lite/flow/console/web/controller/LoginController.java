@@ -92,6 +92,9 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "userInfo")
     public String info() {
         SessionUser user = getUser();
+        if(user == null){
+            return ResponseUtils.notLogin();
+        }
         List<Menu> menus = user.getMenus();
         JSONArray menuDatas = new JSONArray();
         if (CollectionUtils.isNotEmpty(menus)) {

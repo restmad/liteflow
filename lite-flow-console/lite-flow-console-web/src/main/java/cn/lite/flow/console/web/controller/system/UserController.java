@@ -56,7 +56,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "list")
     public String list(
-            @RequestParam(value = "name", required = false) String userNameLike,
+            @RequestParam(value = "nameLike", required = false) String userNameLike,
             @RequestParam(value = "email", required = false) String emailLike,
             @RequestParam(value = "status", required = false) Integer status,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,

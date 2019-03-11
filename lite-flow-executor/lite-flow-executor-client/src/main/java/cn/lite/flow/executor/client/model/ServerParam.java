@@ -13,4 +13,8 @@ import lombok.ToString;
 @ToString
 public class ServerParam extends BaseRpcListParam {
 
+    private String nameLike;
+
+    private String ip;
+
 }

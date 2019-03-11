@@ -7,10 +7,6 @@ import executeJobConfig from "../config/ExecuteJobConfig";
 import {notification} from 'antd';
 
 
-export class ExecuteJobSearchParam {
-    id?: number;
-    name?: String;
-}
 export class ExecuteJob {
     id: number;
     type: number;
@@ -50,7 +46,7 @@ export class ExecuteJobModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: ExecuteJobSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

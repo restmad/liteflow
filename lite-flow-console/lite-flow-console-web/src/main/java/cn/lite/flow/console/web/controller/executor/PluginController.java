@@ -51,7 +51,7 @@ public class PluginController extends BaseController {
      */
     @RequestMapping("list")
     public String list(
-            @RequestParam(value = "name", required = false) String nameLike,
+            @RequestParam(value = "nameLike", required = false) String nameLike,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
     ) {

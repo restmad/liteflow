@@ -30,6 +30,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,6 +186,9 @@ public class TaskVersionServiceImpl implements TaskVersionService {
         Long pluginId = task.getPluginId();
 
         String retryConf = task.getRetryConf();
+        if(StringUtils.isBlank(retryConf)){
+            return Tuple.of(false, "no retry config detail");
+        }
         JSONObject retryConfigObj = JSONObject.parseObject(retryConf);
         Integer retryNum = retryConfigObj.getInteger(Constants.RETRY_NUM);
         Integer retryPeriod = retryConfigObj.getInteger(Constants.RETRY_PERIOD);

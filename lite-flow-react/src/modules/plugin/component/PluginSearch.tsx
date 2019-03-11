@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Form, Input, Popconfirm, Row} from 'antd'
-import {PluginSearchParam, Plugin, PluginModel} from "../model/PluginModel";
+import { Plugin, PluginModel} from "../model/PluginModel";
 import {FormComponentProps} from "antd/lib/form/Form";
 
 export interface PluginSearchProps extends FormComponentProps {
@@ -22,8 +22,7 @@ class PluginSearch extends Component<PluginSearchProps, {}> {
                     return
                 }
 
-                let data = new PluginSearchParam();
-                data.nameLike = this.props.form.getFieldValue('name');
+                let data = this.props.form.getFieldsValue();
                 this.props.pluginModel.query(data);
             })
         };
@@ -32,7 +31,7 @@ class PluginSearch extends Component<PluginSearchProps, {}> {
             <Form layout={'inline'} onSubmit={handleOk} className={"float-right"}>
                 <Form.Item label='名称：' className={"margin-right5"}>
                         <span>
-                        {this.props.form.getFieldDecorator('name', {
+                        {this.props.form.getFieldDecorator('nameLike', {
                             initialValue: '',
                         })(
                             <Input/>

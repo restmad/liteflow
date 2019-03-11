@@ -21,10 +21,16 @@
 				id = #{id}
 			</if>
 			<if test="nameLike != null and nameLike != ''">
-				AND name like #{nameLike}
+				AND name like CONCAT('%', #{nameLike}, '%')
 			</if>
 			<if test="containerId != null">
 				AND container_id = #{containerId}
+			</if>
+			<if test="ids != null">
+				AND id IN
+				<foreach collection="ids" item="item" separator="," open="(" close=")">
+					#{item}
+				</foreach>
 			</if>
 		</where>
 	</sql>

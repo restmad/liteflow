@@ -7,10 +7,6 @@ import userGroupConfig from "../config/UserGroupConfig";
 import {notification} from 'antd';
 import {User} from "../../user/model/UserModel";
 
-export class UserGroupSearchParam {
-    id?: number;
-    nameLike?: String;
-}
 
 export class UserGroup {
     id: number;
@@ -42,7 +38,7 @@ export class UserGroupModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: UserGroupSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

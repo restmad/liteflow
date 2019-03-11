@@ -19,13 +19,6 @@ import {
     fixFlowFromNode
 } from "../service/FlowService"
 
-/**
- * 搜索的model
- */
-export class FlowSearchParam {
-    id?: number;
-    nameLike?: String;
-}
 
 export class Flow {
     id: number;
@@ -56,7 +49,7 @@ export class FlowModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: FlowSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

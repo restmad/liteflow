@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Form, Input, Select, Row} from 'antd'
-import {TaskSearchParam, Task, TaskModel} from "../model/TaskModel";
+import {Task, TaskModel} from "../model/TaskModel";
 import {FormComponentProps} from "antd/lib/form/Form";
 import {DomUtils} from "../../../common/utils/DomUtils";
 import EnumUtils from "../../../common/utils/EnumUtils";
@@ -54,12 +54,7 @@ class TaskSearch extends Component<TaskSearchProps, {}> {
                 if (errors) {
                     return
                 }
-
-                let data = new TaskSearchParam();
-                data.nameLike = this.props.form.getFieldValue('name');
-                data.id = this.props.form.getFieldValue('id');
-                data.period = this.props.form.getFieldValue("period");
-                data.status = this.props.form.getFieldValue("status");
+                let data = this.props.form.getFieldsValue();
                 this.props.taskModel.query(data);
             })
         };
@@ -93,7 +88,7 @@ class TaskSearch extends Component<TaskSearchProps, {}> {
 
                 <Form.Item label='名称' className={"margin-right5"}>
                         <span>
-                        {this.props.form.getFieldDecorator('name', {
+                        {this.props.form.getFieldDecorator('nameLike', {
                             initialValue: '',
                         })(
                             <Input/>

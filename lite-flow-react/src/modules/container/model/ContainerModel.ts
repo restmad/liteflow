@@ -7,11 +7,6 @@ import containerConfig from "../config/ContainerConfig";
 import {notification} from 'antd';
 import {listAllValidPlugin} from "../../plugin/service/PluginService";
 
-
-export class ContainerSearchParam {
-    id?: number;
-    nameLike?: String;
-}
 export class Container {
     id: number;
     name: string;
@@ -46,7 +41,7 @@ export class ContainerModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: ContainerSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

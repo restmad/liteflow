@@ -14,15 +14,6 @@ import {
     getAllAuthTask} from "../service/TaskService"
 import {notification} from 'antd';
 
-/**
- * 搜索的model
- */
-export class TaskSearchParam {
-    id?: number;
-    nameLike?: String;
-    status?: number;
-    period?: number;
-}
 
 export class Task {
     id: number;
@@ -67,7 +58,7 @@ export class TaskModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: TaskSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

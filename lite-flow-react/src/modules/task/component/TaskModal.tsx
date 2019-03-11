@@ -369,7 +369,7 @@ class TaskModal extends Component<ModalProps, { retry, concurrency, pluginId, pl
                         </Form.Item>
                         <Form.Item label='报警电话' hasFeedback {...formItemLayout}>
                             {this.props.form.getFieldDecorator('alarmPhone', {
-                                initialValue: CommonUtils.getStringValueFromModel("报警邮箱", taskObj, ""),
+                                initialValue: CommonUtils.getStringValueFromModel("alarmPhone", taskObj, ""),
                                 rules: [
                                     {
                                         required: false,

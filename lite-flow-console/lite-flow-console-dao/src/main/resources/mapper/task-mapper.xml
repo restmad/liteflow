@@ -91,31 +91,41 @@
 	<update id="update">
 		update <include refid="table"/>
 		<set>
-			<if test="name != null and name != ''">
-				name=#{name},
-			</if> 
+			version=version+1,
 			<if test="cronExpression != null and cronExpression != ''">
 				cron_expression=#{cronExpression},
 			</if>
 			<if test="period != null">
 				period=#{period},
 			</if>
-			<if test="version != null">
-				version=#{version},
+			<if test="isConcurrency != null">
+				is_concurrency=#{isConcurrency},
+			</if>
+			<if test="executeStrategy != null">
+				execute_strategy=#{executeStrategy},
 			</if>
 			<if test="pluginId != null">
 				plugin_id=#{pluginId},
 			</if>
-			<if test="pluginConf != null and pluginConf != ''">
+			<if test="pluginConf != null">
 				plugin_conf = #{pluginConf},
-			</if>
-			<if test="userId != null">
-				user_id = #{userId},
 			</if>
 			<if test="isRetry != null">
 				is_retry = #{isRetry},
 			</if>
-			<if test="description != null and description != ''">
+			<if test="retryConf != null">
+				retry_conf = #{retryConf},
+			</if>
+			<if test="maxRunTime != null">
+				max_run_time = #{maxRunTime},
+			</if>
+			<if test="alarmEmail != null">
+				alarm_email = #{alarmEmail},
+			</if>
+			<if test="alarmPhone != null">
+				alarm_phone = #{alarmPhone},
+			</if>
+			<if test="description != null">
 				description = #{description},
 			</if>
 			<if test="status != null">

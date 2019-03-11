@@ -18,8 +18,11 @@
 			<if test="id != null">
 				id = #{id}
 			</if>
-			<if test="nameLike != null and nameLike != ''">
+			<if test="nameLike != null">
 				AND name like CONCAT('%', #{nameLike}, '%')
+			</if>
+			<if test="ip != null">
+				AND ip = #{ip}
 			</if>
 		</where>
 	</sql>

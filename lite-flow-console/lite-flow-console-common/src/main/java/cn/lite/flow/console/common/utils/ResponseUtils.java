@@ -129,6 +129,12 @@ public class ResponseUtils {
     public static void notLogin(HttpServletRequest request, HttpServletResponse response) {
         errorMsg(request, response, STATUS_NOT_LOGIN, MSG_NO_LOGIN);
     }
+    public static String notLogin() {
+        JSONObject result = new JSONObject();
+        result.put("status", STATUS_NOT_LOGIN);
+        result.put("data", MSG_NO_LOGIN);
+        return JSONUtils.toJSONStringWithoutCircleDetect(result);
+    }
 
     public static void errorMsg(HttpServletRequest request, HttpServletResponse response, int code, String msg) {
         String requestType = request.getHeader("X-Requested-With");

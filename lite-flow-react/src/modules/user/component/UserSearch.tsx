@@ -33,7 +33,7 @@ class UserSearch extends Component<SearchProps, {}> {
 
                 <Form.Item label='用户名' className={"margin-right5"}>
                         <span>
-                        {this.props.form.getFieldDecorator('name', {
+                        {this.props.form.getFieldDecorator('nameLike', {
                             initialValue: '',
                         })(
                             <Input/>

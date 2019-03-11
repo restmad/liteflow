@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Form, Input, Popconfirm, Row} from 'antd'
-import {ExecuteJobSearchParam, ExecuteJob, ExecuteJobModel} from "../model/ExecuteJobModel";
+import { ExecuteJobModel} from "../model/ExecuteJobModel";
 import {FormComponentProps} from "antd/lib/form/Form";
 
 export interface ExecuteJobSearchProps extends FormComponentProps {
@@ -23,8 +23,7 @@ class ExecuteJobSearch extends Component<ExecuteJobSearchProps, {}> {
                     return
                 }
 
-                let data = new ExecuteJobSearchParam();
-                data.name = this.props.form.getFieldValue('name');
+                let data = this.props.form.getFieldsValue();
                 this.props.executeJobModel.query(data);
             })
         };

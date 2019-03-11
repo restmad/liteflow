@@ -51,6 +51,9 @@ public class ExecutorServerRpcServiceImpl implements ExecutorServerRpcService {
 
     private ExecutorServerQM getExecutorServerQM(ServerParam serverParam) {
         ExecutorServerQM qm = new ExecutorServerQM();
+        qm.setNameLike(serverParam.getNameLike());
+        qm.setIp(serverParam.getIp());
+        qm.setId(serverParam.getId());
         qm.setPage(Page.getPageByPageNo(serverParam.getPageNum(), serverParam.getPageSize()));
         return qm;
     }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Form, Input, Popconfirm, Row} from 'antd'
-import {UserGroupSearchParam, UserGroup, UserGroupModel} from "../model/UserGroupModel";
+import { UserGroup, UserGroupModel} from "../model/UserGroupModel";
 import {FormComponentProps} from "antd/lib/form/Form";
 
 export interface UserGroupSearchProps extends FormComponentProps {
@@ -20,9 +20,7 @@ class UserGroupSearch extends Component<UserGroupSearchProps> {
                 if (errors) {
                     return
                 }
-
-                let data = new UserGroupSearchParam();
-                data.nameLike = this.props.form.getFieldValue('name');
+                let data = this.props.form.getFieldsValue();
                 this.props.userGroupModel.query(data);
             })
         };
@@ -31,7 +29,7 @@ class UserGroupSearch extends Component<UserGroupSearchProps> {
             <Form layout={'inline'} onSubmit={handleOk} className={"float-right"}>
                 <Form.Item label='名称：' className={"margin-right5"}>
                         <span>
-                        {this.props.form.getFieldDecorator('name', {
+                        {this.props.form.getFieldDecorator('nameLike', {
                         })(
                             <Input/>
                         )}

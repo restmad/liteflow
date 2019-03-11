@@ -53,6 +53,9 @@ public class ModelUtils {
         }
         obj.put("userId", task.getUserId());
         obj.put("isRetry", task.getIsRetry());
+        obj.put("maxRunTime", task.getMaxRunTime());
+        obj.put("alarmEmail", task.getAlarmEmail());
+        obj.put("alarmPhone", task.getAlarmPhone());
         obj.put("description", task.getDescription());
         obj.put("createTime", task.getCreateTime());
         obj.put("updateTime", task.getUpdateTime());

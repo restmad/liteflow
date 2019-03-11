@@ -43,7 +43,7 @@ export class ExecutorModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: ExecutorSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

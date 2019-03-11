@@ -34,6 +34,9 @@
 			<if test="sourceId != null">
                and source_id = #{sourceId}
 			</if>
+			<if test="status != null">
+               and status = #{status}
+			</if>
 			<if test="executorServerId != null">
 				and executor_server_id = #{executorServerId}
 			</if>

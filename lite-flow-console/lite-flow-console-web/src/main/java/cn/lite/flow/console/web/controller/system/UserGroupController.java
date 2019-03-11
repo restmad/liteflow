@@ -45,7 +45,7 @@ public class UserGroupController extends BaseController {
      */
     @RequestMapping(value = "list")
     public String list(
-            @RequestParam(value = "name", required = false) String groupNameLike,
+            @RequestParam(value = "nameLike", required = false) String groupNameLike,
             @RequestParam(value = "status", required = false) Integer status,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize

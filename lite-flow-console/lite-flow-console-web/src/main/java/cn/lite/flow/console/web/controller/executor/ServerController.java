@@ -44,6 +44,7 @@ public class ServerController extends BaseController {
     ) {
 
         ServerParam param = new ServerParam();
+        param.setNameLike(nameLike);
         param.setPageNum(pageNum);
         param.setPageSize(pageSize);
         List<ExecutorServer> servers = executorServerRpcService.list(param);

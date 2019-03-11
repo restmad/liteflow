@@ -69,6 +69,10 @@ export class ExecutorList extends Component<ExecutorListProps, {showModal, execu
             dataIndex: 'name',
             key: 'name'
         },{
+            title: 'ip',
+            dataIndex: 'ip',
+            key: 'ip'
+        },{
             title: '状态',
             dataIndex: 'status',
             key: 'status',

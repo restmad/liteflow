@@ -12,4 +12,6 @@ import lombok.ToString;
 public class ExecutorServerQM extends BaseQM {
 
     private String nameLike;        //按照名称模糊查询
+
+    private String ip;
 }

@@ -6,11 +6,6 @@ import BaseListModel from "../../../common/model/BaseListModel";
 import TaskVersionConfig from "../config/TaskVersionConfig";
 import {notification} from 'antd';
 
-export class TaskVersionSearchParam {
-    taskId?: number;
-    status?: number;
-    finalStatus?: number;
-}
 
 export class TaskVersion {
     id: number;
@@ -48,7 +43,7 @@ export class TaskVersionModel extends BaseListModel{
     }
 
     @action
-    query(searchParam: TaskVersionSearchParam) {
+    query(searchParam) {
         this.loading = true;
         this.queryData(searchParam);
     }

@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import {Button, Form, Input, Select, Row} from 'antd'
-import {TaskVersionSearchParam, TaskVersion, TaskVersionModel} from "../model/TaskVersionModel";
+import {TaskVersionModel} from "../model/TaskVersionModel";
 import {FormComponentProps} from "antd/lib/form/Form";
 import {DomUtils} from "../../../common/utils/DomUtils";
 import EnumUtils from "../../../common/utils/EnumUtils";
 
 export interface TaskVersionSearchProps extends FormComponentProps {
-    taskModel: TaskVersionModel,
+    taskVersionModel: TaskVersionModel,
 }
 const selectLayout = {
     labelCol: {
@@ -41,7 +41,7 @@ class TaskVersionSearch extends Component<TaskVersionSearchProps, {}> {
     }
 
     render() {
-
+        const that = this;
 
         let finalStatusOptions = this.getFinalStatusOptions();
         let statusOptions = this.getStatusOptions();
@@ -53,11 +53,8 @@ class TaskVersionSearch extends Component<TaskVersionSearchProps, {}> {
                     return
                 }
 
-                let data = new TaskVersionSearchParam();
-                data.status = this.props.form.getFieldValue('status');
-                data.finalStatus = this.props.form.getFieldValue("finalStatus");
-                data.taskId = this.props.form.getFieldValue("taskId");
-                this.props.taskModel.query(data);
+                let data = this.props.form.getFieldsValue();
+                that.props.taskVersionModel.query(data);
             })
         };
 

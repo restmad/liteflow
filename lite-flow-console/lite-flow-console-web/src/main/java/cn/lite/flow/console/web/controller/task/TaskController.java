@@ -77,7 +77,7 @@ public class TaskController extends BaseController {
     @RequestMapping(value = "list")
     public String list(
             @RequestParam(value = "id", required = false) Long id,
-            @RequestParam(value = "name", required = false) String nameLike,
+            @RequestParam(value = "nameLike", required = false) String nameLike,
             @RequestParam(value = "period", required = false) Integer period,
             @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "status", required = false) Integer status,

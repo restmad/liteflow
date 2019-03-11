@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Form, Input, Popconfirm, Row} from 'antd'
-import {FlowSearchParam, Flow, FlowModel} from "../model/FlowModel";
+import {Flow, FlowModel} from "../model/FlowModel";
 import {FormComponentProps} from "antd/lib/form/Form";
 
 export interface FlowSearchProps extends FormComponentProps {
@@ -23,9 +23,7 @@ class FlowSearch extends Component<FlowSearchProps, {}> {
                     return
                 }
 
-                let data = new FlowSearchParam();
-                data.nameLike = this.props.form.getFieldValue('name');
-                data.id = this.props.form.getFieldValue("id");
+                let data = this.props.form.getFieldsValue();
                 this.props.flowModel.query(data);
             })
         };
@@ -43,7 +41,7 @@ class FlowSearch extends Component<FlowSearchProps, {}> {
                 </Form.Item>
                 <Form.Item label='名称' className={"margin-right5"}>
                         <span>
-                        {this.props.form.getFieldDecorator('name', {
+                        {this.props.form.getFieldDecorator('nameLike', {
                             initialValue: '',
                         })(
                             <Input/>

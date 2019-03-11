@@ -34,7 +34,7 @@ class RoleSearch extends Component<RoleSearchProps, {}> {
             <Form layout={'inline'} onSubmit={handleOk} className={"float-right"}>
                 <Form.Item label='名称：' className={"margin-right5"}>
                         <span>
-                        {this.props.form.getFieldDecorator('name', {
+                        {this.props.form.getFieldDecorator('nameLike', {
                             initialValue: '',
                         })(
                             <Input/>

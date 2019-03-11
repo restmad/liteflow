@@ -119,12 +119,17 @@ public class ExecutorJobRpcServiceImpl implements ExecutorJobRpcService {
     @Override
     public List<ExecutorJob> list(JobParam jobParam) {
         ExecutorJobQM qm = getExecutorJobQM(jobParam);
+        qm.setId(jobParam.getId());
+        qm.setApplicationId(jobParam.getApplicationId());
         qm.addOrderDesc(ExecutorServerQM.COL_ID);
         return executorJobService.list(qm);
     }
 
     private ExecutorJobQM getExecutorJobQM(JobParam jobParam) {
         ExecutorJobQM qm = new ExecutorJobQM();
+        qm.setId(jobParam.getId());
+        qm.setApplicationId(jobParam.getApplicationId());
+        qm.setStatus(jobParam.getStatus());
         qm.setPage(Page.getPageByPageNo(jobParam.getPageNum(), jobParam.getPageSize()));
         return qm;
     }

@@ -48,6 +48,8 @@ public class ExecutorContainerRpcServiceImpl implements ExecutorContainerRpcServ
 
     private ExecutorContainerQM getExecutorContainerQM(ContainerParam containerParam) {
         ExecutorContainerQM qm = new ExecutorContainerQM();
+        qm.setId(containerParam.getId());
+        qm.setNameLike(containerParam.getNameLike());
         qm.setPage(Page.getPageByPageNo(containerParam.getPageNum(), containerParam.getPageSize()));
         return qm;
     }
