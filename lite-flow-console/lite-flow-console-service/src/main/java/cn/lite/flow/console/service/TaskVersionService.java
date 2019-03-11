@@ -1,5 +1,6 @@
 package cn.lite.flow.console.service;
 
+import cn.lite.flow.common.model.Tuple;
 import cn.lite.flow.common.service.basic.BaseService;
 import cn.lite.flow.console.model.basic.TaskInstance;
 import cn.lite.flow.console.model.basic.TaskVersion;
@@ -61,7 +62,7 @@ public interface TaskVersionService extends BaseService<TaskVersion, TaskVersion
     /**
      * 任务重试
      */
-    void retry(long taskVersionId);
+    Tuple<Boolean, String> retry(long taskVersionId);
 
     /**
      * 深度修复

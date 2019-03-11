@@ -19,6 +19,8 @@ public class CommonConstants {
 
     public static final String COLON = ":";                                                   //冒号
 
+    public static final String SEMICOLON = ";";                                               //分号
+
     public static final String LINE = "-";                                                    //横线
 
     public static final String UNDERLINE = "_";                                               //下划线

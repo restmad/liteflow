@@ -1,5 +1,6 @@
 package cn.lite.flow.console.kernel.service.rpc.impl;
 
+import cn.lite.flow.common.model.Tuple;
 import cn.lite.flow.common.utils.DateUtils;
 import cn.lite.flow.console.client.service.ConsoleCallbackRpcService;
 import cn.lite.flow.console.common.exception.ConsoleRuntimeException;
@@ -7,6 +8,7 @@ import cn.lite.flow.console.model.basic.TaskInstance;
 import cn.lite.flow.console.model.basic.TaskVersion;
 import cn.lite.flow.console.model.consts.TaskVersionFinalStatus;
 import cn.lite.flow.console.model.consts.TaskVersionStatus;
+import cn.lite.flow.console.service.AlarmService;
 import cn.lite.flow.console.service.TaskInstanceService;
 import cn.lite.flow.console.service.TaskVersionService;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +33,9 @@ public class ConsoleCallbackRpcServiceImpl implements ConsoleCallbackRpcService 
 
     @Autowired
     private TaskVersionService taskVersionService;
+
+    @Autowired
+    private AlarmService alarmService;
 
 
     @Transactional("consoleTxManager")
@@ -157,7 +162,13 @@ public class ConsoleCallbackRpcServiceImpl implements ConsoleCallbackRpcService 
 
             try {
                 //失败重试
-                taskVersionService.retry(taskVersionId);
+                Tuple<Boolean, String> retryResult = taskVersionService.retry(taskVersionId);
+                /**
+                 * 重试失败报警
+                 */
+                if(!retryResult.getA()){
+                    alarmService.alarmTask(taskInstance.getTaskId(), msg);
+                }
             }catch (Throwable e){
                 LOG.error("instance retry error: versionId:{}", taskVersion.getId(), e);
             }

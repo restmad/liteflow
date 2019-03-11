@@ -159,7 +159,7 @@ public class TaskServiceImpl implements TaskService {
 
         if(CollectionUtils.isNotEmpty(dependencies)){
             dependencies.forEach(dependency -> {
-                dependencyService.invalidDependency(dependency.getId());
+                dependencyService.validDependency(dependency.getId());
             });
         }
         /**

@@ -1,6 +1,7 @@
 package cn.lite.flow.console.service.impl;
 
 import cn.lite.flow.common.exception.CommonRuntimeException;
+import cn.lite.flow.common.model.Tuple;
 import cn.lite.flow.common.model.consts.BooleanType;
 import cn.lite.flow.common.model.consts.StatusType;
 import cn.lite.flow.console.common.consts.Constants;
@@ -168,7 +169,7 @@ public class TaskVersionServiceImpl implements TaskVersionService {
 
     @Override
     @Transactional("consoleTxManager")
-    public void retry(long taskVersionId) {
+    public Tuple<Boolean, String> retry(long taskVersionId) {
 
         TaskVersion taskVersion = taskVersionMapper.getById(taskVersionId);
         Task task = taskService.getById(taskVersion.getTaskId());
@@ -176,10 +177,10 @@ public class TaskVersionServiceImpl implements TaskVersionService {
          * 没有配置重试，直接返回
          */
         if(task.getIsRetry() == null || task.getIsRetry() != BooleanType.TRUE.getValue()){
-            return;
+            return Tuple.of(false, "no retry config");
         }
         if(taskVersion.getFinalStatus() == TaskVersionFinalStatus.NEW.getValue()){
-            throw new CommonRuntimeException("task version can not retry, versionId:" + taskVersionId);
+            return Tuple.of(false, "task version can not retry, versionId:" + taskVersionId);
         }
         Long pluginId = task.getPluginId();
 
@@ -196,7 +197,7 @@ public class TaskVersionServiceImpl implements TaskVersionService {
          * 已经超过重试次数就不再重试
          */
         if(versionRetryNum >= retryNum){
-            return;
+            return Tuple.of(false, "retryNum is greater than:" + versionRetryNum);
         }
 
         versionRetryNum += 1;
@@ -234,6 +235,9 @@ public class TaskVersionServiceImpl implements TaskVersionService {
         String pluginConfig = ParamExpressionUtils.handleTimeExpression(task.getPluginConf(), String.valueOf(taskVersion.getVersionNo()));
         TaskInstance taskInstance = this.addVersionInstance(taskVersionId, pluginId, pluginConfig, logicRunTime);
         this.addInstanceDependencies(taskInstance.getId());
+
+        return Tuple.of(true, "");
+
     }
 
     @Override
