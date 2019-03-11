@@ -7,18 +7,18 @@ import cn.lite.flow.executor.model.basic.ExecutorJob;
  * @author: yueyunyue
  * @create: 2019-01-22
  **/
-public interface CompentsateJobService {
+public interface CompensateJobService {
 
     /**
      * 按照条件补偿任务
      * @param status
      */
-    void compentsateJobByStatus(int status);
+    void compensateJobByStatus(int status);
 
     /**
      * 补偿某个任务
      * @param job
      */
-    void compentsateJob(ExecutorJob job);
+    void compensateJob(ExecutorJob job);
 
 }

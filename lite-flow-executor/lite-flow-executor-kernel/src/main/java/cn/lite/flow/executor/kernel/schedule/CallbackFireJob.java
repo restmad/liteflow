@@ -1,6 +1,7 @@
 package cn.lite.flow.executor.kernel.schedule;
 
 import cn.lite.flow.common.job.basic.AbstractUnstatefullJob;
+import cn.lite.flow.executor.kernel.conf.ExecutorMetadata;
 import cn.lite.flow.executor.model.basic.ExecutorCallback;
 import cn.lite.flow.executor.model.consts.JobCallbackStatus;
 import cn.lite.flow.executor.model.query.ExecutorCallbackQM;
@@ -28,6 +29,11 @@ public class CallbackFireJob extends AbstractUnstatefullJob {
     public void executeInternal() {
 
         ExecutorCallbackQM qm = new ExecutorCallbackQM();
+        /**
+         * 添加执行者id
+         */
+        qm.setExecutorServerId(ExecutorMetadata.getServerId());
+
         qm.setStatus(JobCallbackStatus.WAITING.getValue());
         int pageNo = 1;
         qm.addOrderAsc(ExecutorJobQM.COL_ID);

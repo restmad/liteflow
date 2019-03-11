@@ -3,7 +3,7 @@ package cn.lite.flow.executor.kernel.service.impl;
 import cn.lite.flow.executor.common.utils.ContainerMetadata;
 import cn.lite.flow.executor.kernel.conf.ExecutorMetadata;
 import cn.lite.flow.executor.kernel.container.ContainerFactory;
-import cn.lite.flow.executor.kernel.service.CompentsateJobService;
+import cn.lite.flow.executor.kernel.service.CompensateJobService;
 import cn.lite.flow.executor.model.basic.ExecutorJob;
 import cn.lite.flow.executor.model.consts.ExecutorJobStatus;
 import cn.lite.flow.executor.model.kernel.Container;
@@ -21,10 +21,10 @@ import java.util.List;
  * @author: yueyunyue
  * @create: 2019-01-22
  **/
-@Service("compentsateJobServiceImpl")
-public class CompentsateJobServiceImpl implements CompentsateJobService {
+@Service("compensateJobServiceImpl")
+public class CompensateJobServiceImpl implements CompensateJobService {
 
-    private final static Logger LOG = LoggerFactory.getLogger(CompentsateJobServiceImpl.class);
+    private final static Logger LOG = LoggerFactory.getLogger(CompensateJobServiceImpl.class);
 
     private final static int PAGE_SIZE = 100;
 
@@ -32,10 +32,13 @@ public class CompentsateJobServiceImpl implements CompentsateJobService {
     private ExecutorJobService executorJobService;
 
     @Override
-    public void compentsateJobByStatus(int status) {
+    public void compensateJobByStatus(int status) {
         ExecutorJobQM qm = new ExecutorJobQM();
         qm.setStatus(status);
         int pageNo = 1;
+        /**
+         * 添加执行者id
+         */
         qm.setExecutorServerId(ExecutorMetadata.getServerId());
         qm.addOrderAsc(ExecutorJobQM.COL_ID);
         List<ExecutorJob> jobs = null;
@@ -44,7 +47,7 @@ public class CompentsateJobServiceImpl implements CompentsateJobService {
             jobs = executorJobService.list(qm);
             if(CollectionUtils.isNotEmpty(jobs)){
                 jobs.stream().forEach(job -> {
-                    this.compentsateJob(job);
+                    this.compensateJob(job);
                 });
             }
             pageNo ++;
@@ -52,7 +55,7 @@ public class CompentsateJobServiceImpl implements CompentsateJobService {
     }
 
     @Override
-    public void compentsateJob(ExecutorJob job) {
+    public void compensateJob(ExecutorJob job) {
         try {
             LOG.info("job has no container, jobId:{} status{}", job.getId(), job.getStatus());
             if(!ContainerMetadata.containerExist(job.getId())){

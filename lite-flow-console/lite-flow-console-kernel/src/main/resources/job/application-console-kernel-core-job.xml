@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
        ">
-
-
     <!--
         1.每天初始化数据
     -->
@@ -33,7 +32,7 @@
 
 
     <!--
-        2.Versiondailyinit数据生成taskVersion
+        2.VersionDailyInit数据生成taskVersion
     -->
     <bean id="versionDailyInitTriggerJob" class="cn.lite.flow.console.kernel.job.VersionDailyInit2FireJob" />
     <bean id="versionDailyInitTriggerJobDetail"
@@ -130,14 +129,14 @@
             <ref bean="consumerEventQueueJobDetail" />
         </property>
         <property name="cronExpression">
-            <value>*/1 * * * * ?</value>
+            <value>*/10 * * * * ?</value>
         </property>
         <!-- 为了保证主切换后，阻塞的任务不会触发 -->
         <property name="misfireInstruction" value="2"></property>
     </bean>
 
     <!-- Scheduler -->
-    <bean name="startQuertz" lazy-init="false" autowire="no"
+    <bean name="consoleScheduler" lazy-init="false" autowire="no"
           class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>

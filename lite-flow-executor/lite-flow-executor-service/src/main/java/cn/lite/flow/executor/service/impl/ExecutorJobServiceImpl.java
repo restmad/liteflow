@@ -93,6 +93,7 @@ public class ExecutorJobServiceImpl implements ExecutorJobService {
             executorCallback.setJobSourceId(executorJob.getSourceId());
             executorCallback.setJobStatus(executorJob.getStatus());
             executorCallback.setStatus(JobCallbackStatus.WAITING.getValue());
+            executorCallback.setJobMsg(executorJob.getMsg());
             executorCallback.setExecutorServerId(executorJob.getExecutorServerId());
             executorCallbackService.add(executorCallback);
         }

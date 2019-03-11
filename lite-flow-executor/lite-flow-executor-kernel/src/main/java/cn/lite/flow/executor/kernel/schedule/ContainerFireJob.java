@@ -40,7 +40,7 @@ public class ContainerFireJob extends AbstractUnstatefullJob {
                             container.run();
                             LOG.info("container start run, container:{}", container.toString());
                         } catch (Throwable e) {
-                            String errorMsg = "run container error,errMsg:" + ExceptionUtils.collectStackMsg(e);
+                            String errorMsg = "run container error,errMsg:" + e.getMessage();
                             LOG.error(errorMsg, e);
                             /**
                              * 设置任务为失败

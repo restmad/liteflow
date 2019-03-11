@@ -32,7 +32,7 @@ public class ExecutorServerServiceImpl implements ExecutorServerService {
         Preconditions.checkArgument(StringUtils.isNotBlank(executor.getName()), "name不能为空");
         Preconditions.checkArgument(StringUtils.isNotBlank(executor.getIp()), "ip不能为空");
 
-        executor.setStatus(StatusType.NEW.getValue());
+        executor.setStatus(StatusType.ON.getValue());
         try {
             executorServerMapper.insert(executor);
         } catch (DuplicateKeyException e) {

@@ -1,6 +1,7 @@
 package cn.lite.flow.executor.kernel.conf;
 
 import cn.lite.flow.common.model.consts.CommonConstants;
+import cn.lite.flow.common.model.consts.StatusType;
 import cn.lite.flow.common.utils.IpUtils;
 import cn.lite.flow.executor.common.exception.ExecutorRuntimeException;
 import cn.lite.flow.executor.model.basic.ExecutorServer;
@@ -56,8 +57,13 @@ public class ExecutorMetadata implements InitializingBean {
             executorServer.setDescription("自动注册");
             executorServerService.add(executorServer);
             LOG.info("executor is auto registered,ip:{}", SERVER_IP);
-        }else {
+        }
+        if(executorServer == null){
             String errorMsg = "ip:" + SERVER_IP + " executor is not registered";
+            throw new ExecutorRuntimeException(errorMsg);
+        }
+        if(executorServer.getStatus() == StatusType.OFF.getValue()){
+            String errorMsg = "ip:" + SERVER_IP + " executor status is off";
             throw new ExecutorRuntimeException(errorMsg);
         }
         SERVER_ID = executorServer.getId();

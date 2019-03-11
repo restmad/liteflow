@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
        ">
 
     <!--
-        处理容器中需要提交的任务
+        1.处理容器中需要提交的任务
     -->
     <bean id="containerFireJob" class="cn.lite.flow.executor.kernel.schedule.ContainerFireJob" />
     <bean id="containerFireJobDetail"
@@ -24,12 +25,12 @@
             <ref bean="containerFireJobDetail" />
         </property>
         <property name="cronExpression">
-            <value>*/1 * * * * ?</value>
+            <value>*/5 * * * * ?</value>
         </property>
     </bean>
 
     <!--
-        校验异步任务是否成功
+        2.校验异步任务是否成功
     -->
     <bean id="asyncContainerCheckJob" class="cn.lite.flow.executor.kernel.schedule.AsyncContainerCheckJob" />
     <bean id="asyncContainerCheckJobDetail"
@@ -48,11 +49,11 @@
             <ref bean="asyncContainerCheckJobDetail" />
         </property>
         <property name="cronExpression">
-            <value>*/5 * * * * ?</value>
+            <value>*/10 * * * * ?</value>
         </property>
     </bean>
     <!--
-        回调任务，补偿
+        3.回调任务，补偿
     -->
     <bean id="callbackFireJob" class="cn.lite.flow.executor.kernel.schedule.CallbackFireJob" />
     <bean id="callbackFireJobDetail"
@@ -75,7 +76,7 @@
         </property>
     </bean>
     <!--
-        容器补偿，类似服务重启后，任务需要重新放到container中
+        4.容器补偿，类似服务重启后，任务需要重新放到container中
     -->
     <bean id="containerCompensateJob" class="cn.lite.flow.executor.kernel.schedule.ContainerCompensateJob" />
     <bean id="containerCompensateJobDetail"

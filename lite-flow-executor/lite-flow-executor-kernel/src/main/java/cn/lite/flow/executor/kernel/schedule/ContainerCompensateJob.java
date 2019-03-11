@@ -2,13 +2,10 @@ package cn.lite.flow.executor.kernel.schedule;
 
 import cn.lite.flow.common.job.basic.AbstractUnstatefullJob;
 import cn.lite.flow.executor.common.utils.ContainerMetadata;
-import cn.lite.flow.executor.kernel.service.CompentsateJobService;
 import cn.lite.flow.executor.model.basic.ExecutorJob;
-import cn.lite.flow.executor.model.consts.ExecutorJobStatus;
 import cn.lite.flow.executor.model.kernel.AbstractContainer;
 import cn.lite.flow.executor.model.kernel.Container;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -19,14 +16,8 @@ import java.util.List;
  **/
 public class ContainerCompensateJob extends AbstractUnstatefullJob {
 
-    @Autowired
-    private CompentsateJobService compentsateJobService;
-
     @Override
     public void executeInternal() {
-
-        compentsateJobService.compentsateJobByStatus(ExecutorJobStatus.NEW.getValue());
-
         this.removeFinishJob();
     }
 

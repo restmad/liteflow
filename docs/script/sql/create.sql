@@ -329,7 +329,7 @@ CREATE TABLE lf_executor_job
 DROP TABLE if EXISTS lf_executor_callback;
 CREATE TABLE lf_executor_callback (
   id int NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  job_id int DEFAULT NULL COMMENT '插件id',
+  job_id int DEFAULT NULL COMMENT '任务id',
   job_status tinyint NOT NULL DEFAULT '0' COMMENT '状态',
   job_source_id int NOT NULL DEFAULT '0' COMMENT '来源id',
   executor_server_id int NOT NULL DEFAULT '0' COMMENT '执行者id',
@@ -338,7 +338,8 @@ CREATE TABLE lf_executor_callback (
   create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   update_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (id),
-  KEY idx_status(status),
+  KEY idx_job_id(job_id),
+  KEY idx_executor_status(executor_server_id, status),
   KEY idx_job_source_id(job_source_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='执行任务回调表';
 

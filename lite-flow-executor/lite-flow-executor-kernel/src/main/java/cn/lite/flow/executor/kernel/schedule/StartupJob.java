@@ -1,6 +1,6 @@
 package cn.lite.flow.executor.kernel.schedule;
 
-import cn.lite.flow.executor.kernel.service.CompentsateJobService;
+import cn.lite.flow.executor.kernel.service.CompensateJobService;
 import cn.lite.flow.executor.model.consts.ExecutorJobStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class StartupJob implements CommandLineRunner {
     private final static Logger LOG = LoggerFactory.getLogger(StartupJob.class);
 
     @Autowired
-    private CompentsateJobService compentsateJobService;
+    private CompensateJobService compensateJobService;
 
     @Override
     public void run(String... strings) throws Exception {
@@ -28,9 +28,9 @@ public class StartupJob implements CommandLineRunner {
              * 1.新建任务直接创建container
              * 2.运行任务1）异步任务重建container 2）同步任务会由于executor重启会导致任务状态无法拿到，所以会设置为fail
              */
-            compentsateJobService.compentsateJobByStatus(ExecutorJobStatus.NEW.getValue());
+            compensateJobService.compensateJobByStatus(ExecutorJobStatus.NEW.getValue());
 
-            compentsateJobService.compentsateJobByStatus(ExecutorJobStatus.RUNNING.getValue());
+            compensateJobService.compensateJobByStatus(ExecutorJobStatus.RUNNING.getValue());
         }catch (Throwable e){
             LOG.error("compentsate job error", e);
         }
