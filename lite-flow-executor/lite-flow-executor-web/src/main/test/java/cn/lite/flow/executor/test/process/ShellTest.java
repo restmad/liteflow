@@ -15,13 +15,19 @@ import org.slf4j.LoggerFactory;
 public class ShellTest {
 
     private Logger logger = LoggerFactory.getLogger(ShellTest.class);
-
     @Test
     public void testShell() throws Exception {
-        String shell = "/bin/sh -c /Users/yueyunyue/programs/zookeeper-3.4.8/bin/zkCli.sh";
+        String shell = "/Users/yueyunyue/workspace4m/liteflow/docs/jars/paramTest.sh";
         Props sysProps = new Props();
         Props props = new Props();
         props.put(Constants.SHELL_COMMAND, shell);
+        props.put("a", "A");
+        props.put("b", "B");
+        props.put("c", "C");
+        props.put("d", "D");
+        props.put("e", "E");
+        props.put("f", "F");
+        props.put("g", "G");
 
         ShellProcessJob shellProcessJob = new ShellProcessJob(100,sysProps, props, logger);
 

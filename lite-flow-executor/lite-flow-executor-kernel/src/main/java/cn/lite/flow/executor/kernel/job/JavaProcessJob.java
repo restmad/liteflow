@@ -34,7 +34,7 @@ public class JavaProcessJob extends ProcessJob {
         command.append(this.getJavaClass()).append(CommonConstants.BLANK_SPACE);
         command.append(this.getMainArguments()).append(CommonConstants.BLANK_SPACE);
         String commandStr = command.toString();
-        logger.info("create java command " + commandStr);
+        logger.info("create java command: " + commandStr);
         return commandStr;
     }
 

@@ -17,6 +17,7 @@
 package cn.lite.flow.executor.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
@@ -627,6 +628,13 @@ public class Props {
     }
 
     return myKeySet.size() == p.getKeySet().size();
+  }
+
+  public Map<String, String> getParamMap(){
+    if(this.paramMap != null){
+      return ImmutableMap.copyOf(this.paramMap);
+    }
+    return null;
   }
 
   /**

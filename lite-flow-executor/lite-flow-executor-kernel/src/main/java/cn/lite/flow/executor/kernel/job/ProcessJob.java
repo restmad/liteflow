@@ -49,9 +49,9 @@ public class ProcessJob extends AbstractJob {
         executorJobService.run(executorJobId);
 
         for(String command : commandList){
-
-            logger.info("executeJobId:{} run, command: {}", executorJobId, command);
-            LiteProcessBuilder processBuilder = new LiteProcessBuilder(CommandUtils.partitionCommandLine(command));
+            String[] commandLine = CommandUtils.partitionCommandLine(command);
+            logger.info("executeJobId:{} run, command: {}", executorJobId, commandLine);
+            LiteProcessBuilder processBuilder = new LiteProcessBuilder(commandLine);
             //添加logger
             processBuilder.setLogger(this.logger);
             //添加环境变量

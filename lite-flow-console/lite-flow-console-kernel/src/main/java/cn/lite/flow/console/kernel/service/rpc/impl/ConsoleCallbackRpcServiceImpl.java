@@ -138,6 +138,12 @@ public class ConsoleCallbackRpcServiceImpl implements ConsoleCallbackRpcService 
         TaskInstance updateInstance = new TaskInstance();
         updateInstance.setId(instanceId);
         updateInstance.setStatus(targetStatus);
+        /**
+         * 如果提交后直接失败可能不会有开始运行时间，所以设置当前时间
+         */
+        if(taskInstance.getRunStartTime() == null){
+            updateInstance.setRunStartTime(now);
+        }
         updateInstance.setRunEndTime(now);
         if(StringUtils.isBlank(msg)){
             msg = "";
@@ -167,7 +173,8 @@ public class ConsoleCallbackRpcServiceImpl implements ConsoleCallbackRpcService 
                  * 重试失败报警
                  */
                 if(!retryResult.getA()){
-                    alarmService.alarmTask(taskInstance.getTaskId(), msg);
+                    String alarmMsg = String.format("任务版本:%d运行失败，失败消息:%s", taskInstance.getTaskVersionId(), msg);
+                    alarmService.alarmTask(taskInstance.getTaskId(), alarmMsg);
                 }
             }catch (Throwable e){
                 LOG.error("instance retry error: versionId:{}", taskVersion.getId(), e);

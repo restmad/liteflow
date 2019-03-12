@@ -34,6 +34,10 @@ public class AlarmServiceImpl implements AlarmService {
         if(task == null){
             return;
         }
+
+        String alarmPrefix = String.format("任务%s(id=%d)报警:",task.getName(), task.getId());
+        msg = alarmPrefix + msg;
+
         String alarmEmail = task.getAlarmEmail();
         List<String> emails = alarmToString(alarmEmail);
         this.alarmEmail(emails, msg);
