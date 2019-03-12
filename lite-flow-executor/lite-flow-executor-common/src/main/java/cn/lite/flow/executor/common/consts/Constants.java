@@ -91,6 +91,10 @@ public class Constants {
      * 日志
      */
     public static final String LOG_EMPTY = "empty";             //空
+    /**
+     * 进程
+     */
+    public static final String PRCESS_JOB_PREFIX = "p";    //空
 
 
 

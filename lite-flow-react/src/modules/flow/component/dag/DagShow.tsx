@@ -568,6 +568,7 @@ class DagShow extends Component<DagProps, any> {
         let linkData = this.linkData;
         const lk = this.getLink(linkData.taskId, linkData.upstreamTaskId);
         lk["config"] = config;
+        lk
         let dagDataNew = this.shuffleAndArrange(dagData);
         this.renderDag(dagDataNew);
     }

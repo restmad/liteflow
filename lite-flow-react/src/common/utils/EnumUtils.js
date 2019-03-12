@@ -39,6 +39,13 @@ taskVersionFinalStatusMap[taskVersionFinalStatusSuccess] = "成功";
 taskVersionFinalStatusMap[taskVersionFinalStatusFail] = "失败";
 taskVersionFinalStatusMap[taskVersionFinalStatusKilled] = "KILLED";
 
+
+/**
+ * 依赖相关
+ */
+const taskDependencyTypeDefault = 0;
+const taskDependencyTypeTimeRange = 1;
+
 /**
  * 执行者任务状态
  * @type {number}

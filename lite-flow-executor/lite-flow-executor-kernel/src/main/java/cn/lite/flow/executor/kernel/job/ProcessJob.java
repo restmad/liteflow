@@ -3,6 +3,7 @@ package cn.lite.flow.executor.kernel.job;
 import cn.lite.flow.executor.common.consts.Constants;
 import cn.lite.flow.executor.common.utils.CommandUtils;
 import cn.lite.flow.executor.common.utils.LiteThreadPool;
+import cn.lite.flow.executor.common.utils.ProcessorUtils;
 import cn.lite.flow.executor.common.utils.Props;
 import cn.lite.flow.executor.kernel.process.LiteProcess;
 import cn.lite.flow.executor.kernel.process.ProcessFailureException;
@@ -100,8 +101,9 @@ public class ProcessJob extends AbstractJob {
             /**
              * executorJobId和进程绑定,并标记任务开始
              */
-            logger.info("executorJobId:{} get processId:{}", executorJobId, processId);
-            executorJobService.bindApplicationId(executorJobId, String.valueOf(processId));
+            String applicationId = ProcessorUtils.generateApplicationId(executorJobId, processId);
+            logger.info("executorJobId:{} get processId:{} generate applicationId:{}", executorJobId, processId, applicationId);
+            executorJobService.bindApplicationId(executorJobId, applicationId);
         }
 
     }

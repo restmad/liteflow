@@ -44,7 +44,7 @@ class LinkConfModal extends Component<ModalProps, any> {
             <Form layout={'horizontal'} >
                 <Form.Item label='开始时间' hasFeedback {...formItemLayout}>
                     {this.props.form.getFieldDecorator('startTime', {
-                        initialValue: CommonUtils.getStringValueFromModel("config.startTime", this.props.link, ""),
+                        initialValue: CommonUtils.getStringValueFromModel("config.startTime", this.props.link, "${time: yyyy-MM-dd,-1d}"),
                         rules: [
                             {
                                 required: true,
@@ -55,7 +55,7 @@ class LinkConfModal extends Component<ModalProps, any> {
                 </Form.Item>
                 <Form.Item label='结束时间' hasFeedback {...formItemLayout}>
                     {this.props.form.getFieldDecorator('endTime', {
-                        initialValue: CommonUtils.getStringValueFromModel("config.endTime", this.props.link, ""),
+                        initialValue: CommonUtils.getStringValueFromModel("config.endTime", this.props.link, "${time: yyyy-MM-dd,-1d}"),
                         rules: [
                             {
                                 required: true,

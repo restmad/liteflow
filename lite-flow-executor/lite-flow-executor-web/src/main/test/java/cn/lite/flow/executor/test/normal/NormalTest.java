@@ -4,6 +4,7 @@ import cn.lite.flow.common.model.consts.CommonConstants;
 import cn.lite.flow.common.utils.IpUtils;
 import cn.lite.flow.common.utils.UrlUtils;
 import cn.lite.flow.executor.common.consts.Constants;
+import cn.lite.flow.executor.common.utils.ProcessorUtils;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 
@@ -39,6 +40,13 @@ public class NormalTest {
     public void testGetIp(){
         System.out.println("Ip:" + IpUtils.getIp());
 
+    }
+    @Test
+    public void testProcessId(){
+
+        String applicationId = ProcessorUtils.generateApplicationId(1L, 2L);
+        System.out.println(applicationId);
+        System.out.println(ProcessorUtils.getProcessId(applicationId));
     }
 
 }

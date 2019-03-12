@@ -1,14 +1,19 @@
 package cn.lite.flow.console.web.controller.flow;
 
 import cn.lite.flow.common.model.Tuple;
+import cn.lite.flow.common.utils.DateUtils;
+import cn.lite.flow.console.common.consts.TimeUnit;
 import cn.lite.flow.console.common.model.vo.SessionUser;
 import cn.lite.flow.console.common.enums.AuthCheckTypeEnum;
 import cn.lite.flow.console.common.enums.TargetTypeEnum;
 import cn.lite.flow.console.common.exception.ConsoleRuntimeException;
 import cn.lite.flow.console.common.utils.DagUtils;
+import cn.lite.flow.console.common.utils.ParamExpressionUtils;
 import cn.lite.flow.console.common.utils.ResponseUtils;
+import cn.lite.flow.console.common.utils.TaskVersionUtils;
 import cn.lite.flow.console.model.basic.*;
 import cn.lite.flow.console.model.consts.FlowStatus;
+import cn.lite.flow.console.model.consts.TaskDependencyType;
 import cn.lite.flow.console.model.query.FlowQM;
 import cn.lite.flow.console.model.query.TaskInstanceDependencyQM;
 import cn.lite.flow.console.service.*;
@@ -21,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -218,6 +224,11 @@ public class TaskFlowController extends BaseController {
             throw new ConsoleRuntimeException("添加的任务依赖不合法");
         }
         List<TaskDependency> taskDependencies = Lists.newArrayList();
+
+        //用来验证参数配置是否正确
+        Long testTaskVersion = TaskVersionUtils.getTaskVersion(DateUtils.getNow(), TimeUnit.DAY);
+        String testTaskVersionStr = String.valueOf(testTaskVersion);
+
         for(int i = 0; i < datas.size(); i ++){
             JSONObject data = datas.getJSONObject(i);
             Long taskId = data.getLong("taskId");
@@ -227,6 +238,23 @@ public class TaskFlowController extends BaseController {
                 type = 0;
             }
             String conf = data.getString("config");
+
+            /**
+             * 校验config配置
+             */
+            if(type != null && type == TaskDependencyType.TIME_RANGE.getValue()){
+                boolean checkPass = true;
+                if(StringUtils.isBlank(conf)){
+                    checkPass = false;
+                }
+                String expression = ParamExpressionUtils.handleTimeExpression(conf, testTaskVersionStr);
+                if(StringUtils.equals(expression, conf)){
+                    checkPass = false;
+                }
+                if(!checkPass){
+                    return ResponseUtils.error("依赖{}->{}关系配置有误");
+                }
+            }
 
             TaskDependency taskDependency = new TaskDependency();
             taskDependency.setTaskId(taskId);
