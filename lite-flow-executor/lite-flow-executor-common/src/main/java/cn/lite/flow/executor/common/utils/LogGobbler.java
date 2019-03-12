@@ -2,6 +2,7 @@ package cn.lite.flow.executor.common.utils;
 
 import com.google.common.base.Joiner;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import java.io.BufferedReader;
@@ -44,7 +45,7 @@ public class LogGobbler extends Thread {
         log(line);
       }
     } catch (final IOException e) {
-      error("reading from logging stream error:", e);
+      //可能会由于进程退出导致io报错，所以这个日志不再搜集
     }
   }
 
