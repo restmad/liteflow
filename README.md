@@ -1,62 +1,36 @@
-# LiteFlow(Beta)
-   基于DAG(有向无环图)的开发的调度系统
-   
-   静态页面:[http://101.200.43.196:8000/#/login](http://101.200.43.196:8000/#/login)
-   
-   用户名:lite 密码：123456  
-   
-   注：网络带宽比较小，首次加载会比较慢！
+# 一、LiteFlow是做什么的
+liteflow是一个基于任务版本来实现的分布式任务调度系统；
 
-# 项目介绍
+1.实现任务在任务流间共享
 
-> 名称：lite-flow
->   
-> 语言：java
->   
-> 定位： 任务调度系统
->  
-> keyword： 调度 / DAG / 任务流 
-> 
-> 运行环境：
->> jdk: 1.8
->> 
->> zk: 3.4.8
->> 
->> redis: 3.0+
->> 
->> mysql: 5.0+
+2.任务/任务流的可视化配置
 
-# 项目模块
-##
+3.一键修复任务/任务流修复降低数据修复成本
+
+4.提供一个可扩展性比较强的执行引擎，提高灵活性
+
+# 二、LiteFlow项目介绍
 ![module-struct](./docs/img/module-struct.png "模块图")
 
-# 控制台
-## 1.登陆
-![console](./docs/img/console-login.png "登陆")
-## 2.任务
-### 1.任务列表
-![console](./docs/img/console-task-list.png "任务列表")
-### 2.添加任务
-![console](./docs/img/console-task-add.png "添加任务")
-## 3.任务流
-### 1.任务流列表
-![console](./docs/img/console-flow-list.png "任务流列表")
-### 2.添加任务流
-![console](./docs/img/console-flow-add.png "添加任务流")
-### 3.任务流添加任务
-![console](./docs/img/console-flow-dag.png "任务流dag")
-![console](./docs/img/console-flow-dag-add-1.png "任务流dag1")
-![console](./docs/img/console-flow-dag-add-2.png "任务流dag2")
+## 1.项目主要分为控制台和执行引擎
+   ### 1) [控制台(CONSOLE)](docs/md/console.md)
+   主要用来配置以及调度任务
+   
+   ![instruction](./docs/img/instruction.png "功能介绍")
+   
+   ### 2) 执行引擎(EXECUTOR)
+   
 
+# 三、其他
+ 1.[控制台页面](docs/md/console.md)
 
+ 2.[项目运行原理](docs/md/developer.md)
 
+ 3.[任务版本&时间计算器](docs/md/task-version.md)
 
-
-# 项目原理
-## 1.任务运行原理
-![module-struct](./docs/img/framework.png "运行原理")
-## 2.任务状态流转图
-![module-struct](./docs/img/status-change.png "状态流转图")
+> 静态页面:[http://101.200.43.196:8000/#/login](http://101.200.43.196:8000/#/login)
+> 用户名:lite 密码：123456  
+> 注：网络带宽比较小，首次加载会比较慢！
 
 # 相关项目
 - [dubbo](https://github.com/apache/incubator-dubbo)

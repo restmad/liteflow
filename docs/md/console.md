@@ -1,0 +1,20 @@
+# 控制台
+## 1.登陆
+![console](../img/console-login.png "登陆")
+## 2.任务
+### 1.任务列表
+![console](../img/console-task-list.png "任务列表")
+### 2.添加任务
+![console](../img/console-task-add.png "添加任务")
+## 3.任务流
+### 1.任务流列表
+![console](../img/console-flow-list.png "任务流列表")
+### 2.添加任务流
+![console](../img/console-flow-add.png "添加任务流")
+### 3.任务流添加任务
+![console](../img/console-flow-dag.png "任务流dag")
+![console](../img/console-flow-dag-add-1.png "任务流dag1")
+![console](../img/console-flow-dag-add-2.png "任务流dag2")
+
+### 4.任务流修复
+![console](../img/flow-fix-version.png "任务流修复")
