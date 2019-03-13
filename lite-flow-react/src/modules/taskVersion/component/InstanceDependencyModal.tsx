@@ -66,8 +66,8 @@ class InstanceDependencyModal extends Component<ModalProps> {
                 key: 'upstreamTaskName'
             }, {
                 title: '依赖任务版本',
-                dataIndex: 'upstreamTaskVersionNo',
-                key: 'upstreamTaskVersionNo',
+                dataIndex: 'upstreamTaskVersion',
+                key: 'upstreamTaskVersion',
                 render: (upstreamTaskVersion) => {
                     if(upstreamTaskVersion){
                         return  <Row className={"list-content-row"}>

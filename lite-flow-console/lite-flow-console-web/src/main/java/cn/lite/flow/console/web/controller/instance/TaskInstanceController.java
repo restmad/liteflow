@@ -145,7 +145,7 @@ public class TaskInstanceController extends BaseController {
                 TaskInstance taskInstance = taskVersionService.getLatestInstance(taskVersion.getId());
                 taskVersionObj.put("logicRunTime", taskInstance == null ? "" : taskInstance.getLogicRunTime());
                 taskVersionObj.put("msg", taskInstance == null ? "" : taskInstance.getMsg());
-                obj.put("upstreamTaskVersionNo", taskVersionObj);
+                obj.put("upstreamTaskVersion", taskVersionObj);
 
                 obj.put("status", dependency.getStatus());
                 obj.put("createTime", dependency.getCreateTime());
