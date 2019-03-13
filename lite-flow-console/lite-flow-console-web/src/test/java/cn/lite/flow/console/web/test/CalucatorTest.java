@@ -80,6 +80,34 @@ public class CalucatorTest {
         System.out.println(date);
 
     }
+    @Test
+    public void testExpressioins(){
+        String taskVersion = "20190131";
+        System.out.println("1.传参为一个参数");
+        String mode1 = "${time: yesterday}";
+        String mode1Result = ParamExpressionUtils.handleTimeExpression(mode1, taskVersion);
+        System.out.println(mode1 + ":" + mode1Result);
+
+        System.out.println("2.传参为两个参数");
+        String mode2 = "${time: yesterday, -1d}";
+        String mode2Result = ParamExpressionUtils.handleTimeExpression(mode2, taskVersion);
+        System.out.println(mode2 + ":" + mode2Result);
+
+        String mode22 = "${time: yyyyMMddhhmmss, -1d}";
+        String mode22Result = ParamExpressionUtils.handleTimeExpression(mode22, taskVersion);
+        System.out.println(mode22 + ":" + mode22Result);
+
+        String mode23 = "${time: yyyyMMddhhmmss, yesterday}";
+        String mode23Result = ParamExpressionUtils.handleTimeExpression(mode23, taskVersion);
+        System.out.println(mode23 + ":" + mode23Result);
+
+        System.out.println("3.传参为三个参数");
+        String mode3 = "${time: yyyyMMddhhmmss, yesterday, -1d}";
+        String mode3Result = ParamExpressionUtils.handleTimeExpression(mode3, taskVersion);
+        System.out.println(mode3 + ":" + mode3Result);
+
+
+    }
 
 
 
