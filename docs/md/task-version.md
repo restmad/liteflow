@@ -38,9 +38,7 @@ ${time:yesterday}
 
 2.两个参数
 
-${time:yesterday, -1d}
-${time:yyyyMMdd, -1d}
-${time:yyyyMMdd, yesterday}
+${time:yesterday, -1d},${time:yyyyMMdd, -1d},${time:yyyyMMdd, yesterday}
 
 3.三个参数
 

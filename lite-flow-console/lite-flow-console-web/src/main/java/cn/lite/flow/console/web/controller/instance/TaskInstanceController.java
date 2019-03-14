@@ -74,7 +74,7 @@ public class TaskInstanceController extends BaseController {
         qm.setTaskId(taskId);
         qm.setVersionId(taskVersionId);
         qm.setPage(pageNum, pageSize);
-        qm.addOrderDesc(TaskInstanceQM.COL_UPDATE_TIME);
+        qm.addOrderDesc(TaskInstanceQM.COL_ID);
 
         List<TaskInstance> taskInstanceList = taskInstanceService.list(qm);
 
