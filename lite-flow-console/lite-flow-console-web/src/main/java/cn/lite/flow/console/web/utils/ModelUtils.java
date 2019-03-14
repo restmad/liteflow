@@ -48,7 +48,7 @@ public class ModelUtils {
             obj.put("pluginConf",JSONObject.parseObject(pluginConf));
         }
         String retryConf = task.getRetryConf();
-        if(StringUtils.isNotEmpty(pluginConf)){
+        if(StringUtils.isNotEmpty(retryConf)){
             obj.put("retryConf",JSONObject.parseObject(retryConf));
         }
         obj.put("userId", task.getUserId());
